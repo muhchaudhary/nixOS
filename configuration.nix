@@ -122,7 +122,7 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
-
+    # Enable CUDA support for blender and sunshine (compiles blender)
   nixpkgs.overlays = [
   	(final: prev: {
 	    blender = prev.blender.override { cudaSupport = true; };
@@ -176,8 +176,6 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  #nixpkgs.config.cudaSupport = true;
-  #config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -219,8 +217,6 @@
     ventoy
     zerotierone
     appimage-run
-    #	sunshine
-    #sunshine = ./sunshine.nix;
   ];
 
   services.udev.packages = with pkgs; [
@@ -258,7 +254,5 @@
   services.flatpak.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  #services.udev.extraRules =  builtins.readFile openrgb-rules;
 
-#  sunshine = ./sunshine.nix;
 }
