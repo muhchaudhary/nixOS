@@ -113,10 +113,9 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
-    # Enable CUDA support for blender and sunshine (compiles blender)
+    # Enable CUDA support for and sunshine (compiles blender)
   nixpkgs.overlays = [
   	(final: prev: {
-	    blender = prev.blender.override { cudaSupport = true; };
 	    sunshine = prev.sunshine.override {cudaSupport = true; 
 	                                       stdenv = pkgs.cudaPackages.backendStdenv;
 	                                      };
@@ -131,19 +130,6 @@
     shell = pkgs.fish;
     description = "Muhammad Chaudhary";
     extraGroups = [ "networkmanager" "wheel" "input" ];
-    packages = with pkgs; [
-      steam
-      gnome.gnome-tweaks
-      blender
-      minecraft
-      onlyoffice-bin
-      kicad
-      yuzu-early-access
-      vscode-fhs
-      spotify
-      jellyfin-media-player
-      jellyfin-mpv-shim
-    ];
   };
 
   # enable fish shell

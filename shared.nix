@@ -23,5 +23,5 @@
     nerdfonts
     roboto
   ];
-  
+
 }
