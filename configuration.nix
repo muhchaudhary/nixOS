@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./services.sunshine.nix
+      ./shared.nix
     ];
 
   # Enable sunshine 
@@ -25,13 +26,11 @@
   };
 
   #Kernel perams
-  boot.kernelParams = [ "module_blacklist=nouveau, nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+  boot.kernelParams = [ "module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" ];
 
   
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+
 
   networking.hostName = "muhammadDeskop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -43,24 +42,16 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.wayland = false;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   # Configure keymap in X11
   services.xserver = {
+    enable = true;
     layout = "us";
     xkbVariant = "";
+
+    # Enable the GNOME Desktop Env
+    displayManager.gdm.wayland = false;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
   };
 
   # Enable CUPS to print documents.
@@ -110,7 +101,7 @@
     modesetting.enable = true;
 
     # for Hyperland
-    powerManagement.enabled = true;
+    powerManagement.enable = true;
 
     # Use the open source version of the kernel module
     # Only available on driver 515.43.04+
@@ -181,17 +172,6 @@
   # $ nix search wget
   
   environment.systemPackages = with pkgs; [
-  # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  (python311.withPackages(ps: with ps; [
-  	pandas
-  	requests
-  	networkx
-  ]))
-  (python310.withPackages(ps: with ps; [
-  	pandas
-  	requests
-  	networkx
-  ]))
     wget
     micro
     zip
@@ -220,7 +200,7 @@
   ];
 
   services.udev.packages = with pkgs; [
-	openrgb
+	  openrgb
   ];
 	
   # Some programs need SUID wrappers, can be configured further or are
