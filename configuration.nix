@@ -158,17 +158,24 @@
   # $ nix search wget
   
   environment.systemPackages = with pkgs; [
+    home-manager
+
     wget
+    curl
+    git
+    
     micro
+    
     zip
     ntfs3g
     unzip
+
     python311
     python310
     lm_sensors
     pciutils
     wine
-    git
+    
     neofetch
     htop
     firefox
@@ -181,7 +188,6 @@
     unetbootin
     gtk2
     ventoy
-    zerotierone
     appimage-run
   ];
 
