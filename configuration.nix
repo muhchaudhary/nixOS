@@ -135,9 +135,7 @@
       steam
       gnome.gnome-tweaks
       blender
-      orchis-theme
       minecraft
-      kora-icon-theme
       onlyoffice-bin
       kicad
       yuzu-early-access
@@ -165,7 +163,7 @@
     git
     
     micro
-    
+
     zip
     ntfs3g
     unzip
