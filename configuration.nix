@@ -78,7 +78,7 @@
   # services.xserver.libinput.enable = true;
 
 
-  #---------------------------------------------------------------- ADDED NOW 
+  #---------------------------------------------------------------- NVIDIA STUFF
   # Make sure opengl is enabled
   hardware.opengl = {
     enable = true;
@@ -124,20 +124,6 @@
   ];
   #-----------------------------------------------------------------
 
-    
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    mplus-outline-fonts.githubRelease
-    dina-font
-    proggyfonts
-    nerdfonts
-    roboto
-  ];
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.muhammad = {
