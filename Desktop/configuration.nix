@@ -91,8 +91,15 @@
     extraGroups = [ "networkmanager" "wheel" "input" "docker"];
   };
 
-  # enable fish shell
-  programs.fish.enable = true;
+  programs = {
+    # enable fish shell
+    fish.enable = true;
+
+    # enable hyprladn
+    hyperland.enable = true;
+    hyprland.xwayland.enable = true;
+    hyprland.enableNvidiaPatches = true;
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -131,7 +138,7 @@
     appimage-run
   ];
 
-    environment.variables.EDITOR = "micro";
+  environment.variables.EDITOR = "micro";
 
   services.udev.packages = with pkgs; [
 	  openrgb
