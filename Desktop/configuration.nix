@@ -16,11 +16,11 @@
   # Enable sunshine 
   services.sunshine.enable = true;
     
-#  # Use Docker
-#  virtualisation.docker = {
-#    enable = true;
-#    enableNvidia = true;
-#  };
+  # Use Docker
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+  };
 
   # Set up automatic garbage collector 
   nix = {
