@@ -96,7 +96,7 @@
     fish.enable = true;
 
     # enable hyprladn
-    hyperland.enable = true;
+    hyprland.enable = true;
     hyprland.xwayland.enable = true;
     hyprland.enableNvidiaPatches = true;
   };
