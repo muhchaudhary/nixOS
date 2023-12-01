@@ -10,11 +10,17 @@
       ./hardware-configuration.nix
       ./services.sunshine.nix
       ./shared.nix
+      ./nvidia-gpu.nix
     ];
 
   # Enable sunshine 
   services.sunshine.enable = true;
     
+#  # Use Docker
+#  virtualisation.docker = {
+#    enable = true;
+#    enableNvidia = true;
+#  };
 
   # Set up automatic garbage collector 
   nix = {
@@ -76,60 +82,13 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
-
-  #---------------------------------------------------------------- NVIDIA STUFF
-  # Make sure opengl is enabled
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-
-  # NVIDIA drivers are unfree.
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "nvidia-x11"
-    ];
-
-  # Tell Xorg to use the nvidia driver
-  services.xserver.videoDrivers = ["nvidia"];
-
-  hardware.nvidia = {
-
-    # Modesetting is needed for most wayland compositors
-    modesetting.enable = true;
-
-    # for Hyperland
-    powerManagement.enable = true;
-
-    # Use the open source version of the kernel module
-    # Only available on driver 515.43.04+
-    open = false;
-
-    # Enable the nvidia settings menu
-    nvidiaSettings = true;
-
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.production;
-  };
-    # Enable CUDA support for and sunshine (compiles blender)
-  nixpkgs.overlays = [
-  	(final: prev: {
-	    sunshine = prev.sunshine.override {cudaSupport = true; 
-	                                       stdenv = pkgs.cudaPackages.backendStdenv;
-	                                      };
-    })
-  ];
-  #-----------------------------------------------------------------
-
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.muhammad = {
     isNormalUser = true;
     shell = pkgs.fish;
     description = "Muhammad Chaudhary";
-    extraGroups = [ "networkmanager" "wheel" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "input" "docker"];
   };
 
   # enable fish shell
@@ -147,8 +106,6 @@
     micro
     wget
     curl
-    
-
     zip
     ntfs3g
     unzip
