@@ -143,12 +143,11 @@
   
   environment.systemPackages = with pkgs; [
     home-manager
-
+    git
+    micro
     wget
     curl
-    git
     
-    micro
 
     zip
     ntfs3g
@@ -174,6 +173,8 @@
     ventoy
     appimage-run
   ];
+
+    environment.variables.EDITOR = "micro";
 
   services.udev.packages = with pkgs; [
 	  openrgb
