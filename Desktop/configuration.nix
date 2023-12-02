@@ -35,7 +35,15 @@
   boot.kernelParams = [ "module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" ];
 
-  
+  # Session 
+  environment.sessionVariables = rec {
+  	LIBVA_DRIVER_NAME="nvidia";
+  	XDG_SESSION_TYPE="wayland";
+  	GBM_BACKEND="nvidia-drm";
+  	__GLX_VENDOR_LIBRARY_NAME="nvidia";
+  	WLR_NO_HARDWARE_CURSORS="1";
+  	
+  };
 
 
   networking.hostName = "muhammadDeskop"; # Define your hostname.
@@ -55,9 +63,10 @@
     xkbVariant = "";
 
     # Enable the GNOME Desktop Env
-    displayManager.gdm.wayland = false;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+    displayManager.sddm.enable = true;
+    displayManager.sddm.wayland.enable = true;
+   # displayManager.gdm.enable = true;
+   #desktopManager.gnome.enable = true;
   };
 
   # Enable CUPS to print documents.
@@ -116,6 +125,8 @@
     zip
     ntfs3g
     unzip
+    kitty
+    waybar
 
     python311
     python310
@@ -141,7 +152,7 @@
   environment.variables.EDITOR = "micro";
 
   services.udev.packages = with pkgs; [
-	  openrgb
+	 openrgb
   ];
 	
   # Some programs need SUID wrappers, can be configured further or are
