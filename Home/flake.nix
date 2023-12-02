@@ -36,7 +36,7 @@
         modules = [
           home
           hyprland.homeManagerModules.default
-     	  {wayland.windowManager.hyprland.enable = true;}
+     	    {wayland.windowManager.hyprland.enable = true;}
         ];
       };
     };
