@@ -7,7 +7,7 @@ PLEASE USE THE CONFIG PROVIDED IN THE GIT REPO /examples/hypr.conf AND EDIT IT,
 OR EDIT THIS ONE ACCORDING TO THE WIKI INSTRUCTIONS.
 ########################################################################################
 
-#
+# THIS IS A TEST
 # Please note not all available settings / options are set here.
 # For a full list, see the wiki
 #
