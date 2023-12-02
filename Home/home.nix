@@ -1,13 +1,8 @@
-{ homeDirectory
-, pkgs
-, stateVersion
-, system
-, username }: 
-{
-
+{ homeDirectory, pkgs, stateVersion, system, username }: {
   imports =
   [ 
     ./nix-programs
+    ./hyprland-conf
   ];
 
   home = {
@@ -46,23 +41,6 @@
     jellyfin-mpv-shim
     waybar
   ];
-
-  # xdg.systemDirs.data = [ "${config.home.homeDirectory}/.nix-profile/share/applications" ];
-
-  # xdg.userDirs = {
-  #   enable = true;
-  #   extraConfig = {
-  #     XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
-  #   };
-  # };
-
-  wayland.windowManager.hyprland = {
-    settings = {
-      exec-once = [
-        "waybar"
-      ];
-    };
-  };
 
   programs = {
     home-manager.enable = true;
