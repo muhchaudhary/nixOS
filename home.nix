@@ -1,28 +1,20 @@
 { homeDirectory, pkgs, stateVersion, system, username }: {
   imports =
   [ 
-    ./nix-programs
+    ./programs
     ./hyprland-conf
   ];
 
   home = {
-    inherit homeDirectory stateVersion username;
-
-    shellAliases = {
-      reload-home-manager-config = "home-manager switch --flake ${builtins.toString ./.}";
-    };
+    username = "muhammad";
+    homeDirectory = "/home/muhammad";
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
   };
 
-    # As already mentioned
-  targets.genericLinux.enable = true;
-  xdg.mime.enable = true;
-
-  nixpkgs = {
-    config = {
-      inherit system;
-      allowUnfree = true;
-      experimental-features = "nix-command flakes";
-    };
+  xdg.userDirs = {
+    enable = true;
   };
 
   home.packages = with (pkgs); [

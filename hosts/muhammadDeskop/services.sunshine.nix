@@ -13,6 +13,7 @@ in
 
     services.sunshine = {
       enable = mkEnableOption (mdDoc "Sunshine");
+      wayland = true;
     };
 
   };
