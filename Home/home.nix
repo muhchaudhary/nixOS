@@ -1,34 +1,33 @@
-{ config, pkgs, lib, ... }: {
+{ homeDirectory
+, pkgs
+, stateVersion
+, system
+, username }: 
+{
 
   imports =
-  [ # Include the results of the hardware scan.
+  [ 
     ./nix-programs
   ];
+
   home = {
-    username = "muhammad";
-    homeDirectory ="/home/muhammad";
-  };
+    inherit homeDirectory stateVersion username;
 
-
-  # As already mentioned
-  targets.genericLinux.enable = true;
-  xdg.mime.enable = true;
-
-  # The critical missing piece for me
-  xdg.systemDirs.data = [ "${config.home.homeDirectory}/.nix-profile/share/applications" ];
-
-  xdg.userDirs = {
-    enable = true;
-    extraConfig = {
-      XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
+    shellAliases = {
+      reload-home-manager-config = "home-manager switch --flake ${builtins.toString ./.}";
     };
   };
 
-  nixpkgs.config.allowUnfree = true;
+    # As already mentioned
+  targets.genericLinux.enable = true;
+  xdg.mime.enable = true;
 
-  programs = {
-    home-manager.enable = true;
-    bash.enable = true;
+  nixpkgs = {
+    config = {
+      inherit system;
+      allowUnfree = true;
+      experimental-features = "nix-command flakes";
+    };
   };
 
   home.packages = with (pkgs); [
@@ -45,8 +44,28 @@
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
+    waybar
   ];
 
+  # xdg.systemDirs.data = [ "${config.home.homeDirectory}/.nix-profile/share/applications" ];
 
-  home.stateVersion = "23.05";
+  # xdg.userDirs = {
+  #   enable = true;
+  #   extraConfig = {
+  #     XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
+  #   };
+  # };
+
+  wayland.windowManager.hyprland = {
+    settings = {
+      exec-once = [
+        "waybar"
+      ];
+    };
+  };
+
+  programs = {
+    home-manager.enable = true;
+    bash.enable = true;
+  };
 }

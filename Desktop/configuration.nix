@@ -126,7 +126,6 @@
     ntfs3g
     unzip
     kitty
-    waybar
 
     python311
     python310
