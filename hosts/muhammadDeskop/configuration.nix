@@ -109,6 +109,7 @@
     ntfs3g
     unzip
     kitty
+    direnv
 
     python311
     python310
