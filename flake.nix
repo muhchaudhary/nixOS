@@ -21,10 +21,26 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
+    vscode-overlay = self: super: {
+      vscode-fhs = super.vscode-fhs.overrideAttrs (oldAttrs: rec {
+        postFixup =  ''
+        patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}; \
+        '';
+        preFixup = ''
+        gappsWrapperArgs+=(
+        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+        --prefix PATH : ''${glib.bin}/bin
+        --add-flags ''${lib.escapeShellArg commandLineArgs}
+        )
+        '';
+        commandLineArgs ="--disable-gpu-sandbox";
+      });
+    };
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
         (final: prev: hyprland.packages.${system})
+        vscode-overlay
       ];
       config = {
         allowUnfree = true;
@@ -35,6 +51,8 @@
       inherit inputs;
     };
   in {
+    nixpkgs.config.allowUnfree = true;
+    nixpkgs.overlays = [ vscode-overlay ];
     nixosConfigurations = {
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
         modules = [
@@ -42,8 +60,7 @@
           {programs.hyprland.enable = true;}
           {programs.hyprland.xwayland.enable = true;}
           {programs.hyprland.enableNvidiaPatches = true;}
-          home-manager.nixosModules.home-manager
-          {
+          home-manager.nixosModules.home-manager {
             home-manager = {
               extraSpecialArgs = args;
               useGlobalPkgs = true;
