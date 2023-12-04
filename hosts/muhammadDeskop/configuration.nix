@@ -22,14 +22,7 @@
     enableNvidia = true;
   };
 
-  # Set up automatic garbage collector 
-  nix = {
-  	settings.auto-optimise-store = true;
-  	gc = {
-  		dates = "weekly";
-  		options = "--delete-older than 7d";
-  	};
-  };
+
 
   #Kernel perams
   boot.kernelParams = [ "module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
@@ -88,7 +81,7 @@
     # enable fish shell
     fish.enable = true;
 
-    # enable hyprladn
+    # enable hyprland
     hyprland.enable = true;
     hyprland.xwayland.enable = true;
     hyprland.enableNvidiaPatches = true;
@@ -168,7 +161,4 @@
 
   # This is to enable flatpak support
   services.flatpak.enable = true;
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
 }
