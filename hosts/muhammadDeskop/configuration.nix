@@ -37,6 +37,7 @@
 
   # Session 
   environment.sessionVariables = rec {
+    NIXOS_OZONE_WL = "1";
   	LIBVA_DRIVER_NAME="nvidia";
   	XDG_SESSION_TYPE="wayland";
   	GBM_BACKEND="nvidia-drm";

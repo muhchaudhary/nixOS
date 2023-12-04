@@ -16,6 +16,13 @@
   xdg.userDirs = {
     enable = true;
   };
+# THIS DOESNT WORK BRUH
+#   vscode-fhs = pkgs.vscode-fhs.overrideAttrs (oldAttrs: rec {
+#       postFixup = oldAttrs.postFixup + ''
+#       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}
+#       '';
+#       commandLineArgs = "--disable-gpu-sandbox";
+#   });
 
   home.packages = with (pkgs); [
     desktop-file-utils
@@ -27,7 +34,13 @@
     onlyoffice-bin
     kicad
     yuzu-early-access
-    vscode-fhs
+    (vscode-fhs.overrideAttrs (
+      oldAttrs: rec {
+        postFixup = oldAttrs.postFixup + ''
+          patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 $out/lib/vscode/''${executableName}
+        '';
+      }      
+    ))
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
