@@ -34,13 +34,14 @@
     onlyoffice-bin
     kicad
     yuzu-early-access
-    (vscode-fhs.overrideAttrs (
-      oldAttrs: rec {
-        postFixup = oldAttrs.postFixup + ''
-          patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 $out/lib/vscode/''${executableName}
-        '';
-      }      
-    ))
+    vscode-fhs
+    # (vscode-fhs.overrideAttrs (
+    #   oldAttrs: rec {
+    #     postFixup = oldAttrs.postFixup + ''
+    #       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 $out/lib/vscode/''${executableName}
+    #     '';
+    #   }      
+    # ))
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
