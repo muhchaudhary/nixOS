@@ -12,18 +12,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland";
-
-    drvs = {
-      url = "path:./derivations"; 
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs = {
     self,
     nixpkgs,
     home-manager,
     hyprland,
-    drvs,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -45,7 +39,6 @@
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
-        (final: prev: drvs.packages.${system})
         (final: prev: hyprland.packages.${system})
         vscode-overlay
       ];
@@ -58,7 +51,6 @@
       inherit inputs;
     };
   in {
-    nixpkgs.config.allowUnfree = true;
     nixosConfigurations = {
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
         modules = [
