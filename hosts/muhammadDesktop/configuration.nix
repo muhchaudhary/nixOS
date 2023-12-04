@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./services.sunshine.nix
-      ./shared.nix
+      ./../shared.nix
       ./nvidia-gpu.nix
     ];
 
