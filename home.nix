@@ -2,7 +2,6 @@
   imports =
   [ 
     ./programs
-    ./hyprland-conf
   ];
 
   home = {
