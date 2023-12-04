@@ -1,4 +1,4 @@
-{ homeDirectory, pkgs, stateVersion, system, username }: {
+{ config, pkgs, lib, ... }: {
   imports =
   [ 
     ./programs

@@ -51,16 +51,6 @@
       source = [
         "./binds.conf"
       ];
-    }
-  }
+    };
+  };
 }
-
-      animations = {
-        enabled = "yes";
-        bezier = [
-          "linear,0,0,1,1"
-        ];
-        animation = [
-          "borderangle, 1, 50, linear, loop"
-        ];
-      };
