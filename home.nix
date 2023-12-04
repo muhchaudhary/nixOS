@@ -41,6 +41,7 @@
     jellyfin-media-player
     jellyfin-mpv-shim
     waybar
+    vscode-fhs
   ];
 
   programs = {

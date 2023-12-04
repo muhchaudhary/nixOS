@@ -47,6 +47,7 @@
       overlays = [
         (final: prev: drvs.packages.${system})
         (final: prev: hyprland.packages.${system})
+        vscode-overlay
       ];
       config = {
         allowUnfree = true;
@@ -58,7 +59,6 @@
     };
   in {
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = [ vscode-overlay ];
     nixosConfigurations = {
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
         modules = [
