@@ -119,6 +119,7 @@
     gtk2
     ventoy
     appimage-run
+    wlxoverlay
   ];
 
   environment.variables.EDITOR = "micro";

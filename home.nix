@@ -37,7 +37,6 @@
     onlyoffice-bin
     kicad
     yuzu-early-access
-    wlxoverlay
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim

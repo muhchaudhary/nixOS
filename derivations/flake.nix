@@ -17,7 +17,7 @@
       };
     in {
       packages = with pkgs; {
-        wlxoverlay = callPackage ./wlxoverlay.nix {};
+        wlxoverlay = callPackage ./vscode.nix {};
       };
     });
 }
