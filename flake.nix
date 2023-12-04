@@ -21,29 +21,24 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    vscode-overlay = self: super: {
-      vscode-fhs = super.vscode-fhs.overrideAttrs (oldAttrs: rec {
-        postFixup =  ''
-        patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}; \
-        '';
-        commandLineArgs ="--disable-gpu-sandbox";
-        preFixup = ''
-        gappsWrapperArgs+=(
-        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
-        --prefix PATH : ''${glib.bin}/bin
-        --add-flags ''${lib.escapeShellArg commandLineArgs}
-        )
-        '';
-      });
-    };
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
         (final: prev: hyprland.packages.${system})
-        vscode-overlay
+        (final: prev: {
+        sunshine = prev.sunshine.override {
+        cudaSupport = true;
+        stdenv = pkgs.cudaPackages.backendStdenv;
+        }})
+        (final: prev: {
+          vscode-fhs = prev.vscode-fhs.override {electron = final.electron_24;};
+        })
       ];
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "electron-24.8.6"
+        ];
       };
     };
     args = {

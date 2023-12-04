@@ -41,9 +41,10 @@
     jellyfin-media-player
     jellyfin-mpv-shim
     waybar
-    vscode-fhs
+    (vscode-fhs.overrideAttrs {commandLineArgs =  "--disable-gpu-sandbox";})
+    telegram-desktop
   ];
-
+  
   programs = {
     home-manager.enable = true;
     bash.enable = true;

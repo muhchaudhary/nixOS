@@ -48,12 +48,4 @@
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
   # Enable CUDA support for and sunshine (compiles blender)
-  nixpkgs.overlays = [
-    (final: prev: {
-      sunshine = prev.sunshine.override {
-        cudaSupport = true;
-        stdenv = pkgs.cudaPackages.backendStdenv;
-      };
-    })
-  ];
 }
