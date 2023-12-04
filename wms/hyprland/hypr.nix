@@ -4,6 +4,8 @@
     ./programs 
   ];
 
+  home.packages = with pkgs; [hyprland]
+
   xdg.configFile."hypr" = {
     source = ./config;
     recursive = true;

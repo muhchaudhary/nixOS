@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./services.sunshine.nix
-      ./../shared.nix
+      ../shared.nix
       ./nvidia-gpu.nix
     ];
 
@@ -40,7 +40,7 @@
   };
 
 
-  networking.hostName = "muhammadDeskop"; # Define your hostname.
+  networking.hostName = "muhammadDesktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -82,9 +82,6 @@
     fish.enable = true;
 
     # enable hyprland
-    hyprland.enable = true;
-    hyprland.xwayland.enable = true;
-    hyprland.enableNvidiaPatches = true;
   };
 
   # Allow unfree packages
