@@ -17,7 +17,7 @@
       };
     in {
       packages = with pkgs; {
-        vscode-nv = callPackage ./vscode.nix {};
+        wlxoverlay = callPackage ./vscode.nix {};
       };
     }
   );

@@ -37,7 +37,7 @@
     onlyoffice-bin
     kicad
     yuzu-early-access
-    vscode-fhs
+    wlxoverlay
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
