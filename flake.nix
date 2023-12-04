@@ -12,12 +12,18 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland";
+
+    drvs = {
+      url = "path:./derivations"; 
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
     nixpkgs,
     home-manager,
     hyprland,
+    drvs,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -26,6 +32,7 @@
         postFixup =  ''
         patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}; \
         '';
+        commandLineArgs ="--disable-gpu-sandbox";
         preFixup = ''
         gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
@@ -33,14 +40,13 @@
         --add-flags ''${lib.escapeShellArg commandLineArgs}
         )
         '';
-        commandLineArgs ="--disable-gpu-sandbox";
       });
     };
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
         (final: prev: hyprland.packages.${system})
-        vscode-overlay
+        (final: prev: drvs.packages.${system})
       ];
       config = {
         allowUnfree = true;
