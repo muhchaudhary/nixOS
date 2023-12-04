@@ -2,7 +2,7 @@
   description = "My NixOS Flake";
 
   nixConfig = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = ["nix-command" "flakes"];
   };
 
   inputs = {
@@ -12,27 +12,29 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland";
-  }; 
-  outputs = { self 
-              , nixpkgs 
-              , home-manager
-              , hyprland
-              , ... }@inputs: let
-  system = "x86_64-linux";
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = [
-      (final: prev: hyprland.packages.${system})
-    ];
-    config = {
-      allowUnfree = true;
-    }; 
   };
-  args = {
-    inherit pkgs;
-    inherit inputs;
-  };
-in {
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    hyprland,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
+      overlays = [
+        (final: prev: hyprland.packages.${system})
+      ];
+      config = {
+        allowUnfree = true;
+      };
+    };
+    args = {
+      inherit pkgs;
+      inherit inputs;
+    };
+  in {
     nixosConfigurations = {
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
         modules = [
@@ -40,7 +42,8 @@ in {
           {programs.hyprland.enable = true;}
           {programs.hyprland.xwayland.enable = true;}
           {programs.hyprland.enableNvidiaPatches = true;}
-          home-manager.nixosModules.home-manager {
+          home-manager.nixosModules.home-manager
+          {
             home-manager = {
               extraSpecialArgs = args;
               useGlobalPkgs = true;

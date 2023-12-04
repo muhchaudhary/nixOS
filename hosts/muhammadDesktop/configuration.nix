@@ -1,44 +1,42 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, lib, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./services.sunshine.nix
-      ../shared.nix
-      ./nvidia-gpu.nix
-    ];
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./services.sunshine.nix
+    ../shared.nix
+    ./nvidia-gpu.nix
+  ];
 
-  # Enable sunshine 
+  # Enable sunshine
   services.sunshine.enable = true;
-    
+
   # Use Docker
   virtualisation.docker = {
     enable = true;
     enableNvidia = true;
   };
 
-
-
   #Kernel perams
-  boot.kernelParams = [ "module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
-  boot.kernelModules = [ "i2c-dev" "i2c-piix4" ];
+  boot.kernelParams = ["module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
+  boot.kernelModules = ["i2c-dev" "i2c-piix4"];
 
-  # Session 
+  # Session
   environment.sessionVariables = rec {
     NIXOS_OZONE_WL = "1";
-  	LIBVA_DRIVER_NAME="nvidia";
-  	XDG_SESSION_TYPE="wayland";
-  	GBM_BACKEND="nvidia-drm";
-  	__GLX_VENDOR_LIBRARY_NAME="nvidia";
-  	WLR_NO_HARDWARE_CURSORS="1";
-  	
+    LIBVA_DRIVER_NAME = "nvidia";
+    XDG_SESSION_TYPE = "wayland";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
-
 
   networking.hostName = "muhammadDesktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -59,8 +57,8 @@
     # Enable the GNOME Desktop Env
     displayManager.sddm.enable = true;
     displayManager.sddm.wayland.enable = true;
-   # displayManager.gdm.enable = true;
-   #desktopManager.gnome.enable = true;
+    # displayManager.gdm.enable = true;
+    #desktopManager.gnome.enable = true;
   };
 
   # Enable CUPS to print documents.
@@ -68,13 +66,13 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-  
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.muhammad = {
     isNormalUser = true;
     shell = pkgs.fish;
     description = "Muhammad Chaudhary";
-    extraGroups = [ "networkmanager" "wheel" "input" "docker"];
+    extraGroups = ["networkmanager" "wheel" "input" "docker"];
   };
 
   programs = {
@@ -89,7 +87,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  
+
   environment.systemPackages = with pkgs; [
     home-manager
     git
@@ -107,7 +105,7 @@
     lm_sensors
     pciutils
     wine
-    
+
     neofetch
     htop
     firefox
@@ -126,9 +124,9 @@
   environment.variables.EDITOR = "micro";
 
   services.udev.packages = with pkgs; [
-	 openrgb
+    openrgb
   ];
-	
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

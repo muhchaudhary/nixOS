@@ -1,10 +1,14 @@
-{ config, pkgs, ... }: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   #import specific hyprland programs
   imports = [
-    ./programs 
+    ./programs
   ];
 
-  home.packages = with pkgs; [hyprland]
+  home.packages = with pkgs; [hyprland];
 
   xdg.configFile."hypr" = {
     source = ./config;

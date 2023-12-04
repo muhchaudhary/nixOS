@@ -1,11 +1,11 @@
-{ ... }: {
+{...}: {
   imports = [
     ./hypr.nix
   ];
-#  add packages here
-#  home.packages = with pkgs; [
-#    
-#  ];
+  #  add packages here
+  #  home.packages = with pkgs; [
+  #
+  #  ];
   wayland.windowManager.hyperland = {
     settings = {
       exec-once = [

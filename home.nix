@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }: {
-  imports =
-  [ 
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
+  imports = [
     ./programs
   ];
 
@@ -15,15 +19,15 @@
   xdg.userDirs = {
     enable = true;
   };
-# THIS DOESNT WORK BRUH
-#   vscode-fhs = pkgs.vscode-fhs.overrideAttrs (oldAttrs: rec {
-#       postFixup = oldAttrs.postFixup + ''
-#       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}
-#       '';
-#       commandLineArgs = "--disable-gpu-sandbox";
-#   });
+  # THIS DOESNT WORK BRUH
+  #   vscode-fhs = pkgs.vscode-fhs.overrideAttrs (oldAttrs: rec {
+  #       postFixup = oldAttrs.postFixup + ''
+  #       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}
+  #       '';
+  #       commandLineArgs = "--disable-gpu-sandbox";
+  #   });
 
-  home.packages = with (pkgs); [
+  home.packages = with pkgs; [
     desktop-file-utils
     steam
     gnome.gnome-tweaks
@@ -39,7 +43,7 @@
     #     postFixup = oldAttrs.postFixup + ''
     #       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 $out/lib/vscode/''${executableName}
     #     '';
-    #   }      
+    #   }
     # ))
     spotify
     jellyfin-media-player
