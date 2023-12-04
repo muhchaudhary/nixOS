@@ -45,8 +45,8 @@
     pkgs = import nixpkgs {
       inherit system;
       overlays = [
-        (final: prev: hyprland.packages.${system})
         (final: prev: drvs.packages.${system})
+        (final: prev: hyprland.packages.${system})
       ];
       config = {
         allowUnfree = true;

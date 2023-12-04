@@ -1,5 +1,5 @@
 {
-  description = "Custom NixOS Derivations";
+  description = "My derivations";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -10,15 +10,14 @@
     flake-utils,
     ...
   }@inputs:
-  flake-utils.lib.eachDefaultSystem ( system:
+  flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = import nixpkgs {
         inherit system;
       };
     in {
       packages = with pkgs; {
-        wlxoverlay = callPackage ./vscode.nix {};
+        wlxoverlay = callPackage ./wlxoverlay.nix {};
       };
-    }
-  );
+    });
 }
