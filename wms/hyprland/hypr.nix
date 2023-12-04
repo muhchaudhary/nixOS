@@ -8,14 +8,12 @@
     ./programs
   ];
 
-  home.packages = with pkgs; [hyprland];
-
   xdg.configFile."hypr" = {
     source = ./config;
     recursive = true;
   };
 
-  wayland.windowManager.hyperland = {
+  wayland.windowManager.hyprland = {
     enable = true;
     settings = {
       general = {

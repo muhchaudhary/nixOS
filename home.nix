@@ -55,4 +55,5 @@
     home-manager.enable = true;
     bash.enable = true;
   };
+  home.stateVersion = "23.05";
 }
