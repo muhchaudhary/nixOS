@@ -8,7 +8,7 @@
 
   programs.ags = {
     enable = true;
-    configDir = "~/.config/ags";
+    configDir = ./config;
     extraPackages = [pkgs.libsoup_3];
   };
 }
