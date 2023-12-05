@@ -6,7 +6,7 @@
   # imports = [
 
   # ];
-  prgrams.ags = {
+  programs.ags = {
     enable = true;
   };
 }
