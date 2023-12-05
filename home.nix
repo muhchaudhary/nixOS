@@ -33,7 +33,6 @@
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
-    waybar
 
     telegram-desktop
     r2modman

@@ -7,6 +7,7 @@
 
   # ];
   home.packages = with pkgs; [
+    waybar
     wofi
     btop
     killall
