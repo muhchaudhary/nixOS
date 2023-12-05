@@ -1,12 +1,14 @@
 {
+  inputs,
   config,
   pkgs,
   ...
 }: {
-  # imports = [
+  imports = [inputs.ags.homeManagerModules.default];
 
-  # ];
   programs.ags = {
     enable = true;
+    configDir = "~/.config/ags";
+    extraPackages = [pkgs.libsoup_3];
   };
 }
