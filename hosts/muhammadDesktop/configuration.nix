@@ -54,11 +54,11 @@
     layout = "us";
     xkbVariant = "";
 
-    # Enable the GNOME Desktop Env
-    displayManager.sddm.enable = true;
-    displayManager.sddm.wayland.enable = true;
-    # displayManager.gdm.enable = true;
-    #desktopManager.gnome.enable = true;
+    # Using GDM until I fix the SDDM occasionally not starting issue
+    # displayManager.sddm.enable = true;
+    # displayManager.sddm.wayland.enable = true;
+    displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = true;
   };
 
   # Enable CUPS to print documents.
@@ -78,8 +78,6 @@
   programs = {
     # enable fish shell
     fish.enable = true;
-
-    # enable hyprland
   };
 
   # Allow unfree packages

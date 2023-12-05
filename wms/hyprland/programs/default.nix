@@ -9,6 +9,7 @@
   home.packages = with pkgs; [
     wofi
     btop
+    killall
   ];
 
   xdg.configFile."waybar".source = ./waybar;
