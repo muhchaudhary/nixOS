@@ -19,13 +19,6 @@
   xdg.userDirs = {
     enable = true;
   };
-  # THIS DOESNT WORK BRUH
-  #   vscode-fhs = pkgs.vscode-fhs.overrideAttrs (oldAttrs: rec {
-  #       postFixup = oldAttrs.postFixup + ''
-  #       patchelf --add-needed ''${libglvnd}/lib/libGL.so.1 ''$out/lib/vscode/''${executableName}
-  #       '';
-  #       commandLineArgs = "--disable-gpu-sandbox";
-  #   });
     
   home.packages = with pkgs; [
     desktop-file-utils
@@ -41,7 +34,7 @@
     jellyfin-media-player
     jellyfin-mpv-shim
     waybar
-    ((vscode.override {commandLineArgs="--disable-gpu-sandbox";}).overrideAttrs (prevAttrs: {
+    ((vscode.override {}).overrideAttrs (prevAttrs: {
     preFixup=
     ''
 	    gappsWrapperArgs+=(
@@ -54,11 +47,12 @@
     ''
     patchelf --add-needed ${libglvnd}/lib/libGLESv2.so.2 $out/lib/vscode/code
     patchelf --add-needed ${libglvnd}/lib/libGL.so.1 $out/lib/vscode/code
-    '';
-    
-    })).fhs
+    '';})).fhs
     telegram-desktop
     r2modman
+
+    rnix-lsp
+    alejandra
     ];
   
   programs = {

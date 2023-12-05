@@ -1,6 +1,6 @@
 {
   description = "My NixOS Flake";
-
+  
   nixConfig = {
     experimental-features = ["nix-command" "flakes"];
   };
@@ -51,7 +51,6 @@
           ./hosts/muhammadDesktop/configuration.nix
           {programs.hyprland.enable = true;}
           {programs.hyprland.xwayland.enable = true;}
-          {programs.hyprland.enableNvidiaPatches = true;}
           home-manager.nixosModules.home-manager {
             home-manager = {
               extraSpecialArgs = args;
