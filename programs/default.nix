@@ -5,7 +5,7 @@
 }: {
   imports = [
     ./git.nix
-    ./vscode.nix
+    ./vscode-nvfix.nix
   ];
   programs.git-credential-oauth.enable = true;
 }
