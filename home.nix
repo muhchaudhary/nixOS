@@ -37,6 +37,10 @@
 
     telegram-desktop
     r2modman
+    (discord.override {
+      withOpenASAR = true;
+      withVencord = true;
+    })
   ];
 
   programs = {
