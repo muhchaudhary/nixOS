@@ -1,6 +1,6 @@
 {
   description = "My NixOS Flake";
-  
+
   nixConfig = {
     experimental-features = ["nix-command" "flakes"];
   };
@@ -27,10 +27,11 @@
       overlays = [
         (final: prev: hyprland.packages.${system})
         (final: prev: {
-        sunshine = prev.sunshine.override {
-        cudaSupport = true;
-        stdenv = pkgs.cudaPackages.backendStdenv;
-        };})
+          sunshine = prev.sunshine.override {
+            cudaSupport = true;
+            stdenv = pkgs.cudaPackages.backendStdenv;
+          };
+        })
       ];
 
       config = {
@@ -51,7 +52,8 @@
           ./hosts/muhammadDesktop/configuration.nix
           {programs.hyprland.enable = true;}
           {programs.hyprland.xwayland.enable = true;}
-          home-manager.nixosModules.home-manager {
+          home-manager.nixosModules.home-manager
+          {
             home-manager = {
               extraSpecialArgs = args;
               useGlobalPkgs = true;
