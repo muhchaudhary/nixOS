@@ -23,17 +23,16 @@
     system = "x86_64-linux";
     pkgs = import nixpkgs {
       inherit system;
+
       overlays = [
         (final: prev: hyprland.packages.${system})
         (final: prev: {
         sunshine = prev.sunshine.override {
         cudaSupport = true;
         stdenv = pkgs.cudaPackages.backendStdenv;
-        }})
-        (final: prev: {
-          vscode-fhs = prev.vscode-fhs.override {electron = final.electron_24;};
-        })
+        };})
       ];
+
       config = {
         allowUnfree = true;
         permittedInsecurePackages = [

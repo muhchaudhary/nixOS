@@ -41,9 +41,25 @@
     jellyfin-media-player
     jellyfin-mpv-shim
     waybar
-    (vscode-fhs.overrideAttrs {commandLineArgs =  "--disable-gpu-sandbox";})
+    ((vscode.override {commandLineArgs="--disable-gpu-sandbox";}).overrideAttrs (prevAttrs: {
+    preFixup=
+    ''
+	    gappsWrapperArgs+=(
+	      # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+	      --prefix PATH : ${glib.bin}/bin
+	      --add-flags '--disable-gpu-sandbox'
+	    )
+    '';
+    postFixup= 
+    ''
+    patchelf --add-needed ${libglvnd}/lib/libGLESv2.so.2 $out/lib/vscode/code
+    patchelf --add-needed ${libglvnd}/lib/libGL.so.1 $out/lib/vscode/code
+    '';
+    
+    })).fhs
     telegram-desktop
-  ];
+    r2modman
+    ];
   
   programs = {
     home-manager.enable = true;
