@@ -3,9 +3,9 @@
   pkgs,
   ...
 }: {
-  # imports = [
-
-  # ];
+  imports = [
+    ./ags
+  ];
   home.packages = with pkgs; [
     waybar
     wofi
