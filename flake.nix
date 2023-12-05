@@ -19,7 +19,6 @@
     nixpkgs,
     home-manager,
     hyprland,
-    ags,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -28,7 +27,6 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
-        (final: prev: ags.packages.${system})
         (final: prev: {
           sunshine = prev.sunshine.override {
             cudaSupport = true;
