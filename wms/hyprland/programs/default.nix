@@ -12,6 +12,9 @@
     btop
     killall
     swww
+    sassc
+    wl-gammactl
+    wf-recorder
   ];
 
   xdg.configFile."waybar".source = ./waybar;
