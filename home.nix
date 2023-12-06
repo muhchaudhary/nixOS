@@ -23,6 +23,7 @@
   home.packages = with pkgs; [
     desktop-file-utils
     steam
+    gamescope
     gnome.gnome-tweaks
     (blender.override {cudaSupport = true;})
     gradience
