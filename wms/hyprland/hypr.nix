@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   pkgs,
   ...
@@ -7,7 +6,7 @@
   #import specific hyprland programs
   imports = [
     ./programs
-    ../../themes/default-theme.nix
+    ../../themes
   ];
 
   xdg.configFile."hypr" = {

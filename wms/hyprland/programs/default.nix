@@ -13,7 +13,6 @@
     killall
     swww
     sassc
-    wl-gammactl
     wf-recorder
   ];
 
