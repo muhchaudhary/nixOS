@@ -16,7 +16,10 @@ in {
 
   config = mkIf config.services.sunshine.enable {
     environment.systemPackages = [
-      pkgs.sunshine
+      (pkgs.sunshine.override {
+        cudaSupport = true;
+        stdenv = pkgs.cudaPackages.backendStdenv;
+      })
     ];
 
     boot = {kernelModules = ["uinput"];};

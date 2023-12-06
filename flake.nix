@@ -27,12 +27,6 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
-        (final: prev: {
-          sunshine = prev.sunshine.override {
-            cudaSupport = true;
-            stdenv = pkgs.cudaPackages.backendStdenv;
-          };
-        })
       ];
 
       config = {
