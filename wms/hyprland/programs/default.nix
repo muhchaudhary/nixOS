@@ -15,5 +15,6 @@
   ];
 
   xdg.configFile."waybar".source = ./waybar;
+  xdg.configFile."ags".source = ./ags/config;
   programs.waybar.enable = true;
 }
