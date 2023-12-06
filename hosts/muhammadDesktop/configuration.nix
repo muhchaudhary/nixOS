@@ -57,8 +57,6 @@
     # Using GDM until I fix the SDDM occasionally not starting issue
     # displayManager.sddm.enable = true;
     # displayManager.sddm.wayland.enable = true;
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
   };
 
   # Enable CUPS to print documents.
@@ -153,5 +151,5 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   # This is to enable flatpak support
-  services.flatpak.enable = true;
+  # services.flatpak.enable = true;
 }
