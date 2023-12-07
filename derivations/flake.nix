@@ -18,7 +18,7 @@
       ] (system: function nixpkgs.legacyPackages.${system});
   in {
     packages = forAllSystems (pkgs: {
-      aylurs-ags-dots = pkgs.callPackage ./aylur-ags-example.nix {};
+      aylurs-ags-dots = pkgs.callPackage ./aylur-ags-dots.nix {};
     });
     #nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {};
     #overlays.default = final: prev: {};

@@ -18,6 +18,23 @@
         "type": "github"
       }
     },
+    "drvs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-bQJpg0xedXctx25qBo1zlJq6RpCp5IWUR3h6PcHK1p8=",
+        "path": "./derivations",
+        "type": "path"
+      },
+      "original": {
+        "path": "./derivations",
+        "type": "path"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -137,6 +154,7 @@
     "root": {
       "inputs": {
         "ags": "ags",
+        "drvs": "drvs",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixpkgs": "nixpkgs_3"

@@ -23,6 +23,7 @@
     nixpkgs,
     home-manager,
     hyprland,
+    drvs,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -31,7 +32,7 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
-        (final:prev: drvs.packages.${system})
+        (final: prev: drvs.packages.${system})
       ];
 
       config = {
