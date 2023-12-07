@@ -24,6 +24,7 @@
     home-manager,
     hyprland,
     drvs,
+    blender-bin,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -33,6 +34,7 @@
       overlays = [
         (final: prev: hyprland.packages.${system})
         (final: prev: drvs.packages.${system})
+        blender-bin.overlays.default
       ];
 
       config = {

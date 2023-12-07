@@ -25,7 +25,7 @@
     steam
     gamescope
     gnome.gnome-tweaks
-    (blender.override {cudaSupport = true;})
+    blender_4_0
     gradience
     minecraft
     onlyoffice-bin
