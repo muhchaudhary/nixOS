@@ -13,6 +13,6 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-Nj5GuDLqmqoXWH+VD7olRRo6ZohC3EB5ITQXXTHtATA=";
   };
   buildCommand = ''
-    mkdir -p $out/config && cp -r ${src}/ags $out/config
+    mkdir -p $out && cp -r ${src}/ags/ $out
   '';
 }

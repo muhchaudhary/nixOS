@@ -44,7 +44,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-DefzHHCKXcgQoZsxZQvQ3bYy/l/teVmO04qG6YMcLLk=",
+        "narHash": "sha256-55rybwZKrKcOl/MqO7cE06ysUgW25+6bNktlcaWEX7I=",
         "path": "./derivations",
         "type": "path"
       },
