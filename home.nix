@@ -34,7 +34,7 @@
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
-    aylurs-ags-dots
+    #aylurs-ags-dots
     telegram-desktop
     r2modman
     (discord.override {

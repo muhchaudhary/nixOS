@@ -36,23 +36,6 @@
         "type": "indirect"
       }
     },
-    "drvs": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-55rybwZKrKcOl/MqO7cE06ysUgW25+6bNktlcaWEX7I=",
-        "path": "./derivations",
-        "type": "path"
-      },
-      "original": {
-        "path": "./derivations",
-        "type": "path"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -188,7 +171,6 @@
       "inputs": {
         "ags": "ags",
         "blender-bin": "blender-bin",
-        "drvs": "drvs",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixpkgs": "nixpkgs_4"

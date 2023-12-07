@@ -13,17 +13,17 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
     ags.url = "github:Aylur/ags";
-    drvs = {
-      url = "path:./derivations";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # drvs = {
+    #   url = "path:./derivations";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
   outputs = {
     self,
     nixpkgs,
     home-manager,
     hyprland,
-    drvs,
+    # drvs,
     blender-bin,
     ...
   } @ inputs: let
@@ -33,7 +33,9 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
-        (final: prev: drvs.packages.${system})
+        (final: prev: {
+          aylurs-ags-dots = final.callPackage ./derivations/aylurs-ags-dots.nix {};
+        })
         blender-bin.overlays.default
       ];
 
