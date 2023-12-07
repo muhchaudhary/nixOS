@@ -13,6 +13,10 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
     ags.url = "github:Aylur/ags";
+    drvs = {
+      url = "path:./derivations";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
@@ -27,6 +31,7 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
+        (final:prev: drvs.packages.${system})
       ];
 
       config = {
