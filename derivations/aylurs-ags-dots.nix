@@ -2,8 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  jdupes,
-  sassc,
   ...
 }:
 stdenvNoCC.mkDerivation rec {
@@ -12,25 +10,9 @@ stdenvNoCC.mkDerivation rec {
     owner = "Aylur";
     repo = "dotfiles";
     rev = "b64b5bf196c98abf31b0247bdc696518986286f0";
-    hash = "sha256-NxIWH3qLW8sEguovAv9wfgnlnmPlTipRJTmMo3rSHNY=";
+    hash = "sha256-Nj5GuDLqmqoXWH+VD7olRRo6ZohC3EB5ITQXXTHtATA=";
   };
-  nativeBuildInputs = [
-    jdupes
-    sassc
-  ];
-  postPatch = ''
-    rm -rf home-manager
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    name= HOME="$TMPDIR"
-
-    jdupes --quiet --link-soft --recurse $out/share
-
-    runHook postInstall
-  '';
   buildCommand = ''
-    mkdir $out
+    mkdir -p $out/config && cp -r ${src}/ags $out/config
   '';
 }
