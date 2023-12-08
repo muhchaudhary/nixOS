@@ -14,7 +14,7 @@
       ];
       exec-once = [
         #"waybar -c ~/.config/waybar/muhammadDesktop.jsonc > /tmp/waybar.log &"
-        "ags -r"
+        "ags -b hypr"
       ];
     };
   };
