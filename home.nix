@@ -24,13 +24,9 @@
     desktop-file-utils
     steam
     gamescope
-    gnome.gnome-tweaks
-    blender_4_0
-    gradience
     minecraft
     onlyoffice-bin
     kicad
-    yuzu-early-access
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim
