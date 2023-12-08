@@ -7,20 +7,18 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:nixos/nixos-hardware/master";
     # home-manager for user configuration
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland";
     ags.url = "github:Aylur/ags";
-    # drvs = {
-    #   url = "path:./derivations";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
   outputs = {
     self,
     nixpkgs,
+    nixos-hardware,
     home-manager,
     hyprland,
     # drvs,
@@ -55,6 +53,10 @@
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
         modules = [
           ./hosts/muhammadDesktop/configuration.nix
+          nixos-hardware.nixosModules.common-cpu-amd
+          nixos-hardware.nixosModules.common-cpu-amd-pstate
+          nixos-hardware.nixosModules.common-pc-ssd
+          nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
           {programs.hyprland.enable = true;}
           {programs.hyprland.xwayland.enable = true;}
           home-manager.nixosModules.home-manager

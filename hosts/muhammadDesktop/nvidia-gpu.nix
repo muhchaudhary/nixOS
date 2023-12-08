@@ -19,6 +19,7 @@
     ];
 
   # Load nvidia driver for Xorg and Wayland
+  # This is also done by nixos-hardware.common-gpu-nvidia
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
@@ -47,5 +48,4 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
-  # Enable CUDA support for and sunshine (compiles blender)
 }
