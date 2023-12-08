@@ -39,9 +39,6 @@
 
       config = {
         allowUnfree = true;
-        permittedInsecurePackages = [
-          "electron-24.8.6"
-        ];
       };
     };
     args = {
@@ -51,14 +48,13 @@
   in {
     nixosConfigurations = {
       "muhammadDesktop" = nixpkgs.lib.nixosSystem {
+        inherit system;
         modules = [
           ./hosts/muhammadDesktop/configuration.nix
           nixos-hardware.nixosModules.common-cpu-amd
           nixos-hardware.nixosModules.common-cpu-amd-pstate
           nixos-hardware.nixosModules.common-pc-ssd
           nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
-          {programs.hyprland.enable = true;}
-          {programs.hyprland.xwayland.enable = true;}
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -70,6 +66,22 @@
           }
         ];
       };
+      # "muhammadLaptop" = nixpkgs.lib.nixosSystem {
+      #   inherit system;
+      #   modules = [
+      #     ./hosts/muhammadLaptop/configuration.nix
+      #     nixos-hardware.nixosModules.lenovo-thinkpad-x1-7th-gen
+      #     home-manager.nixosModules.home-manager
+      #     {
+      #       home-manager = {
+      #         extraSpecialArgs = args;
+      #         useGlobalPkgs = true;
+      #         useUserPackages = true;
+      #         users.muhammad = import ./hosts/muhammadLaptop/home.nix;
+      #       };
+      #     }
+      #   ];
+      # };
     };
   };
 }

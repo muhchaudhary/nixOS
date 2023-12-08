@@ -4,6 +4,7 @@
   lib,
   ...
 }: {
+  nixpkgs.config.allowUnfree = true;
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -13,6 +14,23 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Configure keymap in X11
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    xkbVariant = "";
+
+    # Using GDM until I fix the SDDM occasionally not starting issue
+    # displayManager.sddm.enable = true;
+    # displayManager.sddm.wayland.enable = true;
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -64,6 +82,13 @@
     #media-session.enable = true;
   };
 
+  # Window Manger
+  programs = {
+    fish.enable = true;
+    hyprland.enable = true;
+    hyprland.xwayland.enable = true;
+  };
+
   # Bluetooth
   hardware.bluetooth = {
     enable = true;
@@ -80,5 +105,32 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 1w";
+  };
+
+  environment.systemPackages = with pkgs; [
+    home-manager
+    git
+    micro
+    wget
+    curl
+    zip
+    ntfs3g
+    nix-index
+    unzip
+    kitty
+    direnv
+    python3
+    lm_sensors
+    pciutils
+    wine
+    neofetch
+    htop
+    firefox
+  ];
+  environment.variables.EDITOR = "micro";
+  # Session
+  environment.sessionVariables = rec {
+    NIXOS_OZONE_WL = "1";
+    XDG_SESSION_TYPE = "wayland";
   };
 }
