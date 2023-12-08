@@ -14,6 +14,10 @@
     swww
     sassc
     wf-recorder
+    brightnessctl
+    hyprpicker
+    wayshot
+    pavucontrol
   ];
 
   xdg.configFile."waybar".source = ./waybar;
