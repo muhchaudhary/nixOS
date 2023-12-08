@@ -10,17 +10,19 @@
     waybar
     wofi
     btop
-    killall
     swww
     sassc
+    wl-clipboard
     wf-recorder
     brightnessctl
     hyprpicker
     wayshot
     pavucontrol
+    swappy
+    slurp
+    imagemagick
   ];
 
   xdg.configFile."waybar".source = ./waybar;
-  #xdg.configFile."ags".source = ./ags/config;
   programs.waybar.enable = true;
 }

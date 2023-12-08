@@ -110,6 +110,7 @@
     gcc
     gperftools
     glibc
+    glib
     nix-index
     unetbootin
     gtk2

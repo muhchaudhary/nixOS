@@ -21,7 +21,13 @@
   };
 
   home.packages = with pkgs; [
+    # tools
     desktop-file-utils
+    inotify-tools
+    ffmpeg
+    libnotify
+    killall
+
     steam
     gamescope
     minecraft
