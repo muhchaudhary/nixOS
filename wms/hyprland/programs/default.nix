@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./ags
+    ./ags.nix
   ];
   home.packages = with pkgs; [
     waybar

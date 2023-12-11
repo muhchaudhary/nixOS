@@ -6,6 +6,7 @@
 }: {
   imports = [
     inputs.ags.homeManagerModules.default
+    #inputs.ags-dots
     #../../../../derivations/aylurs-ags-dots.nix
   ];
 

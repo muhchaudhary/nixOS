@@ -14,6 +14,8 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
     ags.url = "github:Aylur/ags";
+    #ags-dots.url = "github:Aylur/dotfiles";
+    # flake input github figure it out
   };
   outputs = {
     self,
