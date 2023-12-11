@@ -133,4 +133,6 @@
     NIXOS_OZONE_WL = "1";
     XDG_SESSION_TYPE = "wayland";
   };
+  # allow nautilus to see trash:/// (https://nixos.wiki/wiki/Nautilus)
+  services.gvfs.enable = true;
 }

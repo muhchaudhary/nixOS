@@ -14,7 +14,7 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
     ags.url = "github:Aylur/ags";
-    #ags-dots.url = "github:Aylur/dotfiles";
+    ags-dots.url = "github:muhchaudhary/agsConfig";
     # flake input github figure it out
   };
   outputs = {
@@ -23,8 +23,8 @@
     nixos-hardware,
     home-manager,
     hyprland,
-    # drvs,
     blender-bin,
+    ags-dots,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -37,10 +37,14 @@
           aylurs-ags-dots = final.callPackage ./derivations/aylurs-ags-dots.nix {};
         })
         blender-bin.overlays.default
+        ags-dots.overlays.default
       ];
 
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "electron-25.9.0"
+        ];
       };
     };
     args = {

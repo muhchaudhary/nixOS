@@ -6,14 +6,11 @@
 }: {
   imports = [
     inputs.ags.homeManagerModules.default
-    #inputs.ags-dots
-    #../../../../derivations/aylurs-ags-dots.nix
   ];
 
   programs.ags = with pkgs; {
     enable = true;
-    configDir = pkgs.aylurs-ags-dots;
-    #configDir = ./config;
+    configDir = pkgs.aylurs-dots;
     extraPackages = [pkgs.libsoup_3];
   };
 }
