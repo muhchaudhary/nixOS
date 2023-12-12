@@ -48,5 +48,9 @@
     home-manager.enable = true;
     bash.enable = true;
   };
+
+  # Enable use of bluetooth media buttons
+  services.mpris-proxy.enable = true;
+
   home.stateVersion = "23.05";
 }

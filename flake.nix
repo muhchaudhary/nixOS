@@ -33,9 +33,6 @@
 
       overlays = [
         (final: prev: hyprland.packages.${system})
-        (final: prev: {
-          aylurs-ags-dots = final.callPackage ./derivations/aylurs-ags-dots.nix {};
-        })
         blender-bin.overlays.default
         ags-dots.overlays.default
       ];

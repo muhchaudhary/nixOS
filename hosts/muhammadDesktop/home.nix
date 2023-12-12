@@ -9,11 +9,11 @@
   ];
 
   ## add desktop specific packages here
-
   home.packages = with pkgs; [
     blender_4_0
     yuzu-early-access
   ];
+
   # vscode nvidia fix
   programs.vscode.package = with pkgs;
     (pkgs.vscode.override {isInsiders = true;})
@@ -27,7 +27,7 @@
         gappsWrapperArgs+=(
           # Add gio to PATH so that moving files to the trash works when not using a desktop environment
           --prefix PATH : ${glib.bin}/bin
-          #--add-flags '--disable-gpu-sandbox'
+          #--add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland --disable-gpu'
         )
       '';
       postFixup = ''

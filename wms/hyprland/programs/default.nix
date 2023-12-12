@@ -7,7 +7,7 @@
     ./ags.nix
   ];
   home.packages = with pkgs; [
-    waybar
+    # waybar
     wofi
     btop
     swww
