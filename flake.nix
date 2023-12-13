@@ -69,22 +69,22 @@
           }
         ];
       };
-      # "muhammadLaptop" = nixpkgs.lib.nixosSystem {
-      #   inherit system;
-      #   modules = [
-      #     ./hosts/muhammadLaptop/configuration.nix
-      #     nixos-hardware.nixosModules.lenovo-thinkpad-x1-7th-gen
-      #     home-manager.nixosModules.home-manager
-      #     {
-      #       home-manager = {
-      #         extraSpecialArgs = args;
-      #         useGlobalPkgs = true;
-      #         useUserPackages = true;
-      #         users.muhammad = import ./hosts/muhammadLaptop/home.nix;
-      #       };
-      #     }
-      #   ];
-      # };
+      "muhammadLaptop" = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./hosts/muhammadLaptop/configuration.nix
+          nixos-hardware.nixosModules.lenovo-thinkpad-x1-7th-gen
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              extraSpecialArgs = args;
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.muhammad = import ./hosts/muhammadLaptop/home.nix;
+            };
+          }
+        ];
+      };
     };
   };
 }

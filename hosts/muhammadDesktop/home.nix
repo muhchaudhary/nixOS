@@ -27,7 +27,7 @@
         gappsWrapperArgs+=(
           # Add gio to PATH so that moving files to the trash works when not using a desktop environment
           --prefix PATH : ${glib.bin}/bin
-          #--add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland --disable-gpu'
+          --add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland --disable-gpu'
         )
       '';
       postFixup = ''
