@@ -29,7 +29,7 @@
   boot.kernelModules = ["i2c-dev" "i2c-piix4"];
 
   # Session
-  environment.sessionVariables = rec {
+  environment.variables = rec {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
@@ -46,13 +46,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.muhammad = {
-    isNormalUser = true;
-    shell = pkgs.fish;
-    description = "Muhammad Chaudhary";
-    extraGroups = ["networkmanager" "wheel" "input" "docker"];
-  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 

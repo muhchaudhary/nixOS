@@ -28,14 +28,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.muhammad = {
-    isNormalUser = true;
-    shell = pkgs.fish;
-    description = "Muhammad Chaudhary";
-    extraGroups = ["networkmanager" "wheel" "input" "docker"];
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 

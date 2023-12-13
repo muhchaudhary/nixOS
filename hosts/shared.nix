@@ -108,6 +108,14 @@
     options = "--delete-older-than 1w";
   };
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.muhammad = {
+    isNormalUser = true;
+    shell = pkgs.fish;
+    description = "Muhammad Chaudhary";
+    extraGroups = ["networkmanager" "wheel" "input" "docker"];
+  };
+
   environment.systemPackages = with pkgs; [
     home-manager
     git
@@ -128,9 +136,8 @@
     htop
     firefox
   ];
-  environment.variables.EDITOR = "micro";
-  # Session
-  environment.sessionVariables = rec {
+  environment.variables = {
+    EDITOR = "micro";
     NIXOS_OZONE_WL = "1";
     XDG_SESSION_TYPE = "wayland";
   };
