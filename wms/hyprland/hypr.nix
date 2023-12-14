@@ -61,7 +61,15 @@
         preserve_split = true;
       };
       gestures = {
-        workspace_swipe = false;
+        workspace_swipe = true;
+        workspace_swipe_invert = false;
+        workspace_swipe_distance = 200;
+      };
+      input = {
+        touchpad = {
+          natural_scroll = true;
+          scroll_factor = 0.5;
+        };
       };
       misc = {
         disable_hyprland_logo = true;

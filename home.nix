@@ -32,7 +32,7 @@
     gamescope
     minecraft
     onlyoffice-bin
-    kicad
+    kicad-small
     spotify
     jellyfin-media-player
     jellyfin-mpv-shim

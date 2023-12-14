@@ -37,7 +37,7 @@ in {
     services.avahi = {
       enable = true;
       reflector = true;
-      nssmdns = true;
+      nssmdns4 = true;
       publish = {
         enable = true;
         addresses = true;
