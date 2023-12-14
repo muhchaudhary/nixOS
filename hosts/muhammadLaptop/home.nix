@@ -15,7 +15,7 @@
   (prevAttrs: {
     src = builtins.fetchTarball {
       url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
-      sha256 = "02xjw1h4wfd0c1gjwm6m0ixx07ri41fdnzi514knnrmj6b04j7pz";
+      sha256 = "15n680mydgjfxz6cvg8c5057yzrwzx86y4aq1764kwhbzff23420";
     };
     preFixup = ''
       gappsWrapperArgs+=(
