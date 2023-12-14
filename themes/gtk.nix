@@ -14,8 +14,8 @@
     #   size = 18;
     # };
     iconTheme = {
-      package = pkgs.fluent-icon-theme;
-      name = "Fluent";
+      package = pkgs.kora-icon-theme;
+      name = "kora";
     };
     theme = {
       package = pkgs.colloid-gtk-theme.override {
