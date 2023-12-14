@@ -21,7 +21,6 @@
     swappy
     slurp
     imagemagick
-    upower
   ];
 
   xdg.configFile."waybar".source = ./waybar;

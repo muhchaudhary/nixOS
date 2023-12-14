@@ -23,11 +23,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1702338622,
-        "narHash": "sha256-EdaCMowj4KZR87jiMo1D4U+NvSmMmCAAhpT1eoGxsV0=",
+        "lastModified": 1702527232,
+        "narHash": "sha256-RLFyS4kG1bMyQ6KN3K2Dc3Vda1i9Av9+vG4K4AUpJfc=",
         "owner": "muhchaudhary",
         "repo": "agsConfig",
-        "rev": "7631608f9e21a7b5a01359e4fd3de48f506f8607",
+        "rev": "dd7b46da9302ddd7e198d75e55089f5e4b512867",
         "type": "github"
       },
       "original": {
