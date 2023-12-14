@@ -24,7 +24,7 @@
     enable = true;
     layout = "us";
     xkbVariant = "";
-
+    displayManager.lightdm.enable = false;
     # Using GDM until I fix the SDDM occasionally not starting issue
     # displayManager.sddm.enable = true;
     # displayManager.sddm.wayland.enable = true;
