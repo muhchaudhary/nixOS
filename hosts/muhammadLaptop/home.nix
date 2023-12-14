@@ -6,8 +6,6 @@
 {
   imports = [
     ../../home.nix
-    ../../wms/hyprland/muhammadDesktop.nix
+    ../../wms/hyprland/muhammadLaptop.nix
   ];
 }
-../homes/muhamamdDesktop/home.nix
-../homes/muhamamdDesktop/wm-${NAME}.nix
