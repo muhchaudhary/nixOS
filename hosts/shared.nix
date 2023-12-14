@@ -24,10 +24,12 @@
     enable = true;
     layout = "us";
     xkbVariant = "";
-    displayManager.lightdm.enable = false;
     # Using GDM until I fix the SDDM occasionally not starting issue
-    # displayManager.sddm.enable = true;
-    # displayManager.sddm.wayland.enable = true;
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+      theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
+    };
   };
 
   # Enable CUPS to print documents.
@@ -136,11 +138,18 @@
     neofetch
     htop
     firefox
+    xdg-utils
+
+    libsForQt5.qt5.qtquickcontrols2
+    libsForQt5.qt5.qtgraphicaleffects
   ];
   environment.variables = {
     EDITOR = "micro";
     NIXOS_OZONE_WL = "1";
     XDG_SESSION_TYPE = "wayland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    GTK_USE_PORTAL = "1";
   };
 
   services = {

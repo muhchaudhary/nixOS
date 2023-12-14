@@ -21,6 +21,7 @@
     swappy
     slurp
     imagemagick
+    libdbusmenu-gtk3
   ];
 
   xdg.configFile."waybar".source = ./waybar;

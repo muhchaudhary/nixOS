@@ -42,6 +42,8 @@
       withOpenASAR = true;
       withVencord = true;
     })
+    (mpv.override {scripts = [mpvScripts.mpris];})
+    gnome.gnome-tweaks
   ];
 
   programs = {
@@ -51,6 +53,7 @@
 
   # Enable use of bluetooth media buttons
   services.mpris-proxy.enable = true;
+  services.blueman-applet.enable = true;
 
   home.stateVersion = "23.05";
 }
