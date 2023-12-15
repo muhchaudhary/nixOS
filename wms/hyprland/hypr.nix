@@ -62,7 +62,7 @@
       };
       gestures = {
         workspace_swipe = true;
-        workspace_swipe_invert = false;
+        workspace_swipe_invert = true;
         workspace_swipe_distance = 200;
       };
       input = {
