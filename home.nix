@@ -45,6 +45,9 @@
     (mpv.override {scripts = [mpvScripts.mpris];})
     gnome.gnome-tweaks
     xdg-utils
+
+    #fish
+    fishPlugins.tide
   ];
 
   programs = {
