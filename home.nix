@@ -44,6 +44,7 @@
     })
     (mpv.override {scripts = [mpvScripts.mpris];})
     gnome.gnome-tweaks
+    xdg-utils
   ];
 
   programs = {
@@ -54,6 +55,12 @@
   # Enable use of bluetooth media buttons
   services.mpris-proxy.enable = true;
   services.blueman-applet.enable = true;
+
+  home.sessionVariables = {
+    XDG_SESSION_TYPE = "wayland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+    XDG_CURRENT_DESKTOP = "Hyprland";
+  };
 
   home.stateVersion = "23.05";
 }

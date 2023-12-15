@@ -4,6 +4,9 @@
   lib,
   ...
 }: {
+  imports = [
+    ./sharedServices/dbus-fix.nix
+  ];
   nixpkgs.config.allowUnfree = true;
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -30,10 +33,19 @@
       wayland.enable = true;
       theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
     };
+    displayManager.session = [
+      {
+        manage = "desktop";
+        name = "Hyprland-dbus";
+        start = ''dbus-update-activation-environment --systemd --all && exec Hyprland'';
+      }
+    ];
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  services.gnome.gnome-keyring.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -89,7 +101,7 @@
   programs = {
     fish.enable = true;
     hyprland.enable = true;
-    hyprland.xwayland.enable = true;
+    #hyprland.xwayland.enable = true;
   };
 
   # Bluetooth
@@ -138,18 +150,14 @@
     neofetch
     htop
     firefox
-    xdg-utils
 
     libsForQt5.qt5.qtquickcontrols2
     libsForQt5.qt5.qtgraphicaleffects
+    qt6.qttools
   ];
   environment.variables = {
     EDITOR = "micro";
     NIXOS_OZONE_WL = "1";
-    XDG_SESSION_TYPE = "wayland";
-    XDG_SESSION_DESKTOP = "Hyprland";
-    XDG_CURRENT_DESKTOP = "Hyprland";
-    GTK_USE_PORTAL = "1";
   };
 
   services = {

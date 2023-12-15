@@ -8,7 +8,6 @@
     script = ''
       dbus-update-activation-environment --systemd --all
     '';
-    wantedBy = ["graphical-session.target"];
-    partOf = ["graphical-session.target"];
+    wantedBy = ["multi-user.target"];
   };
 }
