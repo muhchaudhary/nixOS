@@ -65,5 +65,14 @@
     XDG_CURRENT_DESKTOP = "Hyprland";
   };
 
+  programs.kitty = {
+    enable = true;
+    shellIntegration.enableFishIntegration = true;
+    extraConfig = "
+    background_opacity 0.8
+    font_family MesloLGSDZ Nerd Font
+    ";
+  };
+
   home.stateVersion = "23.05";
 }

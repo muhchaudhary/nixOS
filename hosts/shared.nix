@@ -4,9 +4,6 @@
   lib,
   ...
 }: {
-  imports = [
-    ./sharedServices/dbus-fix.nix
-  ];
   nixpkgs.config.allowUnfree = true;
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -33,13 +30,6 @@
       wayland.enable = true;
       theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
     };
-    displayManager.session = [
-      {
-        manage = "desktop";
-        name = "Hyprland-dbus";
-        start = ''dbus-update-activation-environment --systemd --all && exec Hyprland'';
-      }
-    ];
   };
 
   # Enable CUPS to print documents.
@@ -141,7 +131,6 @@
     ntfs3g
     nix-index
     unzip
-    kitty
     direnv
     python3
     lm_sensors
