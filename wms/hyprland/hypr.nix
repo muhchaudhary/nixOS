@@ -68,7 +68,7 @@
       input = {
         touchpad = {
           natural_scroll = true;
-          scroll_factor = 0.5;
+          scroll_factor = 0.25;
         };
       };
       misc = {
@@ -76,6 +76,9 @@
       };
       source = [
         "./binds.conf"
+      ];
+      exec-once = [
+        "dbus-update-activation-environment --systemd --all  && systemctl --user restart xdg-desktop-portal.service xdg-desktop-portal-gtk.service xdg-desktop-portal-hyprland.service"
       ];
     };
   };

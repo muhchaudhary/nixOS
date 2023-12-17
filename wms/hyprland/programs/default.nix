@@ -7,7 +7,6 @@
     ./ags.nix
   ];
   home.packages = with pkgs; [
-    # waybar
     wofi
     btop
     swww
@@ -24,6 +23,6 @@
     libdbusmenu-gtk3
   ];
 
-  xdg.configFile."waybar".source = ./waybar;
-  programs.waybar.enable = true;
+  #  xdg.configFile."waybar".source = ./waybar;
+  #  programs.waybar.enable = true;
 }
