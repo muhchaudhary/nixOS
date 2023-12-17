@@ -91,7 +91,7 @@
   programs = {
     fish.enable = true;
     hyprland.enable = true;
-    #hyprland.xwayland.enable = true;
+    hyprland.xwayland.enable = true;
   };
 
   # Bluetooth

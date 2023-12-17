@@ -20,14 +20,15 @@
     .overrideAttrs
     (prevAttrs: {
       src = builtins.fetchTarball {
-        url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
-        sha256 = "02xjw1h4wfd0c1gjwm6m0ixx07ri41fdnzi514knnrmj6b04j7pz";
+        url = "https://code.visualstudio.com/sha/download?build=insider&os=linux-x64";
+        sha256 = "023ryfx9zj7d7ghh41xixsz3yyngc2y6znkvfsrswcij67jqm8cd";
       };
       preFixup = ''
         gappsWrapperArgs+=(
           # Add gio to PATH so that moving files to the trash works when not using a desktop environment
           --prefix PATH : ${glib.bin}/bin
           --add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland --disable-gpu'
+
         )
       '';
       postFixup = ''

@@ -27,6 +27,7 @@
     ffmpeg
     libnotify
     killall
+    wlr-randr
 
     steam
     gamescope
