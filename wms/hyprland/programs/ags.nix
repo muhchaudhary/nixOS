@@ -10,7 +10,8 @@
 
   programs.ags = with pkgs; {
     enable = true;
-    configDir = pkgs.aylurs-dots;
+    # not including config due to active development
+    #configDir = pkgs.aylurs-dots;
     extraPackages = [pkgs.libsoup_3];
   };
 }
