@@ -28,6 +28,8 @@
     libnotify
     killall
     wlr-randr
+    w3m
+    imagemagick
 
     steam
     gamescope
@@ -49,6 +51,8 @@
 
     #fish
     fishPlugins.tide
+
+    libsForQt5.gwenview
   ];
 
   programs = {
