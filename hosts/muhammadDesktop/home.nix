@@ -10,7 +10,7 @@
 
   ## add desktop specific packages here
   home.packages = with pkgs; [
-    blender_4_0
+    blender
     yuzu-early-access
   ];
 

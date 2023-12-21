@@ -6,9 +6,8 @@
   imports = [
     ./git.nix
     ./vscode.nix
-  ];
-  home.packages = with pkgs; [
-    gnome.nautilus
+    ./gnome.nix
+    ./neovim.nix
   ];
 
   programs.git-credential-oauth.enable = true;
