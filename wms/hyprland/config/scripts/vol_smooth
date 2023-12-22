@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for _ in {0..9}
+do
+sleep 0.02
+wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 0.5%+                                                                                                  ✔ 
+done
