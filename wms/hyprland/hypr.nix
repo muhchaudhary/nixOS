@@ -78,7 +78,7 @@
         "./binds.conf"
       ];
       exec-once = [
-        "dbus-update-activation-environment --systemd --all  && systemctl --user restart xdg-desktop-portal.service xdg-desktop-portal-gtk.service xdg-desktop-portal-hyprland.service"
+        "./scripts/dbusfix"
       ];
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
