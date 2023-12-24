@@ -32,15 +32,26 @@
       inherit system;
 
       overlays = [
-        (final: prev: hyprland.packages.${system})
+        # (final: prev: {
+        #   electron_25 = (prev.electron_25.override {}).overrideAttrs (prevAttrs: {
+        #     postFixup = ''
+        #       patchelf \
+        #         --add-needed ${prev.libglvnd}/lib/libGLESv2.so.2 \
+        #         --add-needed ${prev.libglvnd}/lib/libGL.so.1 \
+        #         --add-needed ${prev.libglvnd}/lib/libEGL.so.1\
+        #         $out/bin/electron
+        #     '';
+        #   });
+        # })
         blender-bin.overlays.default
         ags-dots.overlays.default
+        hyprland.overlays.default
       ];
 
       config = {
         allowUnfree = true;
         permittedInsecurePackages = [
-          "electron-25.9.0"
+          "electron-24.8.6"
         ];
       };
     };

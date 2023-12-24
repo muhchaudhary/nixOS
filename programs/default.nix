@@ -8,6 +8,7 @@
     ./vscode.nix
     ./gnome.nix
     ./kitty.nix
+    ./obsidian.nix
   ];
 
   home.packages = with pkgs; [
@@ -28,7 +29,6 @@
     (mpv.override {scripts = [mpvScripts.mpris];})
     xdg-utils
     libsForQt5.gwenview
-    obsidian
   ];
 
   programs.git-credential-oauth.enable = true;
