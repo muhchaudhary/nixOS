@@ -17,6 +17,7 @@
       "nvidia-x11"
       "nvidia-settings"
     ];
+  nixpkgs.config.cudaSupport = true;
 
   # Load nvidia driver for Xorg and Wayland
   # This is also done by nixos-hardware.common-gpu-nvidia

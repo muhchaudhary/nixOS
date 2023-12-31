@@ -22,6 +22,7 @@
   virtualisation.docker = {
     enable = true;
     enableNvidia = true;
+    extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
   };
 
   #Kernel perams

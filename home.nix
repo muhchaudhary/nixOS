@@ -30,6 +30,7 @@
     wlr-randr
     #fish
     fishPlugins.tide
+    xwaylandvideobridge
   ];
 
   programs = {
