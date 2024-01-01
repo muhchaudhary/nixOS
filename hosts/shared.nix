@@ -163,4 +163,6 @@
     # allow nautilus to see trash:/// (https://nixos.wiki/wiki/Nautilus)
     gvfs.enable = true;
   };
+  # swaylock fix (https://nixos.wiki/wiki/Sway#Swaylock_cannot_be_unlocked_with_the_correct_password)
+  security.pam.services.swaylock = {};
 }
