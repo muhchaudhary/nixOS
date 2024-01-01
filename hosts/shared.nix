@@ -121,6 +121,7 @@
     extraGroups = ["networkmanager" "wheel" "input" "docker"];
   };
 
+  # Fix nautilis video thumbnails and information
   environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with pkgs.gst_all_1; [
     gst-plugins-good
     gst-plugins-bad

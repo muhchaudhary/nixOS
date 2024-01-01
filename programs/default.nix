@@ -9,6 +9,7 @@
     ./gnome.nix
     ./kitty.nix
     ./obsidian.nix
+    ./swaylock.nix
   ];
 
   home.packages = with pkgs; [

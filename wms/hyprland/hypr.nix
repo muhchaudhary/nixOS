@@ -77,7 +77,7 @@
       source = [
         "./binds.conf"
       ];
-      exec-once = [
+      exec = [
         "./scripts/dbusfix"
       ];
       windowrulev2 = [

@@ -32,6 +32,7 @@
     #fish
     fishPlugins.tide
     xwaylandvideobridge
+    networkmanagerapplet
   ];
 
   programs = {
@@ -41,6 +42,7 @@
   # Enable use of bluetooth media buttons
   services.mpris-proxy.enable = true;
   services.blueman-applet.enable = true;
+  services.network-manager-applet.enable = true;
 
   home.sessionVariables = {
     XDG_SESSION_TYPE = "wayland";
