@@ -25,6 +25,7 @@
     desktop-file-utils
     inotify-tools
     ffmpeg
+    ffmpegthumbnailer
     libnotify
     killall
     wlr-randr

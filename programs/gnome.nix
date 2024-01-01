@@ -9,5 +9,6 @@
     gnome-tweaks
     nautilus
     gnome-system-monitor
+    totem
   ];
 }
