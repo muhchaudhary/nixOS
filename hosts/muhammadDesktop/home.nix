@@ -20,8 +20,9 @@
     .overrideAttrs
     (prevAttrs: {
       src = builtins.fetchTarball {
-        url = "https://code.visualstudio.com/sha/download?build=insider&os=linux-x64";
-        sha256 = "023ryfx9zj7d7ghh41xixsz3yyngc2y6znkvfsrswcij67jqm8cd";
+        # run curl -I https://update.code.visualstudio.com/latest/linux-x64/insider to get latest url
+        url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/1cfc62d46e6b9dd217cd485d7d4591136f421d70/code-insider-x64-1704471669.tar.gz";
+        sha256 = "08345753pqann2mw25bhplsc881m60fxwpmnshrb4v6vmmdglxvj";
       };
       preFixup = ''
         gappsWrapperArgs+=(
