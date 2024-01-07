@@ -12,6 +12,7 @@
   programs.swaylock = {
     enable = true;
     settings = {
+      image = "~/.config/swaylock/lockscreen.png";
       color = "808080";
       font-size = 24;
       indicator-idle-visible = false;

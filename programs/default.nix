@@ -30,6 +30,7 @@
     (mpv.override {scripts = [mpvScripts.mpris];})
     xdg-utils
     libsForQt5.gwenview
+    openvpn
   ];
 
   programs.git-credential-oauth.enable = true;

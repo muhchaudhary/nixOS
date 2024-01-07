@@ -165,4 +165,7 @@
   };
   # swaylock fix (https://nixos.wiki/wiki/Sway#Swaylock_cannot_be_unlocked_with_the_correct_password)
   security.pam.services.swaylock = {};
+
+  # enable power profile switching through dbus
+  services.power-profiles-daemon.enable = true;
 }
