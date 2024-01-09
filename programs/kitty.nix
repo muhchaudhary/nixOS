@@ -6,7 +6,6 @@
 }: {
   home.packages = with pkgs; [
     w3m
-    imagemagick
   ];
   programs.kitty = {
     enable = true;

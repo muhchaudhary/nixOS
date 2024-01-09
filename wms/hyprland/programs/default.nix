@@ -5,6 +5,8 @@
 }: {
   imports = [
     ./ags.nix
+    ./swaylock.nix
+    ./swayidle.nix
   ];
   home.packages = with pkgs; [
     wofi
@@ -22,7 +24,4 @@
     imagemagick
     libdbusmenu-gtk3
   ];
-
-  #  xdg.configFile."waybar".source = ./waybar;
-  #  programs.waybar.enable = true;
 }
