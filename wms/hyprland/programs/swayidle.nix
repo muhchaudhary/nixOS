@@ -8,6 +8,11 @@
   services.swayidle = {
     enable = true;
     timeouts = [
+      # TODO: make ags window tell user that PC is about to sleep
+      # {
+      #   timeout = 50;
+      #   command = "ags -b hypr -r sleep";
+      # }
       {
         timeout = 60;
         command = "${pkgs.swaylock-effects}/bin/swaylock -fF";

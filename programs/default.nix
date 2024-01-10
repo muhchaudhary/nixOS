@@ -14,7 +14,7 @@
   home.packages = with pkgs; [
     steam
     gamescope
-    minecraft
+    prismlauncher
     onlyoffice-bin
     kicad-small
     spotify
