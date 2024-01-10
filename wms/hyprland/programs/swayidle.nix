@@ -14,11 +14,11 @@
       #   command = "ags -b hypr -r sleep";
       # }
       {
-        timeout = 60;
+        timeout = 300;
         command = "${pkgs.swaylock-effects}/bin/swaylock -fF";
       }
       {
-        timeout = 90;
+        timeout = 600;
         command = "${pkgs.systemd}/bin/systemctl suspend";
       }
     ];
