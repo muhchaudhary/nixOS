@@ -70,4 +70,11 @@
 
   # This is to enable flatpak support
   # services.flatpak.enable = true;
+
+  # Power saving
+  services.thermald.enable = true;
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
+  };
 }
