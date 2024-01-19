@@ -7,6 +7,7 @@
     ./ags.nix
     ./swaylock.nix
     ./swayidle.nix
+    ./gtkFabric.nix
   ];
   home.packages = with pkgs; [
     wofi
