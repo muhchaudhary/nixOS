@@ -51,9 +51,6 @@
   # $ nix search wget
 
   environment.systemPackages = with pkgs; [
-    python311
-    python310
-
     openrgb
     i2c-tools
     gcc

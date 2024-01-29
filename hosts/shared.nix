@@ -140,7 +140,6 @@
     nix-index
     unzip
     direnv
-    python3
     lm_sensors
     pciutils
     wine

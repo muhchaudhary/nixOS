@@ -21,8 +21,9 @@
     (prevAttrs: {
       src = builtins.fetchTarball {
         # run curl -I https://update.code.visualstudio.com/latest/linux-x64/insider to get latest url
-        url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/1cfc62d46e6b9dd217cd485d7d4591136f421d70/code-insider-x64-1704471669.tar.gz";
-        sha256 = "08345753pqann2mw25bhplsc881m60fxwpmnshrb4v6vmmdglxvj";
+        url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/800e60abdfb1675a59520bac6a9473bc380d49ea/code-insider-x64-1705990311.tar.gz";
+        sha256 = "0bigwz1izaafrijsg6mmnjxcdwfzhhwd5i60d79cj92h3qli1h44";
+        #sha256 = lib.fakeSha256;
       };
       preFixup = ''
         gappsWrapperArgs+=(

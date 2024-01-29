@@ -47,8 +47,6 @@
   # };
 
   environment.systemPackages = with pkgs; [
-    python311
-    python310
     i2c-tools
     gcc
     gperftools
