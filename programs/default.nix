@@ -30,6 +30,7 @@
     xdg-utils
     libsForQt5.gwenview
     openvpn
+    (sage.override {requireSageTests = false;})
   ];
 
   programs.git-credential-oauth.enable = true;

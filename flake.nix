@@ -16,7 +16,6 @@
     ags.url = "github:Aylur/ags";
     ags-dots.url = "github:muhchaudhary/agsConfig";
 
-    fabric-test.url = "github:muhchaudhary/fabric";
     # flake input github figure it out
   };
   outputs = {
@@ -27,7 +26,6 @@
     hyprland,
     blender-bin,
     ags-dots,
-    fabric-test,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -35,7 +33,6 @@
       inherit system;
 
       overlays = [
-        (final: prev: fabric-test.packages.${system})
         blender-bin.overlays.default
         ags-dots.overlays.default
         hyprland.overlays.default

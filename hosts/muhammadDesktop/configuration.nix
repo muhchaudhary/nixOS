@@ -62,6 +62,7 @@
     gtk2
     ventoy
     appimage-run
+    godot_4
   ];
 
   environment.etc."sysconfig/lm_sensors".text = ''

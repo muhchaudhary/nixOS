@@ -23,15 +23,7 @@
 
   # Tools only
   home.packages = with pkgs; [
-    gobject-introspection
-    (python3.withPackages (ps:
-      with ps; [
-        inputs.fabric-test.packages.x86_64-linux.fabric
-        loguru
-        pycairo
-        psutil
-      ]))
-
+    python3
     desktop-file-utils
     inotify-tools
     ffmpeg
