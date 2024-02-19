@@ -54,6 +54,24 @@
         "type": "indirect"
       }
     },
+    "fabric": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1707423072,
+        "narHash": "sha256-MBroo9DBVmnu2UfX1+ACLkyTV+evWV2ya4IqkVDmqSs=",
+        "owner": "muhchaudhary",
+        "repo": "fabric",
+        "rev": "044afefb1bae6c39d1150ab4ea14078b58352001",
+        "type": "github"
+      },
+      "original": {
+        "owner": "muhchaudhary",
+        "repo": "fabric",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -78,7 +96,7 @@
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "systems": "systems",
         "wlroots": "wlroots",
         "xdph": "xdph"
@@ -244,6 +262,7 @@
         "ags": "ags",
         "ags-dots": "ags-dots",
         "blender-bin": "blender-bin",
+        "fabric": "fabric",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixos-hardware": "nixos-hardware",

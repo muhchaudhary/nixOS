@@ -30,7 +30,26 @@
     xdg-utils
     libsForQt5.gwenview
     openvpn
-    (sage.override {requireSageTests = false;})
+    # latex
+    texliveFull
+    rstudio
+    (rWrapper.override
+      {
+        packages = with rPackages; [
+          languageserver
+          rmarkdown
+          ggplot2
+          dplyr
+          xts
+          jsonlite
+          aplpack
+          loon
+          png
+          qqtest
+          PairViz
+        ];
+      })
+    gnumake
   ];
 
   programs.git-credential-oauth.enable = true;

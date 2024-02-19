@@ -84,6 +84,10 @@
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
         "minsize 1 1, title:^()$, class:^(steam)$"
       ];
+      layerrule = [
+        "blur, fabric"
+        "ignorezero, fabric"
+      ];
     };
   };
 }

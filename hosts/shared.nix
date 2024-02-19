@@ -22,8 +22,8 @@
   # Configure keymap in X11
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbVariant = "";
+    xkb.layout = "us";
+    xkb.variant = "";
     # Using GDM until I fix the SDDM occasionally not starting issue
     displayManager.sddm = {
       enable = true;
