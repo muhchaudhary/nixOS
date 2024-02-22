@@ -54,24 +54,6 @@
         "type": "indirect"
       }
     },
-    "fabric": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_4"
-      },
-      "locked": {
-        "lastModified": 1707423072,
-        "narHash": "sha256-MBroo9DBVmnu2UfX1+ACLkyTV+evWV2ya4IqkVDmqSs=",
-        "owner": "muhchaudhary",
-        "repo": "fabric",
-        "rev": "044afefb1bae6c39d1150ab4ea14078b58352001",
-        "type": "github"
-      },
-      "original": {
-        "owner": "muhchaudhary",
-        "repo": "fabric",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -96,7 +78,7 @@
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": "nixpkgs_4",
         "systems": "systems",
         "wlroots": "wlroots",
         "xdph": "xdph"
@@ -227,11 +209,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1707546158,
-        "narHash": "sha256-nYYJTpzfPMDxI8mzhQsYjIUX+grorqjKEU9Np6Xwy/0=",
+        "lastModified": 1707689078,
+        "narHash": "sha256-UUGmRa84ZJHpGZ1WZEBEUOzaPOWG8LZ0yPg1pdDF/yM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d934204a0f8d9198e1e4515dd6fec76a139c87f0",
+        "rev": "f9d39fb9aff0efee4a3d5f4a6d7c17701d38a1d8",
         "type": "github"
       },
       "original": {
@@ -262,7 +244,6 @@
         "ags": "ags",
         "ags-dots": "ags-dots",
         "blender-bin": "blender-bin",
-        "fabric": "fabric",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixos-hardware": "nixos-hardware",
