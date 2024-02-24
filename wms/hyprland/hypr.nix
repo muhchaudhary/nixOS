@@ -77,8 +77,9 @@
       source = [
         "./binds.conf"
       ];
-      exec = [
-        "./scripts/dbusfix"
+      exec-once = [
+        "dbus-update-activation-environment --systemd --all &"
+        "sleep 1 && systemctl --user restart xdg-desktop-portal"
       ];
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"

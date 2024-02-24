@@ -7,4 +7,6 @@
   imports = [
     ./gtk.nix
   ];
+
+  programs.pywal.enable = true;
 }

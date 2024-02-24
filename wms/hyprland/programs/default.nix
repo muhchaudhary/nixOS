@@ -5,8 +5,8 @@
 }: {
   imports = [
     ./ags.nix
-    ./swaylock.nix
-    ./swayidle.nix
+    ./hyprlock.nix
+    ./hypridle.nix
   ];
   home.packages = with pkgs; [
     wofi
