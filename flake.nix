@@ -13,6 +13,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland";
+    hypridle.url = "github:hyprwm/hypridle";
+    hyprlock.url = "github:hyprwm/hyprlock";
+
     ags.url = "github:Aylur/ags";
     ags-dots.url = "github:muhchaudhary/agsConfig";
 
