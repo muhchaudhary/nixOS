@@ -19,7 +19,7 @@
       }
       {
         timeout = 330;
-        onTimeout = "${pkgs.systemd} /bin/systemctl suspend";
+        onTimeout = "${systemd}/bin/systemctl suspend";
       }
     ];
   };
