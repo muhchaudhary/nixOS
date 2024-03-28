@@ -17,9 +17,7 @@
     hyprlock.url = "github:hyprwm/hyprlock";
 
     ags.url = "github:Aylur/ags";
-    ags-dots.url = "github:muhchaudhary/agsConfig";
-
-    # flake input github figure it out
+    gtk-session-lock.url = "github:Cu3PO42/gtk-session-lock";
   };
   outputs = {
     self,
@@ -28,7 +26,7 @@
     home-manager,
     hyprland,
     blender-bin,
-    ags-dots,
+    gtk-session-lock,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -36,8 +34,8 @@
       inherit system;
 
       overlays = [
+        (final: prev: gtk-session-lock.packages.${system})
         blender-bin.overlays.default
-        ags-dots.overlays.default
         hyprland.overlays.default
       ];
 
@@ -49,6 +47,7 @@
       };
     };
     args = {
+      inherit self;
       inherit pkgs;
       inherit inputs;
     };

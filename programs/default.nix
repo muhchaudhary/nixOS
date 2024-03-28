@@ -36,6 +36,10 @@
     (rWrapper.override
       {
         packages = with rPackages; [
+          Hmisc
+          tidytable
+          eikosograms
+          venneuler
           languageserver
           rmarkdown
           ggplot2
@@ -44,9 +48,16 @@
           jsonlite
           aplpack
           loon
+          loon_data
           png
           qqtest
           PairViz
+          hexbin
+          qrmdata
+          devtools
+          colorspace
+          jpeg
+          tiff
         ];
       })
     gnumake

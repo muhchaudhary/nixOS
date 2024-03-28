@@ -70,7 +70,8 @@
   # services.flatpak.enable = true;
 
   # Power saving
-  services.thermald.enable = true;
+  services.cpupower-gui.enable = true;
+
   powerManagement = {
     enable = true;
     powertop.enable = true;

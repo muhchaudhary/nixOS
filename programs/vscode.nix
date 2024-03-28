@@ -4,8 +4,6 @@
   ...
 }: {
   home.packages = with pkgs; [
-    # vscode extensions stuff
-    rnix-lsp
     alejandra
   ];
 
