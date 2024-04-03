@@ -14,8 +14,9 @@
     #   size = 18;
     # };
     iconTheme = {
-      package = pkgs.kora-icon-theme;
-      name = "kora";
+      # package = pkgs.kora-icon-theme;
+      package = pkgs.gnome.adwaita-icon-theme;
+      name = "Adwaita";
     };
     theme = {
       package = pkgs.colloid-gtk-theme.override {

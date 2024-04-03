@@ -5,7 +5,7 @@
 }: {
   programs.git = {
     enable = true;
-    userName = "muhammadahmchaudhary@gmail.com";
-    userEmail = "muhchaudhary";
+    userName = "muhchaudhary";
+    userEmail = "61593188+muhchaudhary@users.noreply.github.com";
   };
 }
