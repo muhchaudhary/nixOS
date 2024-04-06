@@ -15,6 +15,10 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hypridle.url = "github:hyprwm/hypridle";
     hyprlock.url = "github:hyprwm/hyprlock";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
 
     ags.url = "github:Aylur/ags";
     gtk-session-lock.url = "github:Cu3PO42/gtk-session-lock";
