@@ -82,6 +82,9 @@
         "dbus-update-activation-environment --systemd --all &"
         "sleep 1 && systemctl --user restart xdg-desktop-portal"
       ];
+      exec-once = [
+        "./launch_fabric"
+      ];
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
         "minsize 1 1, title:^()$, class:^(steam)$"

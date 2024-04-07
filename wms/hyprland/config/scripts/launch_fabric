@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function direnv_cd() {
+  cd "$1"
+  eval "$(direnv export bash)"
+}
+
+direnv_cd ~/nixOS/fabric/fabric
+python main.py
