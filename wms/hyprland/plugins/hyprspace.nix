@@ -12,10 +12,13 @@
       plugin.overview = {
         hideBackgroundLayers = true;
         panelHeight = 150;
-        workspaceBorderSize = 10;
+        workspaceBorderSize = 3;
         workspaceActiveBorder = "rgb(88c0d0)";
         panelColor = "rgba(00000000)";
       };
+      bind = [
+        "ALT, Tab, overview:toggle"
+      ];
     };
   };
 }
