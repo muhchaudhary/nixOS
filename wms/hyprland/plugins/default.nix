@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
-    ./hyprexpo.nix
+    # ./hyprexpo.nix
+    ./hyprspace.nix
   ];
 }
