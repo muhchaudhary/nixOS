@@ -24,12 +24,12 @@
     enable = true;
     xkb.layout = "us";
     xkb.variant = "";
-    # Using GDM until I fix the SDDM occasionally not starting issue
-    displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
-    };
+  };
+
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
   };
 
   # Enable CUPS to print documents.
