@@ -16,8 +16,8 @@
       (prevAttrs: {
         src = builtins.fetchTarball {
           # run curl -I https://update.code.visualstudio.com/latest/linux-x64/insider to get latest url
-          url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/ae59067554575afaba07640320a26435c8e05175/code-insider-x64-1712060988.tar.gz";
-          sha256 = "1j65xpb1k35qm8jcg9wcmri7jay1v037dz8iqbf23bb37r9d2h6k";
+          url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/ed6c6d3f28fa4cb66f6d73918365e41fb81db14c/code-insider-x64-1712555430.tar.gz";
+          sha256 = "sha256:1jjhzfk83w35gz4c2spnycy9alpfawn9a6l80n2c7hlzshzs8fv7";
           # sha256 = lib.fakeSha256;
         };
         version = "latest";
