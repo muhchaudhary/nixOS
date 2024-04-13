@@ -73,6 +73,7 @@
     roboto
     roboto-mono
     roboto-slab
+    jetbrains-mono
   ];
 
   # Enable sound with pipewire.
