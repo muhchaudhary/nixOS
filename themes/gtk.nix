@@ -15,17 +15,12 @@
     # };
     iconTheme = {
       # package = pkgs.kora-icon-theme;
-      package = pkgs.gnome.adwaita-icon-theme;
-      name = "Adwaita";
+      package = pkgs.gruvbox-plus-icons;
+      name = "Gruvbox-Plus-Dark";
     };
     theme = {
-      package = pkgs.colloid-gtk-theme.override {
-        tweaks = [
-          "black"
-          "rimless"
-        ];
-      };
-      name = "Colloid-Dark";
+      package = pkgs.gruvbox-gtk-theme;
+      name = "Gruvbox-Dark-B";
     };
   };
 }
