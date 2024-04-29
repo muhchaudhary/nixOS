@@ -15,6 +15,7 @@
         workspaceBorderSize = 3;
         workspaceActiveBorder = "rgb(88c0d0)";
         panelColor = "rgba(00000000)";
+        disableGestures = true;
       };
       bind = [
         "ALT, Tab, overview:toggle"

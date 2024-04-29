@@ -4,6 +4,9 @@
   lib,
   ...
 }: {
+  programs.starship = {
+    enable = true;
+  };
   home.packages = with pkgs; [
     w3m
   ];

@@ -55,6 +55,7 @@
           "borderangle, 1, 8, default"
           "fade, 1, 7, default"
           "workspaces, 1, 6, default"
+          "specialWorkspace, 1, 6, default, slidevert"
         ];
       };
       dwindle = {
@@ -64,7 +65,7 @@
       gestures = {
         workspace_swipe = true;
         workspace_swipe_invert = true;
-        workspace_swipe_distance = 200;
+        workspace_swipe_distance = 300;
       };
       input = {
         touchpad = {

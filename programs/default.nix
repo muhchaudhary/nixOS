@@ -31,37 +31,10 @@
     xdg-utils
     libsForQt5.gwenview
     openvpn
+
     # latex
     texliveFull
-    rstudio
-    (rWrapper.override
-      {
-        packages = with rPackages; [
-          Hmisc
-          tidytable
-          eikosograms
-          venneuler
-          languageserver
-          rmarkdown
-          ggplot2
-          dplyr
-          xts
-          jsonlite
-          aplpack
-          loon
-          loon_data
-          png
-          qqtest
-          PairViz
-          hexbin
-          qrmdata
-          devtools
-          colorspace
-          jpeg
-          tiff
-        ];
-      })
-    gnumake
+    # gnumake
   ];
 
   programs.git-credential-oauth.enable = true;

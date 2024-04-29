@@ -59,7 +59,6 @@
     glib
     nix-index
     unetbootin
-    gtk2
     ventoy
     appimage-run
     godot_4

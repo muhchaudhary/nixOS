@@ -149,17 +149,12 @@
     ntfs3g
     nix-index
     unzip
-    direnv
     lm_sensors
     pciutils
     wine
     neofetch
     htop
     firefox
-
-    libsForQt5.qt5.qtquickcontrols2
-    libsForQt5.qt5.qtgraphicaleffects
-    qt6.qttools
   ];
   environment.variables = {
     EDITOR = "micro";
@@ -172,8 +167,6 @@
     # allow nautilus to see trash:/// (https://nixos.wiki/wiki/Nautilus)
     gvfs.enable = true;
   };
-  # swaylock fix (https://nixos.wiki/wiki/Sway#Swaylock_cannot_be_unlocked_with_the_correct_password)
-  security.pam.services.swaylock = {};
 
   # enable power profile switching through dbus
   services.power-profiles-daemon.enable = true;

@@ -31,8 +31,6 @@
     libnotify
     killall
     wlr-randr
-    #fish
-    fishPlugins.tide
     xwaylandvideobridge
     networkmanagerapplet
   ];

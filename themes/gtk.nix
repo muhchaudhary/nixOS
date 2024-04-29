@@ -8,19 +8,18 @@
 
   gtk = {
     enable = true;
-    # font = {
-    #   package = pkgs.nerdfonts.override {fonts = ["Mononoki"];};
-    #   name = "Mononoki Nerd Font Regular";
-    #   size = 18;
-    # };
     iconTheme = {
-      # package = pkgs.kora-icon-theme;
-      package = pkgs.gruvbox-plus-icons;
-      name = "Gruvbox-Plus-Dark";
+      package = pkgs.kora-icon-theme;
+      name = "kora";
     };
     theme = {
-      package = pkgs.gruvbox-gtk-theme;
-      name = "Gruvbox-Dark-B";
+      package = pkgs.colloid-gtk-theme.override {
+        tweaks = [
+          "black"
+          "rimless"
+        ];
+      };
+      name = "Colloid-Dark";
     };
   };
 }

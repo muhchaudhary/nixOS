@@ -28,7 +28,6 @@
     };
 
     ags.url = "github:Aylur/ags";
-    gtk-session-lock.url = "github:Cu3PO42/gtk-session-lock";
   };
   outputs = {
     self,
@@ -37,7 +36,6 @@
     home-manager,
     hyprland,
     blender-bin,
-    gtk-session-lock,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -45,16 +43,12 @@
       inherit system;
 
       overlays = [
-        (final: prev: gtk-session-lock.packages.${system})
         blender-bin.overlays.default
         hyprland.overlays.default
       ];
 
       config = {
         allowUnfree = true;
-        permittedInsecurePackages = [
-          "electron-24.8.6"
-        ];
       };
     };
     args = {

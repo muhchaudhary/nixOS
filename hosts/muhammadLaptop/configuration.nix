@@ -53,7 +53,6 @@
     glibc
     glib
     unetbootin
-    gtk2
     ventoy
     appimage-run
   ];
