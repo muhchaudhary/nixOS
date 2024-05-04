@@ -7,9 +7,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:nixos/nixos-hardware/master";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
     # home-manager for user configuration
-    home-manager.url = "github:nix-community/home-manager/master";
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland = {
@@ -26,8 +26,6 @@
       url = "github:KZDKM/Hyprspace";
       inputs.hyprland.follows = "hyprland";
     };
-
-    ags.url = "github:Aylur/ags";
   };
   outputs = {
     self,
@@ -44,7 +42,7 @@
 
       overlays = [
         blender-bin.overlays.default
-        hyprland.overlays.default
+        # hyprland.overlays.default
       ];
 
       config = {

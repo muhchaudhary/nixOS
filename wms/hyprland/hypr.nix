@@ -6,7 +6,7 @@
   #import specific hyprland programs
   imports = [
     ./programs
-    ./plugins
+    # ./plugins
     ../../themes
   ];
 
