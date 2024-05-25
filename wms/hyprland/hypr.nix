@@ -26,7 +26,7 @@
         "col.inactive_border" = "rgba(595959aa)";
         layout = "dwindle";
         resize_on_border = true;
-        no_cursor_warps = true;
+        # no_cursor_warps = true;
         # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
         allow_tearing = false;
       };
@@ -61,6 +61,7 @@
       dwindle = {
         pseudotile = true;
         preserve_split = true;
+        no_gaps_when_only = 1;
       };
       gestures = {
         workspace_swipe = true;
@@ -87,6 +88,7 @@
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
         "minsize 1 1, title:^()$, class:^(steam)$"
+        "noborder, onworkspace:w[t1]"
       ];
       layerrule = [
         "blur, fabric"
