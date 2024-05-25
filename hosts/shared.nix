@@ -29,7 +29,6 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    theme = "${pkgs.sddm-chili-theme}/share/sddm/themes/chili";
   };
 
   # Enable CUPS to print documents.
@@ -111,6 +110,26 @@
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
     auto-optimise-store = true;
+    builders-use-substitutes = true;
+    substituters = [
+      "https://hydra.build/"
+      "https://hyprland.cachix.org"
+      "https://nix-config.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://nixpkgs-wayland.cachix.org"
+      "https://nix-gaming.cachix.org"
+      "https://cache.nixos.org/"
+    ];
+
+    trusted-public-keys = [
+      "headcounter.org:/7YANMvnQnyvcVB6rgFTdb8p5LG1OTXaO+21CaOSBzg="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      "nix-config.cachix.org-1:Vd6raEuldeIZpttVQfrUbLvXJHzzzkS0pezXCVVjDG4="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   nix.gc = {

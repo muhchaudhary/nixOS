@@ -15,6 +15,7 @@
     chromium
     steam
     gamescope
+    freecad
     prismlauncher
     onlyoffice-bin
     kicad-small
@@ -24,7 +25,7 @@
     telegram-desktop
     r2modman
     (discord.override {
-      withOpenASAR = true;
+      # withOpenASAR = true;
       withVencord = true;
     })
     (mpv.override {scripts = [mpvScripts.mpris];})
@@ -34,7 +35,9 @@
 
     # latex
     texliveFull
-    # gnumake
+
+    # game dev
+    godot_4
   ];
 
   programs.git-credential-oauth.enable = true;
