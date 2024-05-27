@@ -8,7 +8,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_8;
 
   # Set your time zone.
   time.timeZone = "America/Toronto";
@@ -26,9 +26,9 @@
     xkb.variant = "";
   };
 
-  services.displayManager.sddm = {
+  services.xserver.displayManager.gdm = {
     enable = true;
-    wayland.enable = true;
+    wayland = true;
   };
 
   # Enable CUPS to print documents.
