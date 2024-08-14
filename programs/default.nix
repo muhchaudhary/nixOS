@@ -20,6 +20,7 @@
     onlyoffice-bin
     kicad-small
     spotify
+    bottles
     jellyfin-media-player
     jellyfin-mpv-shim
     telegram-desktop

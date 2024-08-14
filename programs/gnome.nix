@@ -5,7 +5,7 @@
   lib,
   ...
 }: {
-  home.packages = with pkgs.gnome; [
+  home.packages = with pkgs; [
     gnome-tweaks
     nautilus
     gnome-system-monitor

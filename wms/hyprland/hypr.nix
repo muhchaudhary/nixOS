@@ -90,6 +90,9 @@
         "minsize 1 1, title:^()$, class:^(steam)$"
         "noborder, onworkspace:w[t1]"
       ];
+      windowrule = [
+        "opacity 0.99 0.99, firefox"
+      ];
       layerrule = [
         "blur, fabric"
         "ignorezero, fabric"
