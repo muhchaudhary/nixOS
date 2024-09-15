@@ -11,17 +11,20 @@
   in {
     enable = true;
     settings = {
-      lockCmd = "pidof hyprlock || ${hyprlock}";
-      beforeSleepCmd = "${hyprctl} dispatch dpms off";
-      afterSleepCmd = "${hyprctl} dispatch dpms on && ${loginctl} lock-session ";
+      general = {
+        before_sleep_cmd = "${loginctl} lock-session";
+        after_sleep_cmd = "${hyprctl} dispatch dpms on && ${loginctl} lock-session ";
+        ignore_dbus_inhibit = true;
+        lock_cmd = "pidof ${hyprlock} || ${hyprlock}";
+      };
       listeners = [
         {
           timeout = 200;
-          onTimeout = "${loginctl} lock-session";
+          on-timeout = "${loginctl} lock-session";
         }
         {
           timeout = 330;
-          onTimeout = "${pkgs.systemd}/bin/systemctl suspend";
+          on-timeout = "${pkgs.systemd}/bin/systemctl suspend";
         }
       ];
     };

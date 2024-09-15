@@ -7,6 +7,7 @@
   # Make sure opengl is enabled
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [nvidia-vaapi-driver vaapiVdpau libvdpau-va-gl];
   };
 
@@ -28,4 +29,5 @@
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
+  hardware.nvidia-container-toolkit.enable = true;
 }

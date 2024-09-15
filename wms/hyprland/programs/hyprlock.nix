@@ -7,22 +7,26 @@
   programs.hyprlock = {
     enable = true;
     settings = {
-      backgrounds = [
+      general = {
+        hide_cursor = true;
+        no_fade_in = false;
+        disable_loading_bar = true;
+        grace = 0;
+      };
+      background = [
         {
-          path = "screenshot";
-          blur_passes = 3;
-          contrast = 0.8916;
-          brightness = 0.8172;
-          vibrancy = 0.1696;
-          vibrancy_darkness = 0.0;
+          monitor = "";
+          path = "$HOME/.config/wall.png";
+          color = "rgba(25, 20, 20, 1.0)";
+          blur_passes = 1;
+          blur_size = 0;
+          brightness = 0.2;
         }
       ];
-      input-fields = [
+      input-field = [
         {
-          size = {
-            width = 250;
-            height = 60;
-          };
+          monitor = "";
+          size = "250, 60";
           outline_thickness = 2;
           dots_size = 0.2;
           dots_spacing = 0.2;
@@ -31,31 +35,21 @@
           inner_color = "rgba(0, 0, 0, 0.5)";
           font_color = "rgb(200, 200, 200)";
           fade_on_empty = false;
-
-          placeholder_text = "";
+          placeholder_text = ''<i><span foreground="##cdd6f4">Input Password...</span></i>'';
+          hide_input = false;
+          position = "0, -120";
           halign = "center";
           valign = "center";
         }
       ];
-      labels = [
+      label = [
         {
-          text = "Hi there, $USER";
-          font_size = 50;
-          font_family = "Sans";
-          position = {
-            x = 0;
-            y = 80;
-          };
-        }
-        {
-          text = "cmd[update:1000] date '+%I:%M %p'";
-          font_size = 150;
-          font_family = "JetBrains Mono Nerd Font Mono ExtraBold";
-          color = "rgba(255, 255, 255, 0.6)";
-          position = {
-            x = 0;
-            y = 200;
-          };
+          monitor = "";
+          text = "$TIME";
+          font_size = 120;
+          position = "0, 80";
+          valign = "center";
+          halign = "center";
         }
       ];
     };
