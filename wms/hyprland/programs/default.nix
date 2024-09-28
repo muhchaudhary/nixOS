@@ -17,6 +17,7 @@
     wf-recorder
     brightnessctl
     hyprpicker
+    hyprpaper
     wayshot
     pavucontrol
     swappy
