@@ -18,6 +18,8 @@
     enable = true;
   };
 
+  boot.kernelParams = ["button.lid_init_state=open"];
+
   networking.hostName = "muhammadLaptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -68,6 +70,12 @@
 
   # Power saving
   services.cpupower-gui.enable = true;
+
+  services.logind = {
+    extraConfig = "HandlePowerKey=suspend";
+
+    lidSwitch = "suspend";
+  };
 
   powerManagement = {
     enable = true;

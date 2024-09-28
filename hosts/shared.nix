@@ -111,7 +111,6 @@
     auto-optimise-store = true;
     builders-use-substitutes = true;
     substituters = [
-      "https://hydra.build/"
       "https://hyprland.cachix.org"
       "https://nix-config.cachix.org"
       "https://nix-community.cachix.org"
