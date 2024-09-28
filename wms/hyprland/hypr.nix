@@ -91,7 +91,7 @@
         "noborder, onworkspace:w[t1]"
       ];
       windowrule = [
-        "opacity 0.99 0.99, firefox"
+        "opacity 0.999 0.999, firefox"
       ];
       layerrule = [
         "blur, fabric"
