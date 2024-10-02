@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-hyprctl activeworkspace | grep monitorID | tr -d "[:space:]" | tail -c 1
+cmd=$(hyprctl activeworkspace | grep monitorID | tr -d "[:space:]" | tail -c 1)
+dbus-send --session --print-reply --dest=org.Fabric.fabric.fabric-bar /org/Fabric/fabric org.Fabric.fabric.Evaluate string:"appMenu.toggle_popup(monitor=$((cmd ^= 1)))" >/dev/null 2>&1
