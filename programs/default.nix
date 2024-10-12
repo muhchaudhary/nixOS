@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: {
   imports = [
@@ -12,6 +13,7 @@
   ];
 
   home.packages = with pkgs; [
+    inputs.zen-browser.packages.${pkgs.system}.default
     chromium
     steam
     gamescope

@@ -18,6 +18,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
+      cursor.no_warps = true;
       general = {
         gaps_in = 5;
         gaps_out = 10;
@@ -26,7 +27,6 @@
         "col.inactive_border" = "rgba(595959aa)";
         layout = "dwindle";
         resize_on_border = true;
-        # no_cursor_warps = true;
         # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
         allow_tearing = false;
       };

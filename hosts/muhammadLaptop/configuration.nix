@@ -34,6 +34,7 @@
   # $ nix search wget
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
@@ -66,7 +67,6 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
   # This is to enable flatpak support
-  # services.flatpak.enable = true;
 
   # Power saving
   services.cpupower-gui.enable = true;

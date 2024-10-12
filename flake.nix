@@ -6,6 +6,8 @@
   };
 
   inputs = {
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     # home-manager for user configuration
@@ -40,7 +42,6 @@
 
       overlays = [
         blender-bin.overlays.default
-        # hyprland.overlays.default
       ];
 
       config = {

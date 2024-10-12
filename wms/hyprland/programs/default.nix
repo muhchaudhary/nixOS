@@ -18,7 +18,7 @@
     brightnessctl
     hyprpicker
     hyprpaper
-    wayshot
+    grimblast
     pavucontrol
     swappy
     slurp
