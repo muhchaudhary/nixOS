@@ -18,7 +18,10 @@
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      cursor.no_warps = true;
+      cursor = {
+        no_warps = true;
+        no_hardware_cursors = true;
+      };
       general = {
         gaps_in = 5;
         gaps_out = 10;
@@ -82,8 +85,8 @@
       ];
       exec-once = [
         "dbus-update-activation-environment --systemd --all &"
-        "sleep 1 && systemctl --user restart xdg-desktop-portal"
-        "./launch_fabric"
+        "sleep 1 && systemctl --user restart xdg-desktop-portal &"
+        "./scripts/launch_fabric"
       ];
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
