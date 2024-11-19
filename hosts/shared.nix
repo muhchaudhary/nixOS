@@ -58,6 +58,8 @@
 
   # Fonts
   fonts.packages = with pkgs; [
+    league-spartan
+    jost
     material-design-icons
     noto-fonts
     noto-fonts-cjk-sans

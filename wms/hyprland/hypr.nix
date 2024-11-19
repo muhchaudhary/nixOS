@@ -79,14 +79,16 @@
       };
       misc = {
         disable_hyprland_logo = true;
+        middle_click_paste = false;
       };
       source = [
         "./binds.conf"
       ];
       exec-once = [
+        "wl-paste --watch cliphist store"
         "dbus-update-activation-environment --systemd --all &"
         "sleep 1 && systemctl --user restart xdg-desktop-portal &"
-        "./scripts/launch_fabric"
+        "./launch_fabric"
       ];
       windowrulev2 = [
         "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"

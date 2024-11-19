@@ -13,6 +13,7 @@
     btop
     swww
     sassc
+    cliphist
     wl-clipboard
     wf-recorder
     brightnessctl
