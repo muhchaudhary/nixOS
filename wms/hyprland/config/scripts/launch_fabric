@@ -5,5 +5,5 @@ function direnv_cd() {
   eval "$(direnv export bash)"
 }
 
-direnv_cd ~/nixOS/fabric/fabric
-python main.py
+direnv_cd ~/nixOS/fabric
+python run_fabric.py

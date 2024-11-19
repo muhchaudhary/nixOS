@@ -30,4 +30,13 @@
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
   hardware.nvidia-container-toolkit.enable = true;
+
+  # services.nvidia.extraConfig = {
+  #   source = ./50-limit-free-buffer-pool-in-wayland-compositors.json;
+  # };
+  # environment.etc = {
+  #   "nvidia/nvidia-application-profiles-rc.d" = lib.mkForce {
+  #     source = ./50-limit-free-buffer-pool-in-wayland-compositors.json;
+  #   };
+  # };
 }
