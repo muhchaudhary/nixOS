@@ -5,11 +5,12 @@
   ...
 }: {
   imports = [
+    ./fastfetch.nix
     ./git.nix
-    ./vscode.nix
     ./gnome.nix
     ./kitty.nix
     ./obsidian.nix
+    ./vscode.nix
   ];
 
   home.packages = with pkgs; [
@@ -35,7 +36,7 @@
     xdg-utils
     libsForQt5.gwenview
     openvpn
-
+    yazi
     # latex
     texliveFull
 

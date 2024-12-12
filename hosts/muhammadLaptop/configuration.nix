@@ -29,23 +29,21 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
+  services.xserver.videoDrivers = ["modesetting"];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
+      vpl-gpu-rt
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       vaapiVdpau
       libvdpau-va-gl
     ];
   };
-
-  # environment.variables = rec {
-  #   LIBVA_DRIVER_NAME = "iHD";
-  # };
+  environment.sessionVariables = {LIBVA_DRIVER_NAME = "iHD";};
 
   environment.systemPackages = with pkgs; [
     i2c-tools
@@ -70,6 +68,26 @@
 
   # Power saving
   services.cpupower-gui.enable = true;
+  services.thermald = {
+    enable = true;
+    ignoreCpuidCheck = true;
+    # configFile = "--ignore-cpuid-check --workaround-enabled";
+  };
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+
+      CPU_MIN_PERF_ON_AC = 0;
+      CPU_MAX_PERF_ON_AC = 100;
+      CPU_MIN_PERF_ON_BAT = 0;
+      CPU_MAX_PERF_ON_BAT = 20;
+    };
+  };
 
   services.logind = {
     extraConfig = "HandlePowerKey=suspend";

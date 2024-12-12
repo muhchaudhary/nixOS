@@ -40,10 +40,12 @@
           size = 3;
           passes = 1;
         };
-        drop_shadow = "yes";
-        shadow_range = 4;
-        shadow_render_power = 3;
-        "col.shadow" = "rgba(1a1a1aee)";
+        shadow = {
+          enabled = true;
+          range = 4;
+          render_power = 3;
+          color = "rgba(1a1a1aee)";
+        };
       };
 
       animations = {
@@ -64,7 +66,7 @@
       dwindle = {
         pseudotile = true;
         preserve_split = true;
-        no_gaps_when_only = 1;
+        # 3422no_gaps_when_only = 1;
       };
       gestures = {
         workspace_swipe = true;

@@ -172,8 +172,8 @@
     unzip
     lm_sensors
     pciutils
+    usbutils
     wine
-    neofetch
     htop
     firefox
   ];
@@ -190,5 +190,5 @@
   };
 
   # enable power profile switching through dbus
-  services.power-profiles-daemon.enable = true;
+  # services.power-profiles-daemon.enable = true;
 }
