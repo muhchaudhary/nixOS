@@ -49,9 +49,6 @@ in {
       libdbusmenu-gtk3
       playerctl
     ];
-    ${namespace} = {
-      theming.enable = true;
-    };
     xdg.configFile."hypr" = {
       source = ./config;
       recursive = true;

@@ -13,15 +13,25 @@
 }:
 with lib;
 with lib.${namespace}; let
-  cfg = config.${namespace}.theming;
+  cfg = config.${namespace}.desktop.fonts;
 in {
-  options.${namespace}.theming = with types; {
-    enable = mkBoolOpt false "Whether to enable theme";
+  options.${namespace}.desktop.fonts = with types; {
+    enable = mkBoolOpt config.${namespace}.themes.gtk.enable "Whether to enable catppuccin font theming";
   };
 
   config = mkIf cfg.enable {
-    ${namespace} = {
-      themes.gtk = enabled;
-    };
+    fonts.packages = with pkgs; [
+      roboto
+      roboto-mono
+      roboto-slab
+      jetbrains-mono
+      league-spartan
+      jost
+
+      nerd-fonts.fira-code
+      nerd-fonts.hasklug
+      nerd-fonts.iosevka
+      nerd-fonts.victor-mono
+    ];
   };
 }

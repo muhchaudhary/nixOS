@@ -15,4 +15,5 @@ with lib;
 with lib.internal; {
   imports = [./hyprland.nix];
   internal.apps = enabled;
+  internal.themes.gtk = enabled;
 }

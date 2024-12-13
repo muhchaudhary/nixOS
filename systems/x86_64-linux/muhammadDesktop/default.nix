@@ -21,6 +21,8 @@ with lib.internal; {
     # development = enabled;
     desktop.hyprland = enabled;
     hardware.nvidia = enabled;
+    desktop.fonts = enabled;
+    themes.gtk = enabled;
     polkit = enabled;
   };
 

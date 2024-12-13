@@ -20,23 +20,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    fonts.packages = with pkgs; [
-      roboto
-      roboto-mono
-      roboto-slab
-      jetbrains-mono
-      league-spartan
-      jost
-
-      (nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "Hasklig"
-          "Iosevka"
-          "VictorMono"
-        ];
-      })
-    ];
     boot.plymouth.enable = true;
     services.displayManager.sddm.package = pkgs.kdePackages.sddm;
   };

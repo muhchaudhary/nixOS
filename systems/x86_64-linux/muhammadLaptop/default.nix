@@ -18,6 +18,9 @@ with lib.internal; {
   internal = {
     system = enabled;
     gaming = enabled;
+    desktop.fonts = enabled;
+    themes.gtk = enabled;
+
     # development = enabled;
     desktop.hyprland = enabled;
     polkit = enabled;

@@ -16,7 +16,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.themes.gtk;
 in {
   options.${namespace}.themes.gtk = with types; {
-    enable = mkBoolOpt false "Whether to enable catppuccin user theme";
+    enable = mkBoolOpt false "Whether to enable user theme";
   };
 
   config = mkIf cfg.enable {
