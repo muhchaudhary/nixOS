@@ -23,7 +23,6 @@ in {
     #TODO MOVE THESE TO SOMEWHERE BETTER
     services.mpris-proxy.enable = true;
     services.blueman-applet.enable = true;
-    services.network-manager-applet.enable = true;
     #TODO: ORGANIZE
     home.packages = with pkgs; [
       firefox
