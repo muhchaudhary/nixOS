@@ -49,10 +49,12 @@ in {
       jellyfin-media-player
       jellyfin-mpv-shim
       telegram-desktop
-      (discord.override {
-        # withOpenASAR = true;
-        withVencord = true;
-      })
+      # discord
+      vesktop
+      # (discord.override {
+      #   # withOpenASAR = true;
+      #   withVencord = true;
+      # })
 
       libreoffice-qt # Office Apps
       libsForQt5.gwenview

@@ -1,0 +1,8 @@
+{
+  "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}",
+  "workbench.editor.labelFormat": "short",
+  "workbench.editor.customLabels.enabled": true,
+  "workbench.editor.customLabels.patterns": {
+    "**/default.nix/**": "${dirname(1)}/${dirname} (${extname})"
+  }
+}

@@ -45,6 +45,11 @@
     };
 
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
+
+    blender-bin = {
+      url = "github:edolstra/nix-warez?dir=blender";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
