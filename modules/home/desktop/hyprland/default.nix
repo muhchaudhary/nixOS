@@ -73,7 +73,6 @@ in {
               "col.inactive_border" = "rgba(595959aa)";
               layout = "dwindle";
               resize_on_border = true;
-              # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
               allow_tearing = false;
             };
             decoration = {
@@ -83,12 +82,6 @@ in {
                 size = 3;
                 passes = 1;
               };
-              # shadow = {
-              #   enabled = true;
-              #   range = 4;
-              #   render_power = 3;
-              #   color = "rgba(1a1a1aee)";
-              # };
             };
 
             animations = {
@@ -157,20 +150,6 @@ in {
       extraConfig = with pkgs;
         mkMerge [
           # TODO: MOVE BINDS HERE!
-          #   ''
-          #     bind = ,Print,submap,capture
-
-          #     submap = capture
-
-          #     bind = ,G, exec, ${grimblast}/bin/grimblast --notify copysave area
-          #     bind = ,G, submap, reset
-          #     bind = ,Print, exec, ${grimblast}/bin/grimblast --notify copysave active
-          #     bind = ,Print, submap, reset
-          #     bind = ,S, exec, ${grimblast}/bin/grimblast --notify copysave output
-          #     bind = ,S, submap, reset
-
-          #     submap = reset
-          #   ''
           cfg.extraConfig
         ];
     };
