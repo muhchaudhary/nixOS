@@ -27,6 +27,7 @@ in {
     home.packages = with pkgs; [
       firefox
       inputs.zen-browser.packages.${pkgs.system}.default
+      inputs.hyprland-qtutils.packages.${pkgs.system}.default
       chromium
 
       nautilus # file manager

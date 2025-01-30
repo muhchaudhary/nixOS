@@ -37,6 +37,7 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
 
     # System deployment
     deploy-rs = {
