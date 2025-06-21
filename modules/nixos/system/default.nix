@@ -26,6 +26,7 @@ in {
         bluetooth = enabled;
         network = enabled;
         sound = enabled;
+        printer = enabled;
       };
     };
   };

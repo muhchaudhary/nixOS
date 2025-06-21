@@ -18,5 +18,25 @@ with lib.internal; {
       ];
       misc.vrr = 1;
     };
+    hypridle = {
+      enable = true;
+      settings = {
+        listener = [
+          {
+            timeout = 200;
+            on-timeout = "loginctl lock-session";
+          }
+          {
+            timeout = 500;
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+          {
+            timeout = 2500;
+            on-timeout = "systemctl suspend";
+          }
+        ];
+      };
+    };
   };
 }

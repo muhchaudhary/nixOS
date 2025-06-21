@@ -18,7 +18,6 @@ with lib.internal; {
   internal = {
     system = enabled;
     gaming = enabled;
-    # development = enabled;
     desktop.hyprland = enabled;
     hardware.nvidia = enabled;
     desktop.fonts = enabled;
@@ -27,21 +26,43 @@ with lib.internal; {
   };
 
   environment.systemPackages = with pkgs; [
+    spice-gtk
     r2modman
     lm_sensors
+    quickemu
   ];
 
   environment.variables = rec {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    WLR_NO_HARDWARE_CURSORS = "1";
   };
 
-  virtualisation.docker = {
-    enable = true;
-    extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
-  };
+  # virtualisation.docker = {
+  #   enable = true;
+  #   extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
+  # };
+
+  virtualisation.spiceUSBRedirection.enable = true;
+
+  services.udev.extraRules = ''
+    # Bose PIDs
+
+    # All devices tested so far, normal mode
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="40fe", TAG+="uaccess"
+
+    # SoundLink Color II, DFU mode
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="400d", TAG+="uaccess"
+
+    # SoundLink Mini II, DFU mode
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="4009", TAG+="uaccess"
+
+    # QuietComfort 35 II, DFU mode
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="4020", TAG+="uaccess"
+
+    # QuietComfort 45 , DFU mode
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="4039", TAG+="uaccess"
+  '';
 
   services = {
     sunshine.enable = true;

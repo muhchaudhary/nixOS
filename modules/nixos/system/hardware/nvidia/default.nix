@@ -44,6 +44,9 @@ in {
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
+    environment.systemPackages = with pkgs; [
+      cudaPackages.cudatoolkit
+    ];
     hardware.nvidia-container-toolkit.enable = true;
   };
 }

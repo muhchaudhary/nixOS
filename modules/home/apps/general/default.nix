@@ -45,17 +45,12 @@ in {
 
       freecad
       kicad-small
-      spotify
       bottles
       jellyfin-media-player
       jellyfin-mpv-shim
       telegram-desktop
       # discord
       vesktop
-      # (discord.override {
-      #   # withOpenASAR = true;
-      #   withVencord = true;
-      # })
 
       libreoffice-qt # Office Apps
       libsForQt5.gwenview
@@ -68,7 +63,10 @@ in {
       desktop-file-utils
       python3
       wlr-randr
-      xwaylandvideobridge
     ];
+
+    programs.spicetify = {
+      enable = true;
+    };
   };
 }

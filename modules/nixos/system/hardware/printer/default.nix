@@ -13,21 +13,18 @@
 }:
 with lib;
 with lib.${namespace}; let
-  cfg = config.${namespace}.cli.direnv;
+  cfg = config.${namespace}.hardware.printer;
 in {
-  options.${namespace}.cli.direnv = {
-    enable = mkBoolOpt false "Whether to install nix-direnv.";
+  options.${namespace}.hardware.printer = {
+    enable = mkBoolOpt false "Whether to enable printer configuration.";
   };
 
   config = mkIf cfg.enable {
-    programs = {
-      direnv = {
-        enable = true;
-        enableFishIntegration = true;
-        nix-direnv.enable = true;
-      };
-
-      fish.enable = true;
+    services.printing.enable = true;
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
     };
   };
 }
