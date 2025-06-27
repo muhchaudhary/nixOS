@@ -25,6 +25,7 @@ in {
       yazi
       btop # terminal process viewer/manager
       w3m
+      fzf
     ];
   };
 }
