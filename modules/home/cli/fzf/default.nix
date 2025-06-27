@@ -14,17 +14,18 @@
 with lib;
 with lib.${namespace};
 let
-  cfg = config.${namespace}.cli.direnv;
+  cfg = config.${namespace}.cli.fzf;
 in
 {
-  options.${namespace}.cli.direnv = {
-    enable = mkBoolOpt false "Whether to install nix-direnv.";
+  options.${namespace}.cli.fzf = {
+    enable = mkBoolOpt false "Whether to enable fzf.";
   };
 
   config = mkIf cfg.enable {
-    programs.direnv = {
+    programs.fzf = {
       enable = true;
-      nix-direnv.enable = true;
+      enableFishIntegration = true;
     };
+
   };
 }
