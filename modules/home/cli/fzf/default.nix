@@ -12,11 +12,9 @@
   ...
 }:
 with lib;
-with lib.${namespace};
-let
+with lib.${namespace}; let
   cfg = config.${namespace}.cli.fzf;
-in
-{
+in {
   options.${namespace}.cli.fzf = {
     enable = mkBoolOpt false "Whether to enable fzf.";
   };
@@ -26,6 +24,5 @@ in
       enable = true;
       enableFishIntegration = true;
     };
-
   };
 }

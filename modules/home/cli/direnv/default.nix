@@ -12,11 +12,9 @@
   ...
 }:
 with lib;
-with lib.${namespace};
-let
+with lib.${namespace}; let
   cfg = config.${namespace}.cli.direnv;
-in
-{
+in {
   options.${namespace}.cli.direnv = {
     enable = mkBoolOpt false "Whether to install nix-direnv.";
   };
