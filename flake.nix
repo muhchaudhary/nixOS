@@ -92,9 +92,9 @@
         nix-gaming.nixosModules.pipewireLowLatency
       ];
 
-      #   systems.hosts.muhammadLaptop.modules = with inputs; [
-      #     nixos-hardware.nixosModules.lenovo-thinkpad-x1-7th-gen
-      #   ];
+      systems.hosts.muhammadLaptop.modules = with inputs; [
+        nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen4
+      ];
 
       templates = {
         devshell.description = "Simple flake dev shell.";
