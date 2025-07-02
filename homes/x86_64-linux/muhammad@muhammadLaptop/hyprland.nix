@@ -13,7 +13,7 @@ with lib.internal; {
     type = "laptop";
     settings = {
       monitor = [
-        "eDP-1, 1920x1080@60, 0x0, 1"
+        "eDP-1, 1920x1200@60, 0x0, 1"
       ];
     };
     hypridle = {

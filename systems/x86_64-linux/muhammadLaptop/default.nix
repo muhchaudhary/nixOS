@@ -29,32 +29,21 @@ with lib.internal; {
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-
     ];
   };
 
-  # Power saving
-  services.cpupower-gui.enable = true;
+  hardware.system76.power-daemon.enable = true;
 
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+  services = {
+    # using system76-power
+    system76-scheduler.enable = true;
+    power-profiles-daemon.enable = false;
 
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-
-      CPU_MIN_PERF_ON_AC = 0;
-      CPU_MAX_PERF_ON_AC = 100;
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 20;
+    cpupower-gui.enable = true;
+    logind = {
+      extraConfig = "HandlePowerKey=suspend";
+      lidSwitch = "suspend";
     };
-  };
-
-  services.logind = {
-    extraConfig = "HandlePowerKey=suspend";
-    lidSwitch = "suspend";
   };
 
   powerManagement = {
@@ -67,5 +56,5 @@ with lib.internal; {
     builders-use-substitutes = true;
   };
 
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
