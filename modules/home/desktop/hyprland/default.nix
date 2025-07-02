@@ -133,13 +133,12 @@ in {
             "./binds.conf"
           ];
           exec-once = [
-            "swww-daemon & disown"
-
             "dbus-update-activation-environment --systemd --all &"
 
             "sleep 1 && systemctl --user restart xdg-desktop-portal &"
 
-            "./scripts/launch_fabric"
+            "~/.config/hypr/scripts/launch_fabric"
+            "sleep 1 & ~/.config/hypr/scripts/randomize_wallpaper"
           ];
           windowrulev2 = [
             "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
