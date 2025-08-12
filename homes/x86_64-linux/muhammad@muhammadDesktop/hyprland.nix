@@ -16,6 +16,13 @@ with lib.internal; {
         "HDMI-A-1, 2560x1440@75, 0x0, 1"
         "DP-1,1920x1080@60,2560x0,1"
       ];
+      device = [
+        {
+          name = "wacom-intuos-bt-m-pen";
+          transform = 0;
+          output = "HDMI-A-1";
+        }
+      ];
       misc.vrr = 1;
     };
     hypridle = {

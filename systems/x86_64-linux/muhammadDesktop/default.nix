@@ -23,6 +23,7 @@ with lib.internal; {
     desktop.fonts = enabled;
     themes.gtk = enabled;
     polkit = enabled;
+    virtualisation = enabled;
   };
 
   environment.systemPackages = with pkgs; [
@@ -37,13 +38,6 @@ with lib.internal; {
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
-
-  # virtualisation.docker = {
-  #   enable = true;
-  #   extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
-  # };
-
-  virtualisation.spiceUSBRedirection.enable = true;
 
   services.udev.extraRules = ''
     # Bose PIDs
@@ -64,6 +58,8 @@ with lib.internal; {
     SUBSYSTEM=="hidraw", ATTRS{idVendor}=="05a7", ATTRS{idProduct}=="4039", TAG+="uaccess"
   '';
 
+  services.xserver.wacom.enable = true;
+
   services = {
     sunshine.enable = true;
     hardware.openrgb = {
@@ -83,6 +79,5 @@ with lib.internal; {
     cores = 8;
     max-jobs = 8;
   };
-
   system.stateVersion = "23.05"; # Did you read the comment?
 }
