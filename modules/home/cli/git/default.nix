@@ -33,22 +33,24 @@ in {
       lfs.enable = true;
       package = pkgs.gitFull;
 
-      userName = "muhchaudhary";
-      userEmail = "61593188+muhchaudhary@users.noreply.github.com";
-
-      extraConfig = {
+      settings = {
+        user = {
+          name = "muhchaudhary";
+          email = "61593188+muhchaudhary@users.noreply.github.com";
+        };
         color.ui = "auto";
         push = {
           autoSetupRemote = true;
         };
         credential.credentialStore = "secretservice";
       };
+    };
 
-      delta = {
-        enable = true;
-        options = {
-          side-by-side = true;
-        };
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options = {
+        side-by-side = true;
       };
     };
   };

@@ -21,7 +21,7 @@ in {
   config = mkIf cfg.enable {
     programs.gamemode.enable = true;
     programs.gamescope.enable = true;
-    ${namespace}.user.extraGroups = ["gamemode"];
+    ${namespace}.user.extraGroups = ["gamemode" "plugdev"];
     programs.steam = {
       enable = true;
       extraCompatPackages = with pkgs; [

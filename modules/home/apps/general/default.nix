@@ -38,7 +38,6 @@ in {
       obsidian # note taking
       (mpv.override {scripts = [mpvScripts.mpris];}) # video/music player
       inkscape # vector editing
-      darktable # lighttable editor/darkroom
       transmission_4-gtk # torrenting
       transmission-remote-gtk # remote Transmission control
       teams-for-linux
@@ -46,14 +45,14 @@ in {
       freecad
       kicad-small
       bottles
-      jellyfin-media-player
+      # jellyfin-media-player
       jellyfin-mpv-shim
       telegram-desktop
       # discord
       vesktop
 
       libreoffice-qt # Office Apps
-      libsForQt5.gwenview
+      kdePackages.gwenview
       godot_4
 
       #TODO MOVE TO SOMEHRER BETTER
@@ -63,6 +62,9 @@ in {
       desktop-file-utils
       python3
       wlr-randr
+      blender_4_5
+      zed-editor-fhs
+      nixd
     ];
 
     programs.spicetify = {

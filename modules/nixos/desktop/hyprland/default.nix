@@ -39,18 +39,6 @@ in {
       package = pkgs.kdePackages.kdeconnect-kde;
     };
 
-    xdg.portal = {
-      enable = true;
-      config.hyprland = {
-        "org.freedesktop.portal.FileChooser" = [
-          "gtk"
-        ];
-      };
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-      ];
-    };
-
     ${namespace} = {
       nix.extra-substituters = [
         {

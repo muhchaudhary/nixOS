@@ -13,6 +13,7 @@
 }:
 with lib;
 with lib.${namespace}; let
+  hyprlandPackages = inputs.hyprland.packages.${pkgs.system};
   cfg = config.${namespace}.desktop.hyprland;
 in {
   options.${namespace}.desktop.hyprland = with types; {
@@ -55,6 +56,23 @@ in {
       recursive = true;
     };
 
+    xdg.portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gnome
+        kdePackages.xdg-desktop-portal-kde
+      ];
+
+      config.hyprland = {
+        default = [
+          "hyprland"
+          "gnome"
+          "kde"
+        ];
+      };
+    };
+
     home.file.".config/code-flags.conf".text = ''
       --disable-gpu-sandbox
       --ozone-platform-hint=auto
@@ -67,7 +85,7 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-
+      portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
       settings = mkMerge [
         {
           cursor = {
@@ -75,21 +93,33 @@ in {
             no_hardware_cursors = true;
           };
           general = {
-            gaps_in = 5;
-            gaps_out = 10;
-            border_size = 3;
-            "col.active_border" = "rgba(85e0ffee)";
-            "col.inactive_border" = "rgba(595959aa)";
+            gaps_in = 8;
+            gaps_out = 16;
+            border_size = 2;
+            "col.active_border" = "rgba(333333cc)";
+            "col.inactive_border" = "rgba(33333377)";
             layout = "dwindle";
             resize_on_border = true;
             allow_tearing = false;
           };
           decoration = {
-            rounding = 10;
+            rounding = 22;
+            active_opacity = 1.0;
+            inactive_opacity = 0.92;
+
+            shadow = {
+              enabled = true;
+              range = 30;
+              render_power = 2;
+            };
+
             blur = {
               enabled = true;
-              size = 1;
-              passes = 4;
+              size = 18;
+              passes = 3;
+              new_optimizations = "on";
+              ignore_opacity = false;
+              vibrancy = 0.18;
               brightness = 1;
               contrast = 1;
             };
@@ -97,25 +127,23 @@ in {
           animations = {
             enabled = "yes";
             bezier = [
-              "myBezier, 0.05, 0.9, 0.1, 1.05"
+              "ease, 0.15, 0.9, 0.1, 1.0"
             ];
             animation = [
-              "windows, 1, 7, myBezier"
-              "windowsOut, 1, 7, default, popin 80%"
-              "border, 1, 10, default"
-              "borderangle, 1, 8, default"
-              "fade, 1, 7, default"
+              "windows,    1, 6, ease"
+              "windowsOut, 1, 5, default, popin 80%"
+              "border,     1, 10, default"
+              "fade,       1, 7, default"
               "workspaces, 1, 6, default"
-              "specialWorkspace, 1, 6, default, slidevert"
+              "workspaces, 1, 6, default"
+              "specialWorkspace, 1, 6, default, slide up"
             ];
           };
           dwindle = {
             pseudotile = true;
             preserve_split = true;
-            # 3422no_gaps_when_only = 1;
           };
           gestures = {
-            workspace_swipe = true;
             workspace_swipe_invert = true;
             workspace_swipe_distance = 300;
           };
