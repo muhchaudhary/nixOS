@@ -27,6 +27,7 @@ in {
       jetbrains-mono
       league-spartan
       jost
+      oswald
 
       nerd-fonts.fira-code
       nerd-fonts.hasklug

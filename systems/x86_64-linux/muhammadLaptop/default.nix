@@ -34,10 +34,18 @@ with lib.internal; {
 
   hardware.system76.power-daemon.enable = true;
 
+  services.udev.extraRules = ''
+    # ODESC
+    SUBSYSTEM=="usb", ATTR{idVendor}=="04f2", ATTR{idProduct}=="b74f", MODE="0666"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="0d3[0-9]", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
+  '';
+
   services = {
     # using system76-power
     system76-scheduler.enable = true;
     power-profiles-daemon.enable = false;
+    upower.enable = true;
 
     cpupower-gui.enable = true;
     logind = {
@@ -55,6 +63,7 @@ with lib.internal; {
   nix.settings = {
     builders-use-substitutes = true;
   };
+  security.rtkit = enabled;
 
   system.stateVersion = "25.05"; # Did you read the comment?
 }

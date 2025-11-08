@@ -31,6 +31,6 @@ in {
     # Use beacondb.net since Mozilla Location Service is retired: https://github.com/NixOS/nixpkgs/issues/321121
     services.geoclue2.geoProviderUrl = "https://beacondb.net/v1/geolocate";
 
-    ${namespace}.user.extraGroups = ["networkmanager"];
+    ${namespace}.user.extraGroups = ["networkmanager" "dialout"];
   };
 }

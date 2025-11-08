@@ -27,7 +27,17 @@ in {
 
     programs.vscode = {
       enable = true;
-      # package = with pkgs; (vscode.override {isInsiders = true;});
+      package = with pkgs;
+        (vscode.override {isInsiders = true;})
+        .overrideAttrs
+        (prevAttrs: {
+          src = builtins.fetchTarball {
+            # run curl -I https://update.code.visualstudio.com/latest/linux-x64/insider to get latest url
+            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/7de43ea56b9b4bfd193263f7523ab7ad9d998d26/code-insider-x64-1758086384.tar.gz";
+            sha256 = "sha256:0bnyzvhis1j6w1xjyy6g47qxy9pl735c90fiq66yrrly57sazlw9";
+          };
+          version = "latest";
+        });
       profiles.default.extensions = with pkgs;
       with vscode-extensions; [
         kamadorueda.alejandra

@@ -26,6 +26,7 @@ in {
     extraConfig = mkOpt lines "" "Extra Hyprland config lines.";
     hyprlock = mkOpt attrs {} "Extra Hyprlock settings.";
     hypridle = mkOpt attrs {} "Extra Hypridle settings.";
+    hyprsunset = mkOpt attrs {} "Extra Hyprsunset settings.";
   };
 
   config = mkIf cfg.enable {
@@ -36,15 +37,11 @@ in {
       libnotify
       hyprkeys
       wdisplays
-      grimblast
+      hyprshot
       pwvucontrol
-
       wf-recorder
       brightnessctl
       hyprpicker
-
-      grimblast
-
       swappy
       slurp
       imagemagick
@@ -298,6 +295,13 @@ in {
         };
       }
       cfg.hyprlock
+    ];
+
+    services.hyprsunset = mkMerge [
+      {
+        enable = true;
+      }
+      cfg.hyprsunset
     ];
 
     services.hypridle = mkMerge [
