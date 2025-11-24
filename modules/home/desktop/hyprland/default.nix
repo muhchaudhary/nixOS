@@ -133,7 +133,7 @@ in {
               "fade,       1, 7, default"
               "workspaces, 1, 6, default"
               "workspaces, 1, 6, default"
-              "specialWorkspace, 1, 6, default, slide up"
+              "specialWorkspace, 1, 6, default, slidevert"
             ];
           };
           dwindle = {
@@ -144,6 +144,9 @@ in {
             workspace_swipe_invert = true;
             workspace_swipe_distance = 300;
           };
+          gesture = [
+            "3, horizontal, workspace"
+          ];
           input = {
             touchpad = {
               natural_scroll = true;

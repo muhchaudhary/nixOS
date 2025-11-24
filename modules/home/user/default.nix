@@ -23,10 +23,6 @@ in {
   };
 
   config = {
-    programs.fish = {
-      enable = true;
-    };
-
     home.username = cfg.name;
 
     xdg.userDirs = {

@@ -49,8 +49,10 @@ in {
       };
       gtk4.theme = config.gtk.theme;
     };
-    qt.enable = true;
-    qt.style.name = "kvantum";
-    qt.platformTheme.name = "kvantum";
+    qt = {
+      enable = true;
+      style.name = "adwaita-dark";
+      platformTheme.name = "gnome";
+    };
   };
 }

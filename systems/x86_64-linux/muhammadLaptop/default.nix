@@ -48,9 +48,9 @@ with lib.internal; {
     upower.enable = true;
 
     cpupower-gui.enable = true;
-    logind = {
-      extraConfig = "HandlePowerKey=suspend";
-      lidSwitch = "suspend";
+    logind.settings.Login = {
+      HandlePowerKey = "suspend";
+      HandleLidSwitch = "suspend";
     };
   };
 
