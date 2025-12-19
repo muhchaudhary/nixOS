@@ -15,7 +15,7 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.apps.heroic;
 in {
-  options.${namespace}.apps.steam = {
+  options.${namespace}.apps.heroic = {
     enable = mkBoolOpt false "Whether to enable steam configuration.";
   };
   config = mkIf cfg.enable {
