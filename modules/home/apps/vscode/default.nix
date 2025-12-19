@@ -32,11 +32,19 @@ in {
         .overrideAttrs
         (prevAttrs: {
           src = builtins.fetchTarball {
-            # run curl -I https://update.code.visualstudio.com/latest/linux-x64/insider to get latest url
-            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/7de43ea56b9b4bfd193263f7523ab7ad9d998d26/code-insider-x64-1758086384.tar.gz";
-            sha256 = "sha256:0bnyzvhis1j6w1xjyy6g47qxy9pl735c90fiq66yrrly57sazlw9";
+            # run `curl -I https://update.code.visualstudio.com/latest/linux-x64/insider | grep location: | cut -c 11-` to get latest url
+            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/b2426c57053497e6c1eea406b8f2855e442992b4/code-insider-x64-1763733071.tar.gz";
+            sha256 = "sha256:1wkq9licqf4hb64sflgslzydfvccg6d732j5yr1qv6abhzwn42iz";
           };
           version = "latest";
+          buildInputs =
+            prevAttrs.buildInputs or []
+            ++ [
+              curl
+              openssl
+              webkitgtk_4_1
+              libsoup_3
+            ];
         });
       profiles.default.extensions = with pkgs;
       with vscode-extensions; [

@@ -35,18 +35,26 @@ in {
     nixpkgs.config.cudaSupport = true;
 
     services.xserver.videoDrivers = ["nvidia"];
+    boot.initrd.kernelModules = ["nvidia"];
+    boot.kernelParams = [
+      "module_blacklist=nouveau"
+      "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+      "nvidia-drm.modeset=1"
+      "nvidia-drm.fbdev=1"
+    ];
 
     hardware.nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
       powerManagement.finegrained = false;
-      open = true;
+      open = false;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
     environment.systemPackages = with pkgs; [
       cudaPackages.cudatoolkit
     ];
+    nixpkgs.config.nvidia.acceptLicense = true;
     hardware.nvidia-container-toolkit.enable = true;
   };
 }

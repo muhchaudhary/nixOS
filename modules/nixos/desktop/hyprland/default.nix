@@ -25,15 +25,24 @@ in {
     programs.hyprland.enable = true;
     programs.hyprland.xwayland.enable = true;
     programs.hyprlock.enable = true;
-
-    services.displayManager =
-      {
-        sddm.wayland.enable = true;
-        sddm.enable = true;
-      }
-      // optionalAttrs cfg.makeDefaultSession {
-        sddm.defaultSession = "hyprland";
+    environment.systemPackages = with pkgs; [
+      sddm-astronaut
+    ];
+    services.displayManager.sddm = {
+      package = pkgs.kdePackages.sddm;
+      extraPackages = with pkgs; [
+        sddm-astronaut
+      ];
+      enable = true;
+      wayland.enable = true;
+      theme = "sddm-astronaut-theme";
+      enableHidpi = true;
+      settings = {
+        General = {
+          DisplayServer = "wayland";
+        };
       };
+    };
     programs.kdeconnect = {
       enable = true;
       package = pkgs.kdePackages.kdeconnect-kde;

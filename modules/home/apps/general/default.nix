@@ -26,8 +26,8 @@ in {
     #TODO: ORGANIZE
     home.packages = with pkgs; [
       firefox
-      inputs.zen-browser.packages.${pkgs.system}.default
-      inputs.hyprland-qtutils.packages.${pkgs.system}.default
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
       chromium
 
       nautilus # file manager

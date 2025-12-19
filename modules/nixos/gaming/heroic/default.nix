@@ -13,17 +13,18 @@
 }:
 with lib;
 with lib.${namespace}; let
-  cfg = config.${namespace}.gaming;
+  cfg = config.${namespace}.apps.heroic;
 in {
-  options.${namespace}.gaming = {
-    enable = mkBoolOpt false "Enable everything related to gaming.";
+  options.${namespace}.apps.steam = {
+    enable = mkBoolOpt false "Whether to enable steam configuration.";
   };
   config = mkIf cfg.enable {
-    ${namespace} = {
-      apps = {
-        steam = enabled;
-        heroic = enabled;
-      };
-    };
+    environment.systemPackages = with pkgs; [
+      (heroic.override {
+        extraPkgs = pkgs: [
+          pkgs.gamescope
+        ];
+      })
+    ];
   };
 }

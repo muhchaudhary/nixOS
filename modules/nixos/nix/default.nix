@@ -45,6 +45,8 @@ in {
       deploy-rs
       nix-index
       nix-output-monitor
+      devbox # faster nix-shells
+      shellify # faster nix-shells
     ];
 
     nix = let

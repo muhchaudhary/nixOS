@@ -12,13 +12,15 @@ with lib.internal; {
     ./hardware.nix
   ];
 
-  boot.kernelParams = ["module_blacklist=nouveau" "nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   internal = {
     system = enabled;
     gaming = enabled;
-    desktop.hyprland = enabled;
+    desktop.hyprland = {
+      enable = true;
+      makeDefaultSession = true;
+    };
     hardware.nvidia = enabled;
     desktop.fonts = enabled;
     themes.gtk = enabled;

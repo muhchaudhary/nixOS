@@ -13,7 +13,7 @@
 }:
 with lib;
 with lib.${namespace}; let
-  hyprlandPackages = inputs.hyprland.packages.${pkgs.system};
+  hyprlandPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
   cfg = config.${namespace}.desktop.hyprland;
 in {
   options.${namespace}.desktop.hyprland = with types; {

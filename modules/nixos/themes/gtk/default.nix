@@ -21,6 +21,5 @@ in {
 
   config = mkIf cfg.enable {
     boot.plymouth.enable = true;
-    services.displayManager.sddm.package = pkgs.kdePackages.sddm;
   };
 }
