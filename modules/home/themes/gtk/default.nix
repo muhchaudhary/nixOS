@@ -47,6 +47,7 @@ in {
         };
         name = "Colloid-Dark";
       };
+      gtk4.theme = config.gtk.theme;
     };
     qt.enable = true;
     qt.style.name = "kvantum";

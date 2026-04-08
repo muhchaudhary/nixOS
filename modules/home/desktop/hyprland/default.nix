@@ -114,7 +114,7 @@ in {
               enabled = true;
               size = 18;
               passes = 3;
-              new_optimizations = "on";
+              new_optimizations = true;
               ignore_opacity = false;
               vibrancy = 0.18;
               brightness = 1;
@@ -165,17 +165,17 @@ in {
             "~/.config/hypr/scripts/launch_fabric"
             "sleep 1 & ~/.config/hypr/scripts/randomize_wallpaper"
           ];
-          windowrulev2 = [
-            "stayfocused, title:^(?!.*Steam Settings)$, class:^(steam)$"
-            "minsize 1 1, title:^()$, class:^(steam)$"
+          windowrule = [
+            "stay_focused on, match:title negative:.*Steam Settings.*, match:class ^(steam)$"
+            "min_size 1 1, match:title ^()$, match:class ^(steam)$"
 
-            "noborder, onworkspace:w[t1]"
-            "bordersize 0, floating:0, onworkspace:w[t1]"
-            "rounding 0, floating:0, onworkspace:w[t1]"
-            "bordersize 0, floating:0, onworkspace:w[tg1]"
-            "rounding 0, floating:0, onworkspace:w[tg1]"
-            "bordersize 0, floating:0, onworkspace:f[1]"
-            "rounding 0, floating:0, onworkspace:f[1]"
+            "border_size 0, match:workspace w[t1]"
+            "border_size 0, match:float false, match:workspace w[t1]"
+            "rounding 0, match:float false, match:workspace w[t1]"
+            "border_size 0, match:float false, match:workspace w[tg1]"
+            "rounding 0, match:float false, match:workspace w[tg1]"
+            "border_size 0, match:float false, match:workspace f[1]"
+            "rounding 0, match:float false, match:workspace f[1]"
           ];
 
           workspace = [
@@ -184,9 +184,9 @@ in {
             "f[1], gapsout:0, gapsin:0"
           ];
           layerrule = [
-            "blur, fabric"
-            "ignorezero, fabric"
-            "noanim, fabric"
+            "blur on, match:namespace fabric"
+            "ignore_alpha 0, match:namespace fabric"
+            "no_anim on, match:namespace fabric"
           ];
           env = [
             "NIXOS_OZONE_WL, 1" # for ozone-based and electron apps to run on wayland

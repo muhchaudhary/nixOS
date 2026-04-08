@@ -32,6 +32,7 @@ in {
       enable = true;
       lfs.enable = true;
       package = pkgs.gitFull;
+      signing.format = null;
 
       settings = {
         user = {

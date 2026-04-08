@@ -25,8 +25,8 @@ in rec {
     hosts = self.nixosConfigurations or {};
     names = builtins.attrNames hosts;
     nodes =
-      lib.foldl
-      (result: name: let
+      lib.foldr
+      (name: result: let
         host = hosts.${name};
         user = host.config.${namespace}.user.name or null;
         inherit (host.pkgs) system;
