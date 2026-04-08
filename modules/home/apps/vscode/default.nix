@@ -33,8 +33,8 @@ in {
         (prevAttrs: {
           src = builtins.fetchTarball {
             # run `curl -I https://update.code.visualstudio.com/latest/linux-x64/insider | grep location: | cut -c 11-` to get latest url
-            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/b2426c57053497e6c1eea406b8f2855e442992b4/code-insider-x64-1763733071.tar.gz";
-            sha256 = "sha256:1wkq9licqf4hb64sflgslzydfvccg6d732j5yr1qv6abhzwn42iz";
+            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/fc6d18c3174aa8962d90435aba5b51ef6c300b9a/code-insider-x64-1775671132.tar.gz";
+            sha256 = "sha256:0pbkhjfhlym5b7yg8iby3m8182za3kdswrz06mnlbb53s87br761";
           };
           version = "latest";
           buildInputs =
