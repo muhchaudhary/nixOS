@@ -80,6 +80,12 @@
 
       overlays = with inputs; [
         blender-bin.overlays.default
+        (final: prev: {
+          # OpenLDAP's syncrepl test can be flaky in some environments.
+          openldap = prev.openldap.overrideAttrs (_: {
+            doCheck = false;
+          });
+        })
       ];
 
       homes.modules = [inputs.spicetify-nix.homeManagerModules.spicetify];
