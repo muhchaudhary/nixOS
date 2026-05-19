@@ -20,55 +20,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    #TODO MOVE THESE TO SOMEWHERE BETTER
-    services.mpris-proxy.enable = true;
     services.blueman-applet.enable = true;
-    #TODO: ORGANIZE
+
     home.packages = with pkgs; [
-      firefox
-      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
-      chromium
 
-      nautilus # file manager
-      gnome-calculator # calculator
-      gnome-system-monitor # system monitor
-      totem # for thumbnails
-      warpinator # send files around
-      obsidian # note taking
-      (mpv.override {scripts = [mpvScripts.mpris];}) # video/music player
-      inkscape # vector editing
-      transmission_4-gtk # torrenting
-      transmission-remote-gtk # remote Transmission control
-      teams-for-linux
-
-      freecad
-      kicad-small
-      bottles
-      # jellyfin-media-player
-      jellyfin-mpv-shim
-      telegram-desktop
-      # discord
-      vesktop
-
-      libreoffice-qt # Office Apps
+      nautilus
+      gnome-calculator
+      gnome-system-monitor
+      obsidian
+      libreoffice-qt
       kdePackages.gwenview
-      godot_4
+      transmission_4-gtk
+      transmission-remote-gtk
 
-      #TODO MOVE TO SOMEHRER BETTER
-      ffmpeg
-      ffmpegthumbnailer
-      inotify-tools
-      desktop-file-utils
-      python3
-      wlr-randr
-      blender_4_5
-      zed-editor-fhs
-      nixd
+      (prismlauncher.override {
+        jdks = [openjdk25];
+      })
     ];
-
-    programs.spicetify = {
-      enable = true;
-    };
   };
 }

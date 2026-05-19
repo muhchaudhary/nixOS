@@ -52,7 +52,11 @@ in {
     qt = {
       enable = true;
       style.name = "adwaita-dark";
-      platformTheme.name = "gnome";
+      platformTheme.name = "adwaita";
+    };
+    dconf.enable = true;
+    dconf.settings."org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
     };
   };
 }
