@@ -137,7 +137,6 @@ in {
             ];
           };
           dwindle = {
-            pseudotile = true;
             preserve_split = true;
           };
           gestures = {
@@ -188,7 +187,7 @@ in {
           ];
           layerrule = [
             "blur on, match:namespace fabric"
-            "ignore_alpha 0, match:namespace fabric"
+            "ignore_alpha 0.0, match:namespace fabric"
             "no_anim on, match:namespace fabric"
           ];
           env = [
