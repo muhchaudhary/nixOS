@@ -11,6 +11,7 @@ with lib.internal; {
   imports = [./hardware.nix];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = ["iptable_nat" "iptable_filter"];
 
   internal = {
     system = enabled;
