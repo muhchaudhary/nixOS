@@ -18,6 +18,8 @@ with lib.internal; {
     user.uid = 1001;
   };
 
+  environment.systemPackages = [ pkgs.kitty.terminfo ];
+
   # Run headless with lid closed
   services.logind.settings.Login = {
     HandleLidSwitch = "ignore";
