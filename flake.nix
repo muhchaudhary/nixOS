@@ -96,6 +96,12 @@
         nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen4
       ];
 
+      systems.hosts.laptopServer.modules = with inputs; [
+        nixos-hardware.nixosModules.lenovo-thinkpad-x1-7th-gen
+        nixos-hardware.nixosModules.common-cpu-intel
+        nixos-hardware.nixosModules.common-pc-ssd
+      ];
+
       templates = {
         devshell.description = "Simple flake dev shell.";
       };

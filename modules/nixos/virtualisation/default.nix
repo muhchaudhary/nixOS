@@ -2,12 +2,12 @@
   lib,
   pkgs,
   inputs,
-  namespace, # The namespace used for your flake, defaulting to "internal" if not set.
-  system, # The system architecture for this host (eg. `x86_64-linux`).
-  target, # The Snowfall Lib target for this system (eg. `x86_64-iso`).
-  format, # A normalized name for the system target (eg. `iso`).
-  virtual, # A boolean to determine whether this system is a virtual target using nixos-generators.
-  systems, # An attribute map of your defined hosts.
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
   config,
   ...
 }:
@@ -16,21 +16,23 @@ with lib.${namespace}; let
   cfg = config.${namespace}.virtualisation;
 in {
   options.${namespace}.virtualisation = {
-    enable = mkBoolOpt false "Enable everything related virtualisation.";
+    enable = mkBoolOpt false "Enable everything related to virtualisation.";
+    nvidia = mkBoolOpt false "Enable NVIDIA container runtime for Docker.";
   };
-  config = mkIf cfg.enable {
-    # Docker
-    ${namespace}.user.extraGroups = ["docker"];
-    virtualisation.docker = {
-      enable = true;
-      extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
-    };
-    hardware.nvidia-container-toolkit.enable = true;
 
-    # VMs
-    environment.systemPackages = with pkgs; [
-      quickemu
-    ];
-    virtualisation.spiceUSBRedirection.enable = true;
-  };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      ${namespace}.user.extraGroups = ["docker"];
+      virtualisation.docker.enable = true;
+
+      environment.systemPackages = with pkgs; [
+        quickemu
+      ];
+      virtualisation.spiceUSBRedirection.enable = true;
+    }
+    (mkIf cfg.nvidia {
+      virtualisation.docker.extraOptions = "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
+      hardware.nvidia-container-toolkit.enable = true;
+    })
+  ]);
 }

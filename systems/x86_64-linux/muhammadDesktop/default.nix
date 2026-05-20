@@ -25,7 +25,10 @@ with lib.internal; {
     desktop.fonts = enabled;
     themes.gtk = enabled;
     polkit = enabled;
-    virtualisation = enabled;
+    virtualisation = {
+      enable = true;
+      nvidia = true;
+    };
   };
 
   environment.systemPackages = with pkgs; [
