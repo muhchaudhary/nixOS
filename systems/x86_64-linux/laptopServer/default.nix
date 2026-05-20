@@ -45,7 +45,19 @@ with lib.internal; {
     powertop.enable = true;
   };
   services.thermald.enable = true;
-  services.tlp.enable = true;
+  services.tlp = {
+    enable = true;
+    settings = {
+      START_CHARGE_THRESH_BAT0 = 75;
+      STOP_CHARGE_THRESH_BAT0 = 80;
+    };
+  };
+
+  # Disable flapping Synaptics fingerprint reader (06cb:00bd) on USB 1-9
+  # Internal connector is faulty, causing constant connect/disconnect loop in dmesg
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="06cb", ATTR{idProduct}=="00bd", RUN+="/bin/sh -c 'echo 0 > /sys/$env{DEVPATH}/authorized'"
+  '';
 
   system.stateVersion = "25.05";
 }
