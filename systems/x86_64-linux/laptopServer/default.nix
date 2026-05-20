@@ -15,6 +15,7 @@ with lib.internal; {
   internal = {
     system = enabled;
     virtualisation = enabled; # Docker only, no NVIDIA
+    user.uid = 1001;
   };
 
   # Run headless with lid closed
