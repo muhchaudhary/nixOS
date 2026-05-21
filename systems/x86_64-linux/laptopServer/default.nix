@@ -26,8 +26,8 @@ with lib.internal; {
     HandleLidSwitchDocked = "ignore";
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
-  networking.firewall.allowedUDPPorts = [51820];
+  networking.firewall.allowedTCPPorts = [80 443 25565];
+  networking.firewall.allowedUDPPorts = [51820 25565];
 
   services.openssh = {
     enable = true;
