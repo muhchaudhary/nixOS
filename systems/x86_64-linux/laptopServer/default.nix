@@ -29,6 +29,11 @@ with lib.internal; {
   networking.firewall.allowedTCPPorts = [80 443 25565];
   networking.firewall.allowedUDPPorts = [51820 25565];
 
+  # iwd handles Channel Switch Announcements and reconnects more robustly
+  # than wpa_supplicant on Intel cards (AC 9560) — prevents CSA locking into legacy 802.11a mode
+  networking.networkmanager.wifi.backend = "iwd";
+  networking.wireless.iwd.enable = true;
+
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;
