@@ -40,16 +40,16 @@ with lib.internal; {
   ];
 
   # Intel power management
-  powerManagement = {
-    enable = true;
-    powertop.enable = true;
-  };
+  powerManagement.enable = true;
   services.thermald.enable = true;
   services.tlp = {
     enable = true;
     settings = {
       START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;
+      # Disable WiFi power saving — powertop auto-tune throttles WiFi to ~20 Mbit/s
+      WIFI_PWR_ON_AC = "off";
+      WIFI_PWR_ON_BAT = "off";
     };
   };
 
