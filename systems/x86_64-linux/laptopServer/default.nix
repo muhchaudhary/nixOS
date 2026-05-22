@@ -18,6 +18,13 @@ with lib.internal; {
     user.uid = 1001;
   };
 
+  # Disable desktop-oriented hardware modules not needed on a headless server
+  internal.hardware = {
+    bluetooth.enable = mkForce false;
+    sound.enable = mkForce false;
+    printer.enable = mkForce false;
+  };
+
   environment.systemPackages = [ pkgs.kitty.terminfo ];
 
   # Run headless with lid closed
@@ -44,14 +51,20 @@ with lib.internal; {
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
   ];
 
-  # Intel power management
+  # Performance-first power management — server stays plugged in
   powerManagement.enable = true;
-  services.thermald.enable = true;
   services.tlp = {
     enable = true;
     settings = {
+      # Run at full performance on AC
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_BOOST_ON_AC = 1;
+
+      # Battery charge limits extend longevity while plugged in permanently
       START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;
+
       # Disable WiFi power saving — powertop auto-tune throttles WiFi to ~20 Mbit/s
       WIFI_PWR_ON_AC = "off";
       WIFI_PWR_ON_BAT = "off";
