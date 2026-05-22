@@ -32,7 +32,7 @@ with lib.internal; {
     ];
   };
 
-  hardware.system76.power-daemon.enable = true;
+  hardware.system76.power-daemon.enable = false;
 
   services.udev.extraRules = ''
     # ODESC
@@ -42,12 +42,22 @@ with lib.internal; {
   '';
 
   services = {
-    # using system76-power
-    system76-scheduler.enable = true;
-    power-profiles-daemon.enable = false;
+    system76-scheduler.enable = false;
     upower.enable = true;
 
-    cpupower-gui.enable = true;
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_BOOST_ON_BAT = 0;
+        RADEON_DPM_STATE_ON_BAT = "battery";
+        RADEON_POWER_PROFILE_ON_BAT = "low";
+        WIFI_PWR_ON_BAT = "on";
+        RUNTIME_PM_ON_BAT = "auto";
+      };
+    };
+
     logind.settings.Login = {
       HandlePowerKey = "suspend";
       HandleLidSwitch = "suspend";

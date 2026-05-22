@@ -20,8 +20,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.blueman-applet.enable = true;
-
     home.packages = with pkgs; [
       inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
 
