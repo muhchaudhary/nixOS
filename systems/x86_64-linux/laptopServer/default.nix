@@ -68,13 +68,21 @@ with lib.internal; {
       # Disable WiFi power saving — powertop auto-tune throttles WiFi to ~20 Mbit/s
       WIFI_PWR_ON_AC = "off";
       WIFI_PWR_ON_BAT = "off";
+
+      # Exclude ASIX AX88179A USB Ethernet adapter from TLP's USB autosuspend handling
+      # so it can't undo the udev rule below
+      USB_DENYLIST = "0b95:1790";
     };
   };
 
-  # Disable flapping Synaptics fingerprint reader (06cb:00bd) on USB 1-9
-  # Internal connector is faulty, causing constant connect/disconnect loop in dmesg
   services.udev.extraRules = ''
+    # Disable flapping Synaptics fingerprint reader (06cb:00bd) on USB 1-9
+    # Internal connector is faulty, causing constant connect/disconnect loop in dmesg
     ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="06cb", ATTR{idProduct}=="00bd", RUN+="/bin/sh -c 'echo 0 > /sys/$env{DEVPATH}/authorized'"
+
+    # Disable USB autosuspend on ASIX AX88179A USB Ethernet adapter (0b95:1790)
+    # Autosuspend drops the Ethernet link after 2s and it never recovers
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0b95", ATTR{idProduct}=="1790", ATTR{power/control}="on"
   '';
 
   system.stateVersion = "25.05";
