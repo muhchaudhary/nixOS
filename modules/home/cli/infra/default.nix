@@ -21,9 +21,6 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      pulumi
-      pulumiPackages.pulumi-language-python
-      pulumiPackages.pulumi-language-nodejs
       kubectl
       k9s
       dive
