@@ -55,6 +55,11 @@
     };
 
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -82,6 +87,7 @@
       systems.modules.nixos = with inputs; [
         home-manager.nixosModules.home-manager
         nix-gaming.nixosModules.platformOptimizations
+        sops-nix.nixosModules.sops
       ];
 
       systems.hosts.muhammadDesktop.modules = with inputs; [

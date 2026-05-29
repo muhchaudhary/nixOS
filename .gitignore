@@ -1,0 +1,3 @@
+# Only commit encrypted secrets. Anything unencrypted under secrets/ stays local.
+secrets/*.plain
+secrets/*.dec

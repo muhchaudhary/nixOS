@@ -10,21 +10,6 @@ with lib;
 with lib.internal; {
   internal.desktop.hyprland = {
     enable = true;
-    type = "desktop";
-    settings = {
-      monitor = [
-        "DP-1, 2560x1440@75, 0x0, 1"
-        "HDMI-A-1,1920x1080@60,2560x0,1,transform,2"
-      ];
-      device = [
-        {
-          name = "wacom-intuos-bt-m-pen";
-          transform = 0;
-          output = "DP-1";
-        }
-      ];
-      misc.vrr = 1;
-    };
     hypridle = {
       enable = true;
       settings = {
@@ -46,4 +31,6 @@ with lib.internal; {
       };
     };
   };
+
+  xdg.configFile."hypr/monitors.lua".source = ./hypr/monitors.lua;
 }

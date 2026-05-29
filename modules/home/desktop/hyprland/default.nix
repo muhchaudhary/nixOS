@@ -2,12 +2,12 @@
   lib,
   pkgs,
   inputs,
-  namespace, # The namespace used for your flake, defaulting to "internal" if not set.
-  system, # The system architecture for this host (eg. `x86_64-linux`).
-  target, # The Snowfall Lib target for this system (eg. `x86_64-iso`).
-  format, # A normalized name for the system target (eg. `iso`).
-  virtual, # A boolean to determine whether this system is a virtual target using nixos-generators.
-  systems, # An attribute map of your defined hosts.
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
   config,
   ...
 }:
@@ -18,12 +18,6 @@ with lib.${namespace}; let
 in {
   options.${namespace}.desktop.hyprland = with types; {
     enable = mkBoolOpt false "Whether to enable hyprland configuration. Includes everything required to feel like a desktop environment.";
-    type = mkOpt (enum [
-      "desktop"
-      "laptop"
-    ]) "desktop" "Whether this is a desktop or laptop.";
-    settings = mkOpt attrs {} "Extra Hyprland settings.";
-    extraConfig = mkOpt lines "" "Extra Hyprland config lines.";
     hyprlock = mkOpt attrs {} "Extra Hyprlock settings.";
     hypridle = mkOpt attrs {} "Extra Hypridle settings.";
     hyprsunset = mkOpt attrs {} "Extra Hyprsunset settings.";
@@ -48,6 +42,7 @@ in {
       libdbusmenu-gtk3
       playerctl
     ];
+
     xdg.configFile."hypr" = {
       source = ./config;
       recursive = true;
@@ -81,132 +76,10 @@ in {
     '';
 
     wayland.windowManager.hyprland = {
+      configType = "lua";
       enable = true;
       portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
-      settings = mkMerge [
-        {
-          cursor = {
-            no_warps = true;
-            no_hardware_cursors = true;
-          };
-          general = {
-            gaps_in = 8;
-            gaps_out = 16;
-            border_size = 2;
-            "col.active_border" = "rgba(333333cc)";
-            "col.inactive_border" = "rgba(33333377)";
-            layout = "dwindle";
-            resize_on_border = true;
-            allow_tearing = false;
-          };
-          decoration = {
-            rounding = 22;
-            active_opacity = 1.0;
-            inactive_opacity = 0.92;
-
-            shadow = {
-              enabled = true;
-              range = 30;
-              render_power = 2;
-            };
-
-            blur = {
-              enabled = true;
-              size = 18;
-              passes = 3;
-              new_optimizations = true;
-              ignore_opacity = false;
-              vibrancy = 0.18;
-              brightness = 1;
-              contrast = 1;
-            };
-          };
-          animations = {
-            enabled = "yes";
-            bezier = [
-              "ease, 0.15, 0.9, 0.1, 1.0"
-            ];
-            animation = [
-              "windows,    1, 6, ease"
-              "windowsOut, 1, 5, default, popin 80%"
-              "border,     1, 10, default"
-              "fade,       1, 7, default"
-              "workspaces, 1, 6, default"
-              "workspaces, 1, 6, default"
-              "specialWorkspace, 1, 6, default, slidevert"
-            ];
-          };
-          dwindle = {
-            preserve_split = true;
-          };
-          gestures = {
-            workspace_swipe_invert = true;
-            workspace_swipe_distance = 300;
-          };
-          gesture = [
-            "3, horizontal, workspace"
-          ];
-          input = {
-            touchpad = {
-              natural_scroll = true;
-              scroll_factor = 0.25;
-            };
-          };
-          misc = {
-            disable_hyprland_logo = true;
-            middle_click_paste = false;
-          };
-          source = [
-            "./binds.conf"
-          ];
-          exec-once = [
-            "dbus-update-activation-environment --systemd --all &"
-
-            "sleep 1 && systemctl --user restart xdg-desktop-portal &"
-
-            "~/.config/hypr/scripts/launch_fabric"
-            "sleep 1 & ~/.config/hypr/scripts/randomize_wallpaper"
-          ];
-          windowrule = [
-            "stay_focused on, match:title negative:.*Steam Settings.*, match:class ^(steam)$"
-            "min_size 1 1, match:title ^()$, match:class ^(steam)$"
-
-            "border_size 0, match:workspace w[t1]"
-            "border_size 0, match:float false, match:workspace w[t1]"
-            "rounding 0, match:float false, match:workspace w[t1]"
-            "border_size 0, match:float false, match:workspace w[tg1]"
-            "rounding 0, match:float false, match:workspace w[tg1]"
-            "border_size 0, match:float false, match:workspace f[1]"
-            "rounding 0, match:float false, match:workspace f[1]"
-          ];
-
-          workspace = [
-            "w[t1], gapsout:0, gapsin:0"
-            "w[tg1], gapsout:0, gapsin:0"
-            "f[1], gapsout:0, gapsin:0"
-          ];
-          layerrule = [
-            "blur on, match:namespace fabric"
-            "ignore_alpha 0.0, match:namespace fabric"
-            "no_anim on, match:namespace fabric"
-          ];
-          env = [
-            "NIXOS_OZONE_WL, 1" # for ozone-based and electron apps to run on wayland
-            "MOZ_ENABLE_WAYLAND, 1" # for firefox to run on wayland
-            "MOZ_WEBRENDER, 1" # for firefox to run on wayland
-            "XDG_SESSION_TYPE, wayland"
-            "WLR_NO_HARDWARE_CURSORS, 1"
-            "WLR_RENDERER_ALLOW_SOFTWARE, 1"
-            "QT_QPA_PLATFORM, wayland"
-          ];
-        }
-        cfg.settings
-      ];
-      extraConfig = with pkgs;
-        mkMerge [
-          # TODO: MOVE BINDS HERE!
-          cfg.extraConfig
-        ];
+      systemd.enable = false; # UWSM manages the systemd session
     };
 
     programs.hyprlock = mkMerge [
@@ -333,9 +206,9 @@ in {
 
     services.kdeconnect = {
       enable = true;
-      indicator = true; # Phone integration
+      indicator = true;
     };
-    services.cliphist.enable = true; # Clipboard history for wayland
-    services.udiskie.enable = true; # USB automount
+    services.cliphist.enable = true;
+    services.udiskie.enable = true;
   };
 }

@@ -10,12 +10,6 @@ with lib;
 with lib.internal; {
   internal.desktop.hyprland = {
     enable = true;
-    type = "laptop";
-    settings = {
-      monitor = [
-        "eDP-1, 1920x1200@60, 0x0, 1"
-      ];
-    };
     hypridle = {
       enable = true;
       settings = {
@@ -37,4 +31,6 @@ with lib.internal; {
       };
     };
   };
+
+  xdg.configFile."hypr/monitors.lua".source = ./hypr/monitors.lua;
 }

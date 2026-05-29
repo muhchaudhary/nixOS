@@ -25,6 +25,14 @@ in {
     programs.hyprland.enable = true;
     programs.hyprland.xwayland.enable = true;
     programs.hyprlock.enable = true;
+    programs.uwsm = {
+      enable = true;
+      waylandCompositors.hyprland = {
+        prettyName = "Hyprland";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/start-hyprland";
+      };
+    };
     environment.systemPackages = with pkgs; [
       sddm-astronaut
     ];
@@ -43,6 +51,8 @@ in {
         };
       };
     };
+    services.displayManager.defaultSession = mkIf cfg.makeDefaultSession "hyprland-uwsm";
+
     programs.kdeconnect = {
       enable = true;
       package = pkgs.kdePackages.kdeconnect-kde;
