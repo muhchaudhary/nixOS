@@ -24,15 +24,8 @@ in {
     services.udisks2.enable = true; # Required for udiskie
     programs.hyprland.enable = true;
     programs.hyprland.xwayland.enable = true;
+    programs.hyprland.withUWSM = true;
     programs.hyprlock.enable = true;
-    programs.uwsm = {
-      enable = true;
-      waylandCompositors.hyprland = {
-        prettyName = "Hyprland";
-        comment = "Hyprland compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/start-hyprland";
-      };
-    };
     environment.systemPackages = with pkgs; [
       sddm-astronaut
     ];
