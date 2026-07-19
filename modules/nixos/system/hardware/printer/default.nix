@@ -26,5 +26,16 @@ in {
       nssmdns4 = true;
       openFirewall = true;
     };
+    # Enable scanning and driverless USB/network scanning
+    hardware.sane = {
+      enable = true;
+      extraBackends = [pkgs.sane-airscan];
+    };
+
+    # Required for modern USB driverless scanning (IPP-over-USB)
+    services.ipp-usb.enable = true;
+
+    # Add your user account to the scanner and lp groups
+    ${namespace}.user.extraGroups = ["scanner" "lp"];
   };
 }

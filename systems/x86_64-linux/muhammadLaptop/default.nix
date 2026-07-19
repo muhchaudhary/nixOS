@@ -22,6 +22,7 @@ with lib.internal; {
     themes.gtk = enabled;
     desktop.hyprland = enabled;
     polkit = enabled;
+    hardware.v4l2loopback = enabled;
     services.wgHotspot = {
       enable = true;
       upstream = "wlp2s0";

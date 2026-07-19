@@ -22,6 +22,7 @@ with lib.internal; {
       makeDefaultSession = true;
     };
     hardware.nvidia = enabled;
+    hardware.v4l2loopback = enabled;
     desktop.fonts = enabled;
     themes.gtk = enabled;
     polkit = enabled;
