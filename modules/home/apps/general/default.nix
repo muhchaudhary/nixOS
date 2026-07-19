@@ -27,7 +27,7 @@ in {
       gnome-calculator
       gnome-system-monitor
       obsidian
-      libreoffice-qt
+      # libreoffice-qt
       kdePackages.gwenview
       transmission_4-gtk
       transmission-remote-gtk

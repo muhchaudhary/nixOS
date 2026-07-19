@@ -17,6 +17,7 @@ with lib.${namespace}; let
 in {
   options.${namespace}.apps.vscode = {
     enable = mkBoolOpt false "Whether to enable vscode configuration.";
+    cuda = mkBoolOpt false "Whether to enable CUDA support in VS Code (desktop only).";
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
@@ -33,12 +34,24 @@ in {
         (prevAttrs: {
           src = builtins.fetchTarball {
             # run `curl -I https://update.code.visualstudio.com/latest/linux-x64/insider | grep location: | cut -c 11-` to get latest url
-            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/f2b51f3f64f0a781a7633c2243cfdde589030e34/code-insider-x64-1777051238.tar.gz";
-            sha256 = "sha256:0ym11zspj2l2pmjfg6fnjk39kassnzk20mghrchndf7hblyzmx2l";
+            url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/5e212606d57c0a17f73bc8b7ae0cc9e14bcfd345/code-insider-x64-1784306972.tar.gz";
+            sha256 = "sha256:1zrf0jqvc2ih050rs4bk63ri6p72mkga7z27bjvqrdbjfvm1xqwd";
           };
           version = "latest";
+          postPatch =
+            (prevAttrs.postPatch or "")
+            + ''
+              find . -name "libonnxruntime_providers_tensorrt.so" -delete
+            '';
           buildInputs =
             prevAttrs.buildInputs or []
+            ++ lib.optionals cfg.cuda (with cudaPackages; [
+              cuda_cudart
+              libcublas
+              libcurand
+              libcufft
+              cudnn
+            ])
             ++ [
               curl
               openssl

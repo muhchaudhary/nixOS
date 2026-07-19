@@ -31,9 +31,12 @@ in {
       builtins.elem (lib.getName pkg) [
         "nvidia-x11"
         "nvidia-settings"
+        "cuda_cudart"
+        "libcublas"
+        "libcurand"
+        "libcufft"
+        "cudnn"
       ];
-    nixpkgs.config.cudaSupport = true;
-
     services.xserver.videoDrivers = ["nvidia"];
     boot.initrd.kernelModules = ["nvidia"];
     boot.kernelParams = [
