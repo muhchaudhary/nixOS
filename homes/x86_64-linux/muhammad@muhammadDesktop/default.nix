@@ -14,7 +14,6 @@
 with lib;
 with lib.internal; {
   imports = [./hyprland.nix];
-  internal.apps.streaming = enabled;
   internal.apps = enabled // {vscode.cuda = true;};
   internal.themes.gtk = enabled;
 }
