@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Sunshine "Headless" app undo-command: reloads Hyprland's config so the
+# physical monitors come back exactly as declared in monitors.lua, then
+# disables the headless monitor.
+#
+# Order matters: `hyprctl reload` resets any monitor NOT declared in
+# monitors.lua (i.e. the headless one) back to its enabled default, which
+# would undo an eval'd disable done beforehand. So disable must happen
+# AFTER reload, not before (verified empirically).
+
+hyprctl reload
+sleep 0.2
+
+HEADLESS=$(hyprctl monitors all -j | python3 -c "import sys,json; ms=[m['name'] for m in json.load(sys.stdin) if 'HEADLESS' in m['name']]; print(ms[0] if ms else '')")
+[ -n "$HEADLESS" ] && hyprctl eval "hl.monitor({output=\"$HEADLESS\", disabled=true})"

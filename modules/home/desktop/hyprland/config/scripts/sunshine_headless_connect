@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Sunshine "Headless" app do-command: enables the headless monitor at the
+# resolution/refresh rate the connecting Moonlight client requested, and
+# turns off the physical monitors so the headless is the only active output.
+#
+# Uses `hyprctl eval` (hl.monitor Lua binding) since `hyprctl keyword`
+# doesn't work under the Lua config parser.
+
+HEADLESS=$(hyprctl monitors all -j | python3 -c "import sys,json; ms=[m['name'] for m in json.load(sys.stdin) if 'HEADLESS' in m['name']]; print(ms[0] if ms else '')")
+[ -z "$HEADLESS" ] && exit 1
+
+hyprctl eval "hl.monitor({output=\"$HEADLESS\", mode=\"${SUNSHINE_CLIENT_WIDTH}x${SUNSHINE_CLIENT_HEIGHT}@${SUNSHINE_CLIENT_FPS}\", position=\"auto\", scale=1, disabled=false})"
+hyprctl eval 'hl.monitor({output="HDMI-A-1", disabled=true})'
+hyprctl eval 'hl.monitor({output="DP-1", disabled=true})'

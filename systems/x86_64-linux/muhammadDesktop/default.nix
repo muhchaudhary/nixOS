@@ -75,10 +75,69 @@ with lib.internal; {
     SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
   '';
 
-  services.xserver.wacom.enable = true;
-
   services = {
-    sunshine.enable = true;
+    sunshine = {
+      enable = true;
+      autoStart = true;
+      openFirewall = true;
+      capSysAdmin = true; # Required for KMS desktop capture
+      package = pkgs.sunshine.override {
+        cudaSupport = true;
+        cudaPackages = pkgs.cudaPackages;
+      };
+      # Mirrors what was already configured via the web UI, so switching to
+      # a declarative apps.json doesn't reset encoder settings.
+      #
+      # output_name is deliberately left unset: it's a single global setting
+      # (Sunshine's apps.json has no per-app capture-target field), but it's
+      # re-evaluated per stream and auto-picks whichever output is the sole
+      # enabled one at the time (verified empirically). The Headless app's
+      # prep-cmd relies on this to switch capture between the physical
+      # monitors and the headless output.
+      settings = {
+        nvenc_preset = 2;
+        av1_mode = 1;
+        nvenc_twopass = "full_res"; # better quality/bitrate, 3090 has the headroom
+        nvenc_vbv_increase = 25; # smoother quality on complex frames; safe on LAN
+      };
+      applications = {
+        env = {
+          PATH = "$(PATH):$(HOME)/.local/bin";
+        };
+        apps = [
+          {
+            name = "Desktop";
+            image-path = "desktop.png";
+          }
+          {
+            name = "Headless";
+            prep-cmd = [
+              {
+                do = "$(HOME)/.config/hypr/scripts/sunshine_headless_connect";
+                undo = "$(HOME)/.config/hypr/scripts/sunshine_headless_disconnect";
+              }
+            ];
+          }
+          {
+            # Used by MoonDeck (SteamDeck plugin) instead of a normal app entry;
+            # MoonDeck Buddy tells Sunshine to launch this by name. Ending the
+            # MoonDeckStream process ends the stream (auto-detach = false).
+            # Same prep-cmd as "Headless" above, so games launched through
+            # MoonDeck get the headless virtual desktop with physical
+            # monitors turned off.
+            name = "MoonDeckStream";
+            cmd = "${pkgs.moondeck-buddy}/bin/moondeck-buddy --exec MoonDeckStream";
+            auto-detach = "false";
+            prep-cmd = [
+              {
+                do = "$(HOME)/.config/hypr/scripts/sunshine_headless_connect";
+                undo = "$(HOME)/.config/hypr/scripts/sunshine_headless_disconnect";
+              }
+            ];
+          }
+        ];
+      };
+    };
     hardware.openrgb = {
       enable = true;
       motherboard = "amd";
@@ -88,7 +147,11 @@ with lib.internal; {
       quantum = 32;
       rate = 48000;
     };
+    xserver.wacom.enable = true;
   };
+
+  # MoonDeck Buddy's REST server, queried directly by the SteamDeck plugin.
+  networking.firewall.allowedTCPPorts = [59999];
 
   security.rtkit = enabled;
 

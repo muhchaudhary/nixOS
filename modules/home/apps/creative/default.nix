@@ -23,8 +23,7 @@ in {
     home.packages = with pkgs; [
       inkscape
       blender_4_5
-      freecad
-      kicad-small
+kicad-small
       godot_4
     ];
   };

@@ -21,6 +21,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/launch_fabric")
   hl.exec_cmd("sleep 2 && systemctl --user start tray.target")
   hl.exec_cmd("sleep 1 && " .. os.getenv("HOME") .. "/.config/hypr/scripts/randomize_wallpaper")
+  hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/create_headless_monitor")
 end)
 
 --------------------

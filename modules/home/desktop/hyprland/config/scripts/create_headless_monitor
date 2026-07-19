@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Creates a headless monitor for Sunshine's "Headless" app to stream from,
+# then immediately disables it so it doesn't count as an active display
+# until a Moonlight client connects to that app.
+#
+# `hyprctl keyword` doesn't work under the Lua config parser ("keyword
+# can't work with non-legacy parsers"), so monitor state must be changed
+# via `hyprctl eval` calling the hl.monitor() Lua binding instead.
+
+hyprctl output create headless
+sleep 0.3
+
+HEADLESS=$(hyprctl monitors all -j | python3 -c "import sys,json; ms=[m['name'] for m in json.load(sys.stdin) if 'HEADLESS' in m['name']]; print(ms[0] if ms else '')")
+
+[ -n "$HEADLESS" ] && hyprctl eval "hl.monitor({output=\"$HEADLESS\", disabled=true})"
