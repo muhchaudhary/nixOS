@@ -46,10 +46,10 @@ in {
     };
     services.displayManager.defaultSession = mkIf cfg.makeDefaultSession "hyprland-uwsm";
 
-    programs.kdeconnect = {
-      enable = true;
-      package = pkgs.kdePackages.kdeconnect-kde;
-    };
+    # programs.kdeconnect = {
+    #   enable = true;
+    #   package = pkgs.kdePackages.kdeconnect-kde;
+    # };
 
     ${namespace} = {
       nix.extra-substituters = [
