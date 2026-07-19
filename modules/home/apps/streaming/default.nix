@@ -25,6 +25,6 @@ in {
       plugins = with pkgs.obs-studio-plugins; [droidcam-obs];
     };
 
-    home.packages = [pkgs.droidcam];
+    home.packages = [pkgs.droidcam pkgs.moonlight];
   };
 }
