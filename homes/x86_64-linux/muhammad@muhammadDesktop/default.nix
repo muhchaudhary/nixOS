@@ -15,5 +15,6 @@ with lib;
 with lib.internal; {
   imports = [./hyprland.nix];
   internal.apps = enabled;
+  internal.apps.streaming = enabled;
   internal.themes.gtk = enabled;
 }
