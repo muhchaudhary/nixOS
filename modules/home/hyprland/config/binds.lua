@@ -47,14 +47,13 @@ hl.bind(mainMod .. " + F",       hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + ALT + F", hl.dsp.window.fullscreen({ mode = 1 }))
 
 -- Volume
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+ && " .. fabric_send .. " 'toggle-system-osd' 'sound'"),  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%- && " .. fabric_send .. " 'toggle-system-osd' 'sound'"),  { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),  { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-"),  { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 
 -- Brightness
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl s 5%+ && " .. fabric_send .. " 'toggle-system-osd' 'brightness'"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 5%- && " .. fabric_send .. " 'toggle-system-osd' 'brightness'"), { locked = true, repeating = true })
-hl.bind("XF86KbdLightOnOff",     hl.dsp.exec_cmd(fabric_send .. " 'toggle-system-osd' 'kbd'"),                                     { locked = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl s 5%+"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 5%-"), { locked = true, repeating = true })
 
 -- Fabric / app launchers
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(fabric_send .. " 'toggle-appmenu'"))
