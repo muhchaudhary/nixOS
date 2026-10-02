@@ -39,8 +39,8 @@
     # mkDefault so a host (e.g. the server) can pin a different uid.
     uid = lib.mkDefault 1000;
     initialPassword = "password";
-    # extraGroups is intentionally empty here; feature modules (network, printer,
+    # wheel for sudo; feature modules (network, printer,
     # steam, virtualisation, …) append their own groups via list merging.
-    extraGroups = [];
+    extraGroups = ["wheel"];
   };
 }
