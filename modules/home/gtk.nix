@@ -33,6 +33,10 @@
     };
     gtk4.theme = config.gtk.theme;
   };
+  # The status bar regenerates ~/.config/gtk-4.0/gtk.css at runtime, so HM's
+  # managed file collides with it on activation. Force HM to overwrite instead
+  # of failing on the backup step.
+  xdg.configFile."gtk-4.0/gtk.css".force = true;
   qt = {
     enable = true;
     style.name = "adwaita-dark";

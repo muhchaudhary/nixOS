@@ -5,5 +5,6 @@
     ./nix.nix
     ./user.nix
     ./home-manager.nix
+    ./nilla.nix
   ];
 }
