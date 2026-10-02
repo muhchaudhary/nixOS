@@ -9,8 +9,6 @@ hl.env("NIXOS_OZONE_WL", "1")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("MOZ_WEBRENDER", "1")
 hl.env("XDG_SESSION_TYPE", "wayland")
-hl.env("WLR_NO_HARDWARE_CURSORS", "1")
-hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")
 hl.env("QT_QPA_PLATFORM", "wayland")
 
 --------------------
@@ -92,20 +90,27 @@ hl.config({
 -- ANIMATIONS
 --------------------
 
--- snap: near-critically-damped — fast settle, barely any overshoot (window open/close)
-hl.curve("snap", { type = "spring", mass = 1, stiffness = 220, dampening = 28 })
--- flow: moderately underdamped — smooth glide with a gentle spring (workspace/layer transitions)
-hl.curve("flow", { type = "spring", mass = 1, stiffness = 130, dampening = 16 })
--- ease-out bezier for opacity fades (springs don't add value for pure fade)
-hl.curve("ease-out", { type = "bezier", points = { {0.16, 1.0}, {0.3, 1.0} } })
+-- Springs ignore `speed`: their duration comes purely from stiffness/damping/mass
+-- (they run until within 0.001 of the target). Bezier durations are speed * 100ms.
+-- Anything not listed inherits from `global` (Hyprland's default is a slow 800ms).
 
-hl.animation({ leaf = "windowsIn",        enabled = true, speed = 1, spring = "snap", style = "popin 87%" })
-hl.animation({ leaf = "windowsOut",       enabled = true, speed = 1, spring = "snap", style = "popin 87%" })
-hl.animation({ leaf = "windows",          enabled = true, speed = 1, spring = "snap" })
-hl.animation({ leaf = "border",           enabled = true, speed = 1, spring = "flow" })
-hl.animation({ leaf = "fade",             enabled = true, speed = 3, bezier = "ease-out" })
-hl.animation({ leaf = "workspaces",       enabled = true, speed = 1, spring = "flow" })
-hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 1, spring = "snap", style = "slidevert" })
+-- snap: stiff, critically-damped-ish — visually done in ~125ms, no overshoot
+hl.curve("snap", { type = "spring", mass = 1, stiffness = 1000, dampening = 55 })
+-- glide: slightly underdamped (~0.3% overshoot) — quick, with a hint of spring
+hl.curve("glide", { type = "spring", mass = 1, stiffness = 900, dampening = 50 })
+-- fast-start ease-out for fades, borders and layers
+hl.curve("easeOutQuint", { type = "bezier", points = { {0.23, 1}, {0.32, 1} } })
+
+hl.animation({ leaf = "global",           enabled = true, speed = 2.5, bezier = "easeOutQuint" })
+hl.animation({ leaf = "windows",          enabled = true, speed = 1,   spring = "snap" })
+hl.animation({ leaf = "windowsIn",        enabled = true, speed = 1,   spring = "snap",         style = "popin 90%" })
+hl.animation({ leaf = "windowsOut",       enabled = true, speed = 1.2, bezier = "easeOutQuint", style = "popin 90%" })
+hl.animation({ leaf = "border",           enabled = true, speed = 2,   bezier = "easeOutQuint" })
+hl.animation({ leaf = "fade",             enabled = true, speed = 1.5, bezier = "easeOutQuint" })
+hl.animation({ leaf = "fadeOut",          enabled = true, speed = 1.2, bezier = "easeOutQuint" })
+hl.animation({ leaf = "layers",           enabled = true, speed = 1.5, bezier = "easeOutQuint", style = "fade" })
+hl.animation({ leaf = "workspaces",       enabled = true, speed = 1,   spring = "glide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 1,   spring = "snap",         style = "slidevert" })
 
 --------------------
 -- GESTURES
@@ -158,9 +163,13 @@ hl.window_rule({
 -- LAYER RULES
 --------------------
 
-hl.layer_rule({ name = "fabric-blur",    match = { namespace = "fabric" }, blur = true })
-hl.layer_rule({ name = "fabric-alpha",   match = { namespace = "fabric" }, ignore_alpha = 0.0 })
-hl.layer_rule({ name = "fabric-no-anim", match = { namespace = "fabric" }, no_anim = true })
+hl.layer_rule({
+  name = "fabric",
+  match = { namespace = "fabric" },
+  blur = true,
+  ignore_alpha = 0.0,
+  no_anim = true,
+})
 
 --------------------
 -- KEYBINDINGS
