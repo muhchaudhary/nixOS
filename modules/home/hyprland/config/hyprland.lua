@@ -52,16 +52,17 @@ hl.config({
       range = 30,
       render_power = 2,
     },
+    -- a wide, smooth, slightly saturated blur (macOS-style glass)
     blur = {
       enabled = true,
-      size = 5,
-      passes = 4,
+      size = 8,
+      passes = 3,
       new_optimizations = true,
-      vibrancy = 0.25,
+      vibrancy = 0.2,
       vibrancy_darkness = 0.0,
-      brightness = 1.0,
-      contrast = 0.9,
-      noise = 0.02,
+      brightness = 0.95,
+      contrast = 1.0,
+      noise = 0.015,
     },
   },
   animations = {
@@ -163,13 +164,39 @@ hl.window_rule({
 -- LAYER RULES
 --------------------
 
-hl.layer_rule({
-  name = "fabric",
-  match = { namespace = "fabric" },
-  blur = true,
-  ignore_alpha = 0.0,
-  no_anim = true,
-})
+-- Fabric (~/nixOS/fabric) gives each window its own namespace. Blur only
+-- goes behind pixels more opaque than ignore_alpha: glass panels (background
+-- alpha >= ~0.3) are frosted, while soft shadows, hover tints and the
+-- transparent parts of full-screen layers stay crisp.
+local fabric_glass = {
+  "fabric-bar",
+  "fabric-dock",
+  "fabric-popup",
+  "fabric-overview",
+  "fabric-osd",
+  "fabric-toast",
+  "fabric-music",
+}
+for _, ns in ipairs(fabric_glass) do
+  hl.layer_rule({
+    name = ns,
+    match = { namespace = ns },
+    blur = true,
+    ignore_alpha = 0.25,
+    -- the bar's tray menus are separate popup surfaces
+    blur_popups = ns == "fabric-bar",
+    no_anim = true,
+  })
+end
+
+-- not frosted: the desktop (clock, notes, visualizer) and screen corners
+for _, ns in ipairs({ "fabric-desktop", "fabric-corners" }) do
+  hl.layer_rule({
+    name = ns,
+    match = { namespace = ns },
+    no_anim = true,
+  })
+end
 
 --------------------
 -- KEYBINDINGS
