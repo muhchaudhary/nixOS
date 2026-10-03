@@ -189,7 +189,8 @@ for _, ns in ipairs(fabric_glass) do
   })
 end
 
--- not frosted: the desktop (clock, notes, visualizer) and screen corners
+-- not frosted: the screen corners, and the desktop, whose clock sits on a
+-- soft scrim that blur would turn into a hard-edged shape
 for _, ns in ipairs({ "fabric-desktop", "fabric-corners" }) do
   hl.layer_rule({
     name = ns,
