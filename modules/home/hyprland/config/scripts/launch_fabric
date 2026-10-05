@@ -5,5 +5,16 @@ function direnv_cd() {
   eval "$(direnv export bash)"
 }
 
+# Hyprland's exec sends output to /dev/null; keep this run's log and the
+# previous one's (a restart would otherwise wipe the log of a run that hung)
+log_dir="${XDG_STATE_HOME:-$HOME/.local/state}/fabric"
+mkdir -p "$log_dir"
+[ -f "$log_dir/fabric.log" ] && mv -f "$log_dir/fabric.log" "$log_dir/fabric.log.1"
+
+# unbuffered so the log is current; faulthandler prints a Python traceback on
+# a crash (SIGSEGV/SIGABRT) instead of dying silently
+export PYTHONUNBUFFERED=1
+export PYTHONFAULTHANDLER=1
+
 direnv_cd ~/nixOS/fabric
-python run_fabric.py
+exec python run_fabric.py >>"$log_dir/fabric.log" 2>&1
