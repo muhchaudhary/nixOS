@@ -7,6 +7,7 @@
     league-spartan
     jost
     oswald
+    inter # desktop clock (fabric)
 
     nerd-fonts.fira-code
     nerd-fonts.hasklug
