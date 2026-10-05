@@ -15,4 +15,6 @@
   ];
 
   programs.spicetify.enable = true;
+
+  programs.cava.enable = true;
 }
