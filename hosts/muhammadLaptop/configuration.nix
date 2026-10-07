@@ -72,7 +72,7 @@
 
     logind.settings.Login = {
       HandlePowerKey = "suspend";
-      HandleLidSwitch = "ignore";
+      HandleLidSwitch = "suspend";
     };
   };
 

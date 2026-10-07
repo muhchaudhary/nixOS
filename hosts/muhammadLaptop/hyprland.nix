@@ -1,4 +1,4 @@
-# Laptop-specific hypridle timings + monitor layout + lid handling. The base
+# Laptop-specific hypridle timings + monitor layout. The base
 # Hyprland home module already enables hypridle and sets settings.general; this
 # only adds the listeners (module options merge).
 {...}: {
@@ -19,17 +19,4 @@
   ];
 
   xdg.configFile."hypr/monitors.lua".source = ./hypr/monitors.lua;
-
-  home.file.".config/hypr/scripts/lid_close" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      count=$(hyprctl monitors | grep -c "^Monitor")
-      if [ "$count" -gt 1 ]; then
-          hyprctl eval 'hl.monitor({ output = "eDP-1", disabled = true })'
-      else
-          systemctl suspend
-      fi
-    '';
-  };
 }
