@@ -118,23 +118,6 @@
               }
             ];
           }
-          {
-            # Used by MoonDeck (SteamDeck plugin) instead of a normal app entry;
-            # MoonDeck Buddy tells Sunshine to launch this by name. Ending the
-            # MoonDeckStream process ends the stream (auto-detach = false).
-            # Same prep-cmd as "Headless" above, so games launched through
-            # MoonDeck get the headless virtual desktop with physical
-            # monitors turned off.
-            name = "MoonDeckStream";
-            cmd = "${pkgs.moondeck-buddy}/bin/moondeck-buddy --exec MoonDeckStream";
-            auto-detach = "false";
-            prep-cmd = [
-              {
-                do = "$(HOME)/.config/hypr/scripts/sunshine_headless_connect";
-                undo = "$(HOME)/.config/hypr/scripts/sunshine_headless_disconnect";
-              }
-            ];
-          }
         ];
       };
     };
@@ -149,9 +132,6 @@
     };
     xserver.wacom.enable = true;
   };
-
-  # MoonDeck Buddy's REST server, queried directly by the SteamDeck plugin.
-  networking.firewall.allowedTCPPorts = [59999];
 
   security.rtkit.enable = true;
 

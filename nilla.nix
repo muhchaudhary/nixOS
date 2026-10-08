@@ -27,7 +27,6 @@ in
             };
             overlays = [
               config.inputs.blender-bin.result.overlays.default
-              config.overlays.default
               # NOTE: overlays/openldap.nix (doCheck = false) is intentionally NOT
               # applied — it changes openldap's hash and forces the entire KDE/kio
               # stack (SDDM, portal-kde, gwenview deps) to rebuild from source
@@ -40,14 +39,6 @@ in
         # blender-bin's flake lives in the `blender` subdirectory of edolstra/nix-warez.
         blender-bin.src = pins.blender-bin + "/blender";
       };
-
-      ##############
-      ## Packages ##
-      ##############
-      # Each `packages/<name>/default.nix` is a callPackage-style derivation, added to
-      # nixpkgs via the `default` overlay and buildable with `nilla build <name>`.
-      generators.overlays.default.folder = ./packages;
-      generators.packages.folder = ./packages;
 
       ###########
       ## NixOS ##
@@ -112,7 +103,6 @@ in
         general = ./modules/home/apps/general.nix;
         kitty = ./modules/home/apps/kitty.nix;
         media = ./modules/home/apps/media.nix;
-        moondeckBuddy = ./modules/home/apps/moondeckBuddy.nix;
         streaming = ./modules/home/apps/streaming.nix;
         vscode = ./modules/home/apps/vscode.nix;
 

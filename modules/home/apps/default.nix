@@ -9,7 +9,6 @@
     ./general.nix
     ./kitty.nix
     ./media.nix
-    ./moondeckBuddy.nix
     ./streaming.nix
     ./vscode.nix
   ];

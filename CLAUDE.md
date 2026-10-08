@@ -55,8 +55,6 @@ nilla-utils plugins provide the `os`/`home` subcommands).
     `hosts/<host>/configuration.nix`, sets `networking.hostName = <host>`, and applies
     `modules.nixos.base` to every host.
   - `modules.nixos.*` / `modules.home.*` — the **named module registry** (see below).
-  - `generators.overlays.default` / `generators.packages` — every `packages/<name>/default.nix`
-    (callPackage-style) is added to pkgs via the `default` overlay and is `nilla build <name>`-able.
 - **`overlays/`** — raw `final: prev:` overlays that aren't new packages (only `openldap.nix`,
   intentionally not applied — see the note in `nilla.nix`).
 
@@ -68,7 +66,6 @@ nilla-utils plugins provide the `os`/`home` subcommands).
   `default.nix` is only ever an `imports` barrel (`system/`, `gaming/`, `apps/`, `cli/`) or a module
   that owns non-nix files (`home/hyprland/` with its `config/`).
 - `modules/home/profiles/` — role bundles shared by several hosts (`workstation.nix`).
-- `packages/` — custom packages (moondeck-buddy AppImage wrapper).
 
 **Gotcha:** the nixos generator imports `"${./hosts}/<host>/configuration.nix"`, i.e. from a
 store copy of `hosts/`. Paths in a `configuration.nix` must therefore stay inside `hosts/`
