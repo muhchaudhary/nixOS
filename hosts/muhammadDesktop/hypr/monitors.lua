@@ -1,6 +1,10 @@
 hl.monitor({ output = "DP-1", mode = "1920x1080@60", position = "2560x0", scale = 1 })
 hl.monitor({ output = "HDMI-A-1",     mode = "2560x1440@75", position = "0x0",    scale = 1 })
 
+-- Sunshine's headless output (created at startup by create_headless_monitor);
+-- declared so config reloads keep it off until sunshine_headless_connect enables it.
+hl.monitor({ output = "HEADLESS-1", disabled = true })
+
 
 hl.device({
   name = "wacom-intuos-bt-m-pen",

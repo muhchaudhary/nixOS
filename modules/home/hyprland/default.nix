@@ -42,6 +42,9 @@ in {
         "gnome"
         "kde"
       ];
+      # hyprland's portal lacks RemoteDesktop and gnome's only works under
+      # Mutter; without this Sunshine's startup probe errors in the journal.
+      "org.freedesktop.impl.portal.RemoteDesktop" = ["none"];
     };
   };
 
