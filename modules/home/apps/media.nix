@@ -12,6 +12,7 @@
     (mpv.override {scripts = [mpvScripts.mpris];})
     jellyfin-mpv-shim
     totem
+    cheese
   ];
 
   programs.spicetify.enable = true;
