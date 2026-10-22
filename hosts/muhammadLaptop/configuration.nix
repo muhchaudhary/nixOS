@@ -16,6 +16,7 @@
     gtk
     v4l2loopback
     secrets
+    nordvpn
   ];
 
   boot.kernelParams = ["button.lid_init_state=open"];

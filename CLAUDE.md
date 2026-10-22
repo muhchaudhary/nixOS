@@ -135,4 +135,4 @@ Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid
 
 `nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins` / `hyprland-qtutils`;
 `home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `spicetify-nix`; `zen-browser`;
-`blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).
+`spotifast` (native Spotify client); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).

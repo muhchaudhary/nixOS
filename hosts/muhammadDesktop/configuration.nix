@@ -21,6 +21,7 @@
     nvidia
     v4l2loopback
     virtualisation
+    nordvpn
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

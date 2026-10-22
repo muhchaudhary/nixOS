@@ -4,5 +4,6 @@
     blender_4_5
     kicad-small
     godot_4
+    cura-appimage
   ];
 }
