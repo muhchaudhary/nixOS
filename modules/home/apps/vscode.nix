@@ -22,8 +22,8 @@ in {
       (prevAttrs: {
         src = builtins.fetchTarball {
           # run `curl -I https://update.code.visualstudio.com/latest/linux-x64/insider | grep location: | cut -c 11-` to get latest url
-          url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/5e212606d57c0a17f73bc8b7ae0cc9e14bcfd345/code-insider-x64-1784306972.tar.gz";
-          sha256 = "sha256:1zrf0jqvc2ih050rs4bk63ri6p72mkga7z27bjvqrdbjfvm1xqwd";
+          url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/76fae85ac19c965c60b10618426469bfd93a6d03/code-insider-x64-1792604446.tar.gz";
+          sha256 = "sha256:172gy44r75c9d8kk56540wvsalnq7671ijf6kx7r4dlkkh08kvzr";
         };
         version = "latest";
         postPatch =
