@@ -73,6 +73,10 @@
     };
   };
 
+  # throttled (from nixos-hardware) reads AC state from UPower over D-Bus and
+  # crash-loops without it; nothing else enables UPower on this headless host.
+  services.upower.enable = true;
+
   services.udev.extraRules = ''
     # Disable flapping Synaptics fingerprint reader (06cb:00bd) on USB 1-9
     # Internal connector is faulty, causing constant connect/disconnect loop in dmesg
