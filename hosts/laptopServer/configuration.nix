@@ -23,6 +23,9 @@
   # This host pins a non-default uid (the user module defaults to 1000 via mkDefault).
   users.users.muhammad.uid = 1001;
 
+  # Start user services (claude-remote-control) at boot, without a login session.
+  users.users.muhammad.linger = true;
+
   environment.systemPackages = [pkgs.kitty.terminfo];
 
   # Run headless with lid closed
