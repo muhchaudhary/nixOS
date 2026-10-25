@@ -18,6 +18,7 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = ["usbcore.autosuspend=-1"];
 
   # This host pins a non-default uid (the user module defaults to 1000 via mkDefault).
   users.users.muhammad.uid = 1001;
@@ -81,6 +82,9 @@
     # Autosuspend drops the Ethernet link after 2s and it never recovers
     ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0b95", ATTR{idProduct}=="1790", ATTR{power/control}="on"
   '';
+
+  # Cap journal size so logs do not eat the disk
+  services.journald.settings.Journal.SystemMaxUse = "500M";
 
   system.stateVersion = "25.05";
 }
