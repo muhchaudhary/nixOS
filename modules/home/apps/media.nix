@@ -13,8 +13,8 @@
     jellyfin-mpv-shim
     totem
     cheese
-    # Native Rust Spotify client (librespot); no binary cache, builds from source.
-    inputs.spotifast.result.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Native Rust Spotify client (librespot); no binary cache, builds from source.(disabling until available on Cachix)
+    # inputs.spotifast.result.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   programs.spicetify.enable = true;

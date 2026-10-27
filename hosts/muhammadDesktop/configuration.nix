@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   pkgs,
   inputs,
   nixosModules,
@@ -22,9 +24,63 @@
     v4l2loopback
     virtualisation
     nordvpn
+    tailscale
   ];
 
+  # SSH over the tailnet only: the port isn't opened on the LAN, and tailscale0
+  # is a trusted interface (see the tailscale module).
+  services.openssh = {
+    enable = true;
+    openFirewall = false;
+    settings.PasswordAuthentication = false;
+  };
+  users.users.muhammad.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
+  ];
+
+  # Extra boot entry for serving LLMs (~/Documents/LLMs) while away: no
+  # graphical session (frees its VRAM, and no hypridle to suspend the machine)
+  # and no Sunshine. Boot into it once with
+  #   systemctl reboot --boot-loader-entry=<entry from `bootctl list`>
+  # and the next plain reboot comes back to the normal desktop.
+  specialisation.headless.configuration = {
+    system.nixos.tags = ["headless"];
+
+    services.displayManager.sddm.enable = lib.mkForce false;
+    services.sunshine.enable = lib.mkForce false;
+
+    # Nothing should put the machine to sleep while it's serving.
+    systemd.targets = {
+      sleep.enable = false;
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+
+    # With no display client holding the GPU open, keep the driver initialised
+    # so model loads don't pay GPU init each time.
+    hardware.nvidia.nvidiaPersistenced = true;
+
+    # 300 W: ~94% of stock LLM decode speed, ~70 W less, ~7 °C cooler
+    # (see ~/Documents/LLMs/powertest/20261027-171504/summary.md). The limit
+    # doesn't survive a reboot, so the normal desktop boot stays at stock 370 W.
+    systemd.services.nvidia-power-limit = {
+      description = "Set NVIDIA GPU power limit";
+      wantedBy = ["multi-user.target"];
+      after = ["systemd-modules-load.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pl 300";
+      };
+    };
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Prefer dropping page cache over swapping out apps; loading multi-GB LLM
+  # weights otherwise pushes idle browser/desktop memory into swap.
+  boot.kernel.sysctl."vm.swappiness" = 10;
 
   # Make Hyprland the default SDDM session (was internal.desktop.hyprland.makeDefaultSession).
   services.displayManager.defaultSession = "hyprland-uwsm";
@@ -73,7 +129,15 @@
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
     # Bose ODESC
     SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="0d3[0-9]", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
+    # GameSir controllers (GameSir Connect under Wine)
+    # (uaccess TAG is ignored here: 99-local runs after 73-seat-late applies it)
+    SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="3537", MODE="0666"
+    # GameSir firmware-update bootloader (JieLi BR23 UBOOT), for USB passthrough to a VM
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="4c4a", ATTRS{idProduct}=="2342", MODE="0666"
+    # Front hub ports 1-4.1 and 1-4.2 are passed through to the Windows VM by port (any VID:PID)
+    SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", KERNEL=="1-4.1|1-4.2", MODE="0666"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
+
   '';
 
   services = {

@@ -17,6 +17,7 @@
     v4l2loopback
     secrets
     nordvpn
+    tailscale
   ];
 
   boot.kernelParams = ["button.lid_init_state=open"];
