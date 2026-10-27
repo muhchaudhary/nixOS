@@ -13,6 +13,19 @@
       "url": "https://github.com/edolstra/nix-warez/archive/32a73188c4026cea3f8ed97078ace45bf9f7f578.tar.gz",
       "hash": "sha256-R0SImlpvVtp4gBCjWtrjyWlir2vMEs03XdVBJtsryUU="
     },
+    "claude-code": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "sadjow",
+        "repo": "claude-code-nix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "8cd20882e5ad8e15d7c10a6752a1a691460cff52",
+      "url": "https://github.com/sadjow/claude-code-nix/archive/8cd20882e5ad8e15d7c10a6752a1a691460cff52.tar.gz",
+      "hash": "sha256-Ig43Vl9+aB0gnktIm/1EM6+9w9S8TcvBjyt2HrgR8FY="
+    },
     "home-manager": {
       "type": "Git",
       "repository": {
