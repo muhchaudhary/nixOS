@@ -44,7 +44,12 @@
 
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    # Key-only: keyboard-interactive would otherwise still allow the account
+    # password via PAM.
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
   # Replace with your actual public key: cat ~/.ssh/id_ed25519.pub
