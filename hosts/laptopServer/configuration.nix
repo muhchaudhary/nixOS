@@ -15,6 +15,7 @@
     locale
     network
     virtualisation
+    tailscale
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -26,7 +27,16 @@
   # Start user services (claude-remote-control) at boot, without a login session.
   users.users.muhammad.linger = true;
 
-  environment.systemPackages = [pkgs.kitty.terminfo];
+  environment.systemPackages = [
+    pkgs.kitty.terminfo
+    # Wake-on-LAN for muhammadDesktop (enp4s0's MAC); this host is always on and
+    # on the same LAN, so `ssh laptopserver wake-desktop` over Tailscale wakes it.
+    (pkgs.writeShellApplication {
+      name = "wake-desktop";
+      runtimeInputs = [pkgs.wakeonlan];
+      text = "wakeonlan 70:85:c2:96:b5:37";
+    })
+  ];
 
   # Run headless with lid closed
   services.logind.settings.Login = {

@@ -99,6 +99,25 @@
     r2modman
     lm_sensors
     quickemu
+    ethtool
+    # `sudo reboot-headless`: boot the headless specialisation once (works over
+    # SSH); the next plain reboot is back to the normal desktop.
+    (writeShellApplication {
+      name = "reboot-headless";
+      runtimeInputs = [jq config.systemd.package];
+      text = ''
+        # Entry ids are hashes that change every generation, so find it by
+        # title; bootctl lists newest first.
+        # (stderr: bootctl warns that NixOS's entry versions aren't valid version strings)
+        entry=$(bootctl list --json=short 2>/dev/null | jq -r 'first(.[] | select(.title | test("headless"))) | .id')
+        if [ -z "$entry" ]; then
+          echo "no headless boot entry found" >&2
+          exit 1
+        fi
+        echo "rebooting into $entry"
+        systemctl reboot --boot-loader-entry="$entry"
+      '';
+    })
   ];
 
   environment.variables = rec {
@@ -143,6 +162,10 @@
     SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", KERNEL=="1-4.1|1-4.2", MODE="0666"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
 
+    # Wake-on-LAN (magic packet) on the wired NIC, so laptopServer's
+    # `wake-desktop` can wake it from suspend or power-off. Matched by MAC
+    # rather than a .link file, which would replace the default naming policy.
+    ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="70:85:c2:96:b5:37", RUN+="${pkgs.ethtool}/bin/ethtool -s $name wol g"
   '';
 
   services = {
