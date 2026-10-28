@@ -104,6 +104,7 @@ in
         dev = ./modules/home/apps/dev.nix;
         general = ./modules/home/apps/general.nix;
         kitty = ./modules/home/apps/kitty.nix;
+        local-llm = ./modules/home/apps/local-llm.nix;
         media = ./modules/home/apps/media.nix;
         streaming = ./modules/home/apps/streaming.nix;
         vscode = ./modules/home/apps/vscode.nix;

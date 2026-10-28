@@ -8,6 +8,7 @@
     ./dev.nix
     ./general.nix
     ./kitty.nix
+    ./local-llm.nix
     ./media.nix
     ./streaming.nix
     ./vscode.nix
