@@ -1,17 +1,48 @@
 # Coding agents for the llama-swap server on muhammadDesktop (~/Documents/LLMs), reached
 # over the tailnet. Both default to qwen3.8-27b; llama-swap reloads on every model change,
 # so OpenCode's small_model is pinned to the same ID.
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   baseURL = "https://muhammaddesktop.tail1f99a6.ts.net/v1";
   model = "qwen3.8-27b";
-in {
-  # Qwen Code reads its OpenAI-compatible provider from the environment.
-  home.packages = [pkgs.qwen-code];
-  home.sessionVariables = {
-    OPENAI_BASE_URL = baseURL;
-    OPENAI_API_KEY = "llama-swap"; # unchecked; the server is tailnet-only
-    OPENAI_MODEL = model;
+
+  qwenSettings = {
+    env.LLAMA_SWAP_API_KEY = "llama-swap"; # unchecked; the server is tailnet-only
+    security.auth.selectedType = "openai";
+    model.name = model;
+    modelProviders.openai = [
+      {
+        id = model;
+        name = "Qwen3.8 27B";
+        baseUrl = baseURL;
+        envKey = "LLAMA_SWAP_API_KEY";
+        generationConfig.contextWindowSize = 242688;
+      }
+      {
+        id = "qwen3.8-27b-hyperqwen";
+        name = "Qwen3.8 27B (vLLM)";
+        baseUrl = baseURL;
+        envKey = "LLAMA_SWAP_API_KEY";
+        generationConfig.contextWindowSize = 150000;
+      }
+    ];
   };
+in {
+  home.packages = [pkgs.qwen-code];
+
+  # Qwen Code writes its own state into ~/.qwen/settings.json, so merge our keys into it
+  # on activation instead of making it a read-only store symlink.
+  home.activation.qwenSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    f="$HOME/.qwen/settings.json"
+    run mkdir -p "$HOME/.qwen"
+    [ -s "$f" ] || echo '{}' > "$f"
+    tmp=$(mktemp)
+    ${lib.getExe pkgs.jq} --argjson s ${lib.escapeShellArg (builtins.toJSON qwenSettings)} \
+      '. * $s' "$f" > "$tmp" && run mv "$tmp" "$f"
+  '';
 
   programs.opencode = {
     enable = true;
