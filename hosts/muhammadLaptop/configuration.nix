@@ -24,14 +24,8 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # sops-nix: the `secrets` module wires the age key + packages; the host points
-  # at its own encrypted file and declares secrets.
+  # at its own encrypted file and declares secrets (`sops.secrets.<name>`).
   sops.defaultSopsFile = ./secrets.yaml;
-
-  sops.secrets.hotspot-passphrase = {
-    mode = "0400";
-    owner = "root";
-    restartUnits = ["wg-hotspot.service"];
-  };
 
   services.fwupd.enable = true;
 
@@ -65,10 +59,6 @@
         CPU_BOOST_ON_BAT = 0;
         RADEON_DPM_STATE_ON_BAT = "battery";
         RADEON_POWER_PROFILE_ON_BAT = "low";
-        # TODO: re-enable ("on") once hotspot throughput issues are resolved — ath11k power save
-        # tanks AP-mode throughput, so we trade battery for working hotspot.
-        WIFI_PWR_ON_AC = "off";
-        WIFI_PWR_ON_BAT = "off";
         RUNTIME_PM_ON_BAT = "auto";
       };
     };
@@ -84,31 +74,6 @@
     powertop.enable = true;
   };
 
-  # networking.wg-quick.interfaces.wg0 = {
-  #   address = ["10.8.0.3/24"];
-  #   dns = ["1.1.1.1"];
-  #   privateKeyFile = "/etc/wireguard/private.key";
-  #   autostart = false;
-  #   postUp = "ip route add 10.0.0.38/32 dev wg0";
-  #   preDown = "ip route del 10.0.0.38/32 dev wg0";
-  #   peers = [
-  #     {
-  #       publicKey = "F4dgmEFS4H4mHABPzyE0PIIlM2c9mAKX1fxt2RxWiUw=";
-  #       presharedKeyFile = "/etc/wireguard/psk.key";
-  #       allowedIPs = ["0.0.0.0/0"];
-  #       endpoint = "vpn.ahmadyyz.ca:51820";
-  #     }
-  #   ];
-  # };
-  # networking.networkmanager.unmanaged = ["wg0"];
-
-  # TODO: re-enable (remove this line or set true) once hotspot throughput issues are resolved.
-  networking.networkmanager.wifi.powersave = false;
-
-  nix.distributedBuilds = true;
-  nix.settings = {
-    builders-use-substitutes = true;
-  };
   security.rtkit.enable = true;
 
   system.stateVersion = "25.05"; # Did you read the comment?

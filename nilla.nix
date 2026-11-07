@@ -79,7 +79,6 @@ in
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;
-        wgHotspot = ./modules/nixos/wg-hotspot.nix;
         nordvpn = ./modules/nixos/nordvpn.nix;
         tailscale = ./modules/nixos/tailscale.nix;
       };
