@@ -22,7 +22,9 @@
     modesetting.enable = true;
     powerManagement.enable = true;
     powerManagement.finegrained = false;
-    open = false;
+    # Open kernel modules: NVIDIA's recommended driver for Turing and newer (the
+    # 3090 is Ampere); same userspace driver, but tracks new kernels better.
+    open = true;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
