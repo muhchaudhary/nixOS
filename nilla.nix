@@ -120,6 +120,27 @@ in
         gtk = ./modules/home/gtk.nix;
       };
 
+      ###########
+      ## Shell ##
+      ###########
+      # Tools for working on this repo (`nilla shell`, or `nix-shell` / direnv via
+      # shell.nix). The nilla CLI itself is installed system-wide by modules/nixos/nilla.nix.
+      shells.default = {
+        systems = ["x86_64-linux"];
+        shell = {
+          mkShell,
+          alejandra,
+          npins,
+          nixd,
+          sops,
+          age,
+          ssh-to-age,
+        }:
+          mkShell {
+            packages = [alejandra npins nixd sops age ssh-to-age];
+          };
+      };
+
       ##########
       ## Misc ##
       ##########

@@ -27,8 +27,15 @@ nilla os switch laptopServer --target <ssh-host>
 # Build every declared system at once (CI-style gate)
 nilla build allSystems
 
-# Format nix files (alejandra is installed system-wide)
+# Format nix files (alejandra is installed system-wide, and in the dev shell)
 alejandra .
+
+# Dev shell with alejandra/npins/nixd/sops (`shells.default`; direnv loads it via .envrc)
+nilla shell   # or: nix-shell
+
+# What CI runs (.github/workflows/check.yml): format check + evaluate every host
+alejandra --check .
+nix eval --impure --json --expr 'builtins.mapAttrs (n: s: s.result.config.system.build.toplevel.drvPath) (import ./nilla.nix).systems.nixos'
 
 # Dependency management (npins replaces flake inputs)
 npins show            # list pinned sources
@@ -55,6 +62,8 @@ nilla-utils plugins provide the `os`/`home` subcommands).
     `hosts/<host>/configuration.nix`, sets `networking.hostName = <host>`, and applies
     `modules.nixos.base` to every host.
   - `modules.nixos.*` / `modules.home.*` — the **named module registry** (see below).
+- **`.github/workflows/`** — `check.yml` (format + evaluate all hosts on every push/PR) and
+  `update.yml` (weekly `npins update`, opened as a PR only if every host still evaluates).
 - **`overlays/`** — raw `final: prev:` overlays that aren't new packages (only `openldap.nix`,
   intentionally not applied — see the note in `nilla.nix`).
 
