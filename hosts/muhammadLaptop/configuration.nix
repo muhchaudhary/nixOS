@@ -50,6 +50,7 @@
     SUBSYSTEM=="usb", ATTR{idVendor}=="04f2", ATTR{idProduct}=="b74f", MODE="0666"
     SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="0d3[0-9]", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
     SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
+    SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ENV{HID_ID}=="*:00002E8A:000010C6", TAG+="seat", TAG+="uaccess"
   '';
 
   services = {
