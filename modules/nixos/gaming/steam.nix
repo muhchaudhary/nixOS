@@ -8,7 +8,7 @@
 
   programs.gamemode.enable = true;
   programs.gamescope.enable = true;
-  users.users.muhammad.extraGroups = ["gamemode" "plugdev"];
+  users.users.muhammad.extraGroups = ["gamemode"];
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [
