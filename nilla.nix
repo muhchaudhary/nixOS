@@ -66,6 +66,7 @@ in
         nvidia = ./modules/nixos/hardware/nvidia.nix;
         printer = ./modules/nixos/hardware/printer.nix;
         sound = ./modules/nixos/hardware/sound.nix;
+        odesc = ./modules/nixos/hardware/odesc.nix;
         v4l2loopback = ./modules/nixos/hardware/v4l2loopback.nix;
 
         hyprland = ./modules/nixos/desktop/hyprland.nix;
@@ -79,9 +80,9 @@ in
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;
-        wgHotspot = ./modules/nixos/wg-hotspot.nix;
         nordvpn = ./modules/nixos/nordvpn.nix;
         tailscale = ./modules/nixos/tailscale.nix;
+        ssh = ./modules/nixos/ssh.nix;
       };
 
       ##################
@@ -117,6 +118,27 @@ in
 
         hyprland = ./modules/home/hyprland;
         gtk = ./modules/home/gtk.nix;
+      };
+
+      ###########
+      ## Shell ##
+      ###########
+      # Tools for working on this repo (`nilla shell`, or `nix-shell` / direnv via
+      # shell.nix). The nilla CLI itself is installed system-wide by modules/nixos/nilla.nix.
+      shells.default = {
+        systems = ["x86_64-linux"];
+        shell = {
+          mkShell,
+          alejandra,
+          npins,
+          nixd,
+          sops,
+          age,
+          ssh-to-age,
+        }:
+          mkShell {
+            packages = [alejandra npins nixd sops age ssh-to-age];
+          };
       };
 
       ##########

@@ -16,6 +16,7 @@
     network
     virtualisation
     tailscale
+    ssh
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -44,28 +45,24 @@
     HandleLidSwitchDocked = "ignore";
   };
 
-  networking.firewall.allowedTCPPorts = [80 443 25565];
-  networking.firewall.allowedUDPPorts = [51820 25565];
+  # Services run as Docker containers (stacks managed by Dockge, not this repo).
+  # Docker's published ports bypass the NixOS firewall, so these entries only
+  # document what is meant to be public; every published container port is
+  # reachable from the LAN regardless (see `docker ps`). To restrict one, bind it
+  # to 127.0.0.1 or the tailnet IP in its compose file.
+  networking.firewall.allowedTCPPorts = [
+    80 # caddy (HTTP -> HTTPS redirect, ACME)
+    443 # caddy
+  ];
+  networking.firewall.allowedUDPPorts = [
+    443 # caddy (HTTP/3)
+    51820 # wg-easy
+  ];
 
   # iwd handles Channel Switch Announcements and reconnects more robustly
   # than wpa_supplicant on Intel cards (AC 9560) — prevents CSA locking into legacy 802.11a mode
   networking.networkmanager.wifi.backend = "iwd";
   networking.wireless.iwd.enable = true;
-
-  services.openssh = {
-    enable = true;
-    # Key-only: keyboard-interactive would otherwise still allow the account
-    # password via PAM.
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-
-  # Replace with your actual public key: cat ~/.ssh/id_ed25519.pub
-  users.users.muhammad.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
-  ];
 
   # Performance-first power management — server stays plugged in
   powerManagement.enable = true;

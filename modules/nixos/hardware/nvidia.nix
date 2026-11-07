@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   config,
   ...
@@ -10,17 +9,6 @@
     extraPackages = with pkgs; [nvidia-vaapi-driver libva-vdpau-driver libvdpau-va-gl];
   };
 
-  # NVIDIA drivers are unfree.
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "nvidia-x11"
-      "nvidia-settings"
-      "cuda_cudart"
-      "libcublas"
-      "libcurand"
-      "libcufft"
-      "cudnn"
-    ];
   services.xserver.videoDrivers = ["nvidia"];
   boot.initrd.kernelModules = ["nvidia"];
   boot.kernelParams = [
@@ -41,6 +29,5 @@
   environment.systemPackages = with pkgs; [
     cudaPackages.cudatoolkit
   ];
-  nixpkgs.config.nvidia.acceptLicense = true;
   hardware.nvidia-container-toolkit.enable = true;
 }

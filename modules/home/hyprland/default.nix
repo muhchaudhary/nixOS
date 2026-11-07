@@ -48,16 +48,6 @@ in {
     };
   };
 
-  home.file.".config/code-flags.conf".text = ''
-    --disable-gpu-sandbox
-    --ozone-platform-hint=auto
-    --UseOzonePlatformozone-platform-wayland
-    --enable-features=UseOzonePlatform
-    --ozone-platform=wayland
-    --enable-features=WebRTCPipeWireCapturer
-    --enable-features=WaylandWindowDecorations
-  '';
-
   wayland.windowManager.hyprland = {
     configType = "lua";
     enable = true;

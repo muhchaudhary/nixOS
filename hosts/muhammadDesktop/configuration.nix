@@ -25,23 +25,13 @@
     virtualisation
     nordvpn
     tailscale
+    ssh
+    odesc
   ];
 
   # SSH over the tailnet only: the port isn't opened on the LAN, and tailscale0
   # is a trusted interface (see the tailscale module).
-  services.openssh = {
-    enable = true;
-    openFirewall = false;
-    # Key-only: keyboard-interactive would otherwise still allow the account
-    # password via PAM.
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  users.users.muhammad.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
-  ];
+  services.openssh.openFirewall = false;
 
   # Extra boot entry for serving LLMs (~/Documents/LLMs) while away: no
   # graphical session (frees its VRAM, and no hypridle to suspend the machine)
@@ -98,7 +88,6 @@
     spice-gtk
     r2modman
     lm_sensors
-    quickemu
     ethtool
     # `sudo reboot-headless`: boot the headless specialisation once (works over
     # SSH); the next plain reboot is back to the normal desktop.
@@ -126,33 +115,11 @@
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
+  # ZSA keyboards (Oryx/Keymapp/Wally flashing + live training): nixpkgs' rules,
+  # which grant the logged-in user access via uaccess.
+  hardware.keyboard.zsa.enable = true;
+
   services.udev.extraRules = ''
-    # Rules for Oryx web flashing and live training
-    KERNEL=="hidraw*", ATTRS{idVendor}=="16c0", MODE="0664", GROUP="plugdev"
-    KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
-
-    # Legacy rules for live training over webusb (Not needed for firmware v21+)
-      # Rule for all ZSA keyboards
-      SUBSYSTEM=="usb", ATTR{idVendor}=="3297", GROUP="plugdev"
-      # Rule for the Moonlander
-      SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969", GROUP="plugdev"
-      # Rule for the Ergodox EZ
-      SUBSYSTEM=="usb", ATTR{idVendor}=="feed", ATTR{idProduct}=="1307", GROUP="plugdev"
-      # Rule for the Planck EZ
-      SUBSYSTEM=="usb", ATTR{idVendor}=="feed", ATTR{idProduct}=="6060", GROUP="plugdev"
-
-    # Wally Flashing rules for the Ergodox EZ
-    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
-    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"
-    KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", MODE:="0666"
-
-    # Keymapp / Wally Flashing rules for the Moonlander and Planck EZ
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0666", SYMLINK+="stm32_dfu"
-    # Keymapp Flashing rules for the Voyager
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
-    # Bose ODESC
-    SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="0d3[0-9]", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
     # GameSir controllers (GameSir Connect under Wine)
     # (uaccess TAG is ignored here: 99-local runs after 73-seat-late applies it)
     SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="3537", MODE="0666"
@@ -160,7 +127,6 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="4c4a", ATTRS{idProduct}=="2342", MODE="0666"
     # Front hub ports 1-4.1 and 1-4.2 are passed through to the Windows VM by port (any VID:PID)
     SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", KERNEL=="1-4.1|1-4.2", MODE="0666"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
 
     # Wake-on-LAN (magic packet) on the wired NIC, so laptopServer's
     # `wake-desktop` can wake it from suspend or power-off. Matched by MAC

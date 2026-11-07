@@ -1,4 +1,6 @@
-# Only commit encrypted secrets. Anything unencrypted under secrets/ stays local.
-secrets/*.plain
-secrets/*.dec
+# Only commit encrypted secrets (hosts/<host>/secrets.yaml); decrypted copies stay local.
+*.plain
+*.dec
 result
+# direnv cache
+.direnv/

@@ -1,0 +1,26 @@
+# Formatting + evaluation of every host. Evaluating the system derivations
+# catches option errors, bad module wiring and failed assertions without
+# building anything.
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+
+      - name: Format
+        run: nix-shell --run 'alejandra --check .'
+
+      - name: Evaluate hosts
+        # --impure: the nilla project reads paths and fetches pins at eval time.
+        run: |
+          nix eval --impure --json --expr '
+            builtins.mapAttrs (name: s: s.result.config.system.build.toplevel.drvPath)
+              (import ./nilla.nix).systems.nixos
+          '

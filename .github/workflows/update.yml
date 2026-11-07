@@ -1,0 +1,38 @@
+# Weekly `npins update`, opened as a PR only if every host still evaluates.
+# Needs "Allow GitHub Actions to create and approve pull requests" enabled in the
+# repo's Settings -> Actions -> General.
+name: update pins
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+
+      - name: Update pins
+        run: nix-shell --run 'npins update'
+
+      - name: Evaluate hosts
+        run: |
+          nix eval --impure --json --expr '
+            builtins.mapAttrs (name: s: s.result.config.system.build.toplevel.drvPath)
+              (import ./nilla.nix).systems.nixos
+          '
+
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: npins-update
+          commit-message: "npins: update all pins"
+          title: "npins: update all pins"
+          body: "Automated weekly `npins update`. Every host evaluates; nothing has been built."
+          delete-branch: true
