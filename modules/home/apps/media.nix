@@ -1,11 +1,4 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
-  # Provides programs.spicetify.
-  imports = [inputs.spicetify-nix.result.homeManagerModules.spicetify];
-
+{pkgs, ...}: {
   services.mpris-proxy.enable = true;
 
   home.packages = with pkgs; [

@@ -150,19 +150,6 @@
       "url": "https://github.com/Mic92/sops-nix/archive/60182817ee048ac94b4c68ea76d5ef2e8aac730d.tar.gz",
       "hash": "sha256-Y/JIHTnMlOabDfyaSBubWGLDIVGihLEUuoMhFvQKaDo="
     },
-    "spicetify-nix": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "Gerg-L",
-        "repo": "spicetify-nix"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "f6eb8135c060130150c8fbcc6b7cf5e22e5179d8",
-      "url": "https://github.com/Gerg-L/spicetify-nix/archive/f6eb8135c060130150c8fbcc6b7cf5e22e5179d8.tar.gz",
-      "hash": "sha256-gJ8uPmQFhJ98X+VWPpD+o0tnQ0nJjbG+Z3QDHcSJKw0="
-    },
     "spotifast": {
       "type": "Git",
       "repository": {
