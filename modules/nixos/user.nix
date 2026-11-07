@@ -38,7 +38,9 @@
     shell = pkgs.fish;
     # mkDefault so a host (e.g. the server) can pin a different uid.
     uid = lib.mkDefault 1000;
-    initialPassword = "password";
+    # Only applies when the account is first created; change it later with `passwd`.
+    # Regenerate with `mkpasswd -m yescrypt`.
+    initialHashedPassword = "$y$j9T$57U1lw9EknuWVtm5GM.UB1$KxOA3v2gMkHo/T1Cw54KeRt74en2NMgb8brW4sym3Q6";
     # wheel for sudo; feature modules (network, printer,
     # steam, virtualisation, …) append their own groups via list merging.
     extraGroups = ["wheel"];
