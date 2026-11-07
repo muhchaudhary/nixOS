@@ -41,6 +41,7 @@ nix eval --impure --json --expr 'builtins.mapAttrs (n: s: s.result.config.system
 npins show            # list pinned sources
 npins update          # update all pins
 npins update nixpkgs  # update a single pin
+./scripts/update-vscode-insiders  # bump VS Code Insiders (modules/home/apps/vscode-insiders.json; needs jq: run in the dev shell)
 ```
 
 If the `nilla` CLI is not installed: `nix profile install github:nilla-nix/cli` (the
@@ -63,7 +64,7 @@ nilla-utils plugins provide the `os`/`home` subcommands).
     `modules.nixos.base` to every host.
   - `modules.nixos.*` / `modules.home.*` — the **named module registry** (see below).
 - **`.github/workflows/`** — `check.yml` (format + evaluate all hosts on every push/PR) and
-  `update.yml` (weekly `npins update`, opened as a PR only if every host still evaluates).
+  `update.yml` (weekly `npins update` + VS Code Insiders bump, opened as a PR only if every host still evaluates).
 - **`overlays/`** — raw `final: prev:` overlays that aren't new packages (only `openldap.nix`,
   intentionally not applied — see the note in `nilla.nix`).
 

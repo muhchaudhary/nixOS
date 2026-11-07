@@ -1,4 +1,4 @@
-# Weekly `npins update`, opened as a PR only if every host still evaluates.
+# Weekly `npins update` + VS Code Insiders bump, opened as a PR only if every host still evaluates.
 # Needs "Allow GitHub Actions to create and approve pull requests" enabled in the
 # repo's Settings -> Actions -> General.
 name: update pins
@@ -22,6 +22,9 @@ jobs:
       - name: Update pins
         run: nix-shell --run 'npins update'
 
+      - name: Update VS Code Insiders
+        run: nix-shell --run ./scripts/update-vscode-insiders
+
       - name: Evaluate hosts
         run: |
           nix eval --impure --json --expr '
@@ -32,7 +35,7 @@ jobs:
       - uses: peter-evans/create-pull-request@v7
         with:
           branch: npins-update
-          commit-message: "npins: update all pins"
-          title: "npins: update all pins"
-          body: "Automated weekly `npins update`. Every host evaluates; nothing has been built."
+          commit-message: "Update pins and VS Code Insiders"
+          title: "Update pins and VS Code Insiders"
+          body: "Automated weekly `npins update` and `scripts/update-vscode-insiders`. Every host evaluates; nothing has been built."
           delete-branch: true

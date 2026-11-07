@@ -135,9 +135,10 @@ in
           sops,
           age,
           ssh-to-age,
+          jq,
         }:
           mkShell {
-            packages = [alejandra npins nixd sops age ssh-to-age];
+            packages = [alejandra npins nixd sops age ssh-to-age jq];
           };
       };
 

@@ -7,6 +7,10 @@
   # Enable CUDA-linked VS Code only on hosts whose system uses the nvidia driver
   # (the desktop). `osConfig` is the NixOS config of the host this home runs on.
   cuda = lib.elem "nvidia" (osConfig.services.xserver.videoDrivers or []);
+
+  # Latest Insiders build; bump with scripts/update-vscode-insiders (the weekly
+  # pin-update workflow runs it too).
+  insiders = lib.importJSON ./vscode-insiders.json;
 in {
   # Read by VS Code's launcher. NIXOS_OZONE_WL already selects Wayland; Chromium only
   # honours the last --enable-features, so all features go in one flag.
@@ -27,12 +31,12 @@ in {
       (vscode.override {isInsiders = true;})
       .overrideAttrs
       (prevAttrs: {
-        src = builtins.fetchTarball {
-          # run `curl -I https://update.code.visualstudio.com/latest/linux-x64/insider | grep location: | cut -c 11-` to get latest url
-          url = "https://vscode.download.prss.microsoft.com/dbazure/download/insider/76fae85ac19c965c60b10618426469bfd93a6d03/code-insider-x64-1792604446.tar.gz";
-          sha256 = "sha256:172gy44r75c9d8kk56540wvsalnq7671ijf6kx7r4dlkkh08kvzr";
+        # fetchurl rather than fetchTarball: fetched at build time, not on every evaluation.
+        src = fetchurl {
+          name = "vscode-insiders-${insiders.version}.tar.gz";
+          inherit (insiders) url sha256;
         };
-        version = "latest";
+        inherit (insiders) version;
         postPatch =
           (prevAttrs.postPatch or "")
           + ''

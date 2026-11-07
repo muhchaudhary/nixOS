@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Point modules/home/apps/vscode-insiders.json at the latest VS Code Insiders build.
+# The update API returns the build's versioned download URL and the tarball's
+# SHA-256, so nothing has to be downloaded here; Nix checks the hash when it fetches.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+curl -fsSL https://update.code.visualstudio.com/api/update/linux-x64/insider/latest |
+  jq '{version: .productVersion, rev: .version, url, sha256: .sha256hash}' \
+    >modules/home/apps/vscode-insiders.json
+
+jq -r '"vscode-insiders: \(.version) (\(.rev[0:8]))"' modules/home/apps/vscode-insiders.json
