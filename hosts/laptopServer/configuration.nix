@@ -17,6 +17,7 @@
     virtualisation
     tailscale
     ssh
+    desktopCache
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

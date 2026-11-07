@@ -24,7 +24,9 @@ sudo nilla os switch muhammadLaptop
 # Remote deploy over SSH (replaces the old deploy-rs workflow)
 nilla os switch laptopServer --target <ssh-host>
 
-# Build every declared system at once (CI-style gate)
+# Build every declared system at once (CI-style gate). On the desktop this also
+# fills its binary cache, so the laptop/server switches download instead of building;
+# keep the ./result link, it's the GC root for those builds.
 nilla build allSystems
 
 # Format nix files (alejandra is installed system-wide, and in the dev shell)
@@ -135,7 +137,8 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 
 **NixOS (`modules/nixos/`):** `base` (nix + user + home-manager, every host), `system`
 (boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
-`ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules).
+`ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules),
+`binaryCache` (Harmonia on the desktop) / `desktopCache` (laptop + server download from it).
 
 **Home Manager (`modules/home/`):** `base`, `profiles/workstation`, `ai` (claude/opencode/pi/qwen-code/t3code, each also exported individually), `apps` (Firefox/Zen/Obsidian/
 Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid-Dark + Bibata),

@@ -28,6 +28,7 @@
     tailscale
     ssh
     odesc
+    binaryCache
   ];
 
   # SSH over the tailnet only: the port isn't opened on the LAN, and tailscale0

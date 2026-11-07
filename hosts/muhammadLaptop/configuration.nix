@@ -19,6 +19,7 @@
     nordvpn
     tailscale
     odesc
+    desktopCache
   ];
 
   boot.kernelParams = ["button.lid_init_state=open"];

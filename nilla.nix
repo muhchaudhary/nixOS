@@ -84,6 +84,8 @@ in
         nordvpn = ./modules/nixos/nordvpn.nix;
         tailscale = ./modules/nixos/tailscale.nix;
         ssh = ./modules/nixos/ssh.nix;
+        binaryCache = ./modules/nixos/binary-cache.nix;
+        desktopCache = ./modules/nixos/desktop-cache.nix;
       };
 
       ##################
