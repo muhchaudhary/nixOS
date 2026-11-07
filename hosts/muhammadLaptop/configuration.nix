@@ -34,7 +34,8 @@
   services.libinput.enable = true;
 
   services.udev.extraRules = ''
-    # Integrated camera (Chicony 04f2:b74f): raw USB access for all users
+    # Game controller (Chicony 04f2:b74f): raw USB access for all users. The
+    # laptop's integrated camera reports the same ID, so this matches it too.
     SUBSYSTEM=="usb", ATTR{idVendor}=="04f2", ATTR{idProduct}=="b74f", MODE="0666"
     SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ENV{HID_ID}=="*:00002E8A:000010C6", TAG+="seat", TAG+="uaccess"
   '';
