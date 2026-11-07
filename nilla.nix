@@ -80,6 +80,7 @@ in
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;
+        quickemu = ./modules/nixos/quickemu.nix;
         nordvpn = ./modules/nixos/nordvpn.nix;
         tailscale = ./modules/nixos/tailscale.nix;
         ssh = ./modules/nixos/ssh.nix;

@@ -107,7 +107,7 @@ exactly what it imports.
   before a host can import it by name.
 - **Modules refer to each other by relative path** (barrels, profiles, `base`), not by name.
 - A module that needs an upstream module imports it itself (`secrets.nix` → sops-nix,
-  `gaming/steam.nix` → nix-gaming platformOptimizations, `home/apps/media.nix` → spicetify).
+  `gaming/steam.nix` → nix-gaming platformOptimizations).
 - Cross-cutting settings just merge via the NixOS/HM module system — e.g. feature modules append to
   `users.users.muhammad.extraGroups` and `nix.settings.substituters` (list options merge).
 
@@ -134,7 +134,7 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 ### Key module groups
 
 **NixOS (`modules/nixos/`):** `base` (nix + user + home-manager, every host), `system`
-(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `nordvpn`, `tailscale`,
+(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
 `ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules).
 
 **Home Manager (`modules/home/`):** `base`, `profiles/workstation`, `ai` (claude/opencode/pi/qwen-code/t3code, each also exported individually), `apps` (Firefox/Zen/Obsidian/
@@ -144,5 +144,5 @@ Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid
 ### Notable inputs (pins)
 
 `nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins` / `hyprland-qtutils`;
-`home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `spicetify-nix`; `zen-browser`;
+`home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `zen-browser`;
 `spotifast` (native Spotify client); `llm-agents` (numtide/llm-agents.nix: every AI agent in `modules/home/ai`, used as a flake via `.result.packages` so builds come from `cache.numtide.com`); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).

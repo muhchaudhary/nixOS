@@ -1,7 +1,6 @@
 {lib, ...}: {
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
-  programs.nm-applet.enable = true;
 
   # Enable automatic timezone updates
   services.automatic-timezoned.enable = true;

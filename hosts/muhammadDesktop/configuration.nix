@@ -23,6 +23,7 @@
     nvidia
     v4l2loopback
     virtualisation
+    quickemu
     nordvpn
     tailscale
     ssh

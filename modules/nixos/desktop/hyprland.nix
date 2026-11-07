@@ -4,6 +4,8 @@
   programs.hyprland.xwayland.enable = true;
   programs.hyprland.withUWSM = true;
   programs.hyprlock.enable = true;
+  # NetworkManager tray applet (the `network` module itself is shared with the headless server).
+  programs.nm-applet.enable = true;
   environment.systemPackages = with pkgs; [
     sddm-astronaut
   ];
