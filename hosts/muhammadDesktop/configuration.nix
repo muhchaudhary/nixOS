@@ -25,23 +25,13 @@
     virtualisation
     nordvpn
     tailscale
+    ssh
+    odesc
   ];
 
   # SSH over the tailnet only: the port isn't opened on the LAN, and tailscale0
   # is a trusted interface (see the tailscale module).
-  services.openssh = {
-    enable = true;
-    openFirewall = false;
-    # Key-only: keyboard-interactive would otherwise still allow the account
-    # password via PAM.
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  users.users.muhammad.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
-  ];
+  services.openssh.openFirewall = false;
 
   # Extra boot entry for serving LLMs (~/Documents/LLMs) while away: no
   # graphical session (frees its VRAM, and no hypridle to suspend the machine)
@@ -98,7 +88,6 @@
     spice-gtk
     r2modman
     lm_sensors
-    quickemu
     ethtool
     # `sudo reboot-headless`: boot the headless specialisation once (works over
     # SSH); the next plain reboot is back to the normal desktop.
@@ -131,9 +120,6 @@
   hardware.keyboard.zsa.enable = true;
 
   services.udev.extraRules = ''
-    # ODESC (STM32 DFU 0483:df11 is also covered by the ZSA rules via uaccess;
-    # 0666 additionally allows non-seat access, e.g. over SSH)
-    SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="0d3[0-9]", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
     # GameSir controllers (GameSir Connect under Wine)
     # (uaccess TAG is ignored here: 99-local runs after 73-seat-late applies it)
     SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="3537", MODE="0666"
@@ -141,7 +127,6 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="4c4a", ATTRS{idProduct}=="2342", MODE="0666"
     # Front hub ports 1-4.1 and 1-4.2 are passed through to the Windows VM by port (any VID:PID)
     SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", KERNEL=="1-4.1|1-4.2", MODE="0666"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="df11", MODE="0666"
 
     # Wake-on-LAN (magic packet) on the wired NIC, so laptopServer's
     # `wake-desktop` can wake it from suspend or power-off. Matched by MAC

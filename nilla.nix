@@ -66,6 +66,7 @@ in
         nvidia = ./modules/nixos/hardware/nvidia.nix;
         printer = ./modules/nixos/hardware/printer.nix;
         sound = ./modules/nixos/hardware/sound.nix;
+        odesc = ./modules/nixos/hardware/odesc.nix;
         v4l2loopback = ./modules/nixos/hardware/v4l2loopback.nix;
 
         hyprland = ./modules/nixos/desktop/hyprland.nix;
@@ -81,6 +82,7 @@ in
         virtualisation = ./modules/nixos/virtualisation.nix;
         nordvpn = ./modules/nixos/nordvpn.nix;
         tailscale = ./modules/nixos/tailscale.nix;
+        ssh = ./modules/nixos/ssh.nix;
       };
 
       ##################

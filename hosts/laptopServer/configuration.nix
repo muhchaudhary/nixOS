@@ -16,6 +16,7 @@
     network
     virtualisation
     tailscale
+    ssh
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -62,21 +63,6 @@
   # than wpa_supplicant on Intel cards (AC 9560) — prevents CSA locking into legacy 802.11a mode
   networking.networkmanager.wifi.backend = "iwd";
   networking.wireless.iwd.enable = true;
-
-  services.openssh = {
-    enable = true;
-    # Key-only: keyboard-interactive would otherwise still allow the account
-    # password via PAM.
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-
-  # Replace with your actual public key: cat ~/.ssh/id_ed25519.pub
-  users.users.muhammad.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFw/pFaCTF2sGl7WBmIRld/6ClenyRvbFm8kfzTE9Cf6 muhammadahmchaudhary@gmail.com"
-  ];
 
   # Performance-first power management — server stays plugged in
   powerManagement.enable = true;
