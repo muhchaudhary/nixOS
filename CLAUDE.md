@@ -134,8 +134,7 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 ### Key module groups
 
 **NixOS (`modules/nixos/`):** `base` (nix + user + home-manager, every host), `system`
-(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit}`,
-`gtk`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `nordvpn`, `tailscale`,
+(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `nordvpn`, `tailscale`,
 `ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules).
 
 **Home Manager (`modules/home/`):** `base`, `profiles/workstation`, `ai` (claude/opencode/pi/qwen-code/t3code, each also exported individually), `apps` (Firefox/Zen/Obsidian/

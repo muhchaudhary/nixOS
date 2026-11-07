@@ -72,7 +72,7 @@ in
         hyprland = ./modules/nixos/desktop/hyprland.nix;
         fonts = ./modules/nixos/desktop/fonts.nix;
         polkit = ./modules/nixos/desktop/polkit.nix;
-        gtk = ./modules/nixos/gtk.nix;
+        plymouth = ./modules/nixos/desktop/plymouth.nix;
 
         gaming = ./modules/nixos/gaming;
         steam = ./modules/nixos/gaming/steam.nix;

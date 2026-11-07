@@ -1,13 +1,8 @@
 {pkgs, ...}: {
-  home.packages = with pkgs; [
-    git-credential-manager
-  ];
   programs.gh = {
     enable = true;
     gitCredentialHelper.enable = true;
   };
-  # programs.git-credential-oauth.enable = true;
-
   programs.git = {
     enable = true;
     lfs.enable = true;
@@ -23,7 +18,6 @@
       push = {
         autoSetupRemote = true;
       };
-      credential.credentialStore = "secretservice";
     };
   };
 

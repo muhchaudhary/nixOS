@@ -8,5 +8,6 @@
     ./fzf.nix
     ./general.nix
     ./git.nix
+    ./starship.nix
   ];
 }

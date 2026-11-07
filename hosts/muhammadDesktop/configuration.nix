@@ -19,7 +19,7 @@
     hyprland
     fonts
     polkit
-    gtk
+    plymouth
     nvidia
     v4l2loopback
     virtualisation
@@ -109,7 +109,7 @@
     })
   ];
 
-  environment.variables = rec {
+  environment.variables = {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";

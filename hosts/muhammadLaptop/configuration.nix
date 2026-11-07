@@ -13,7 +13,7 @@
     hyprland
     fonts
     polkit
-    gtk
+    plymouth
     v4l2loopback
     secrets
     nordvpn
@@ -30,15 +30,8 @@
 
   services.fwupd.enable = true;
 
-  services.libinput.enable = true; # Enable touchpad support
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-    ];
-  };
-
-  hardware.system76.power-daemon.enable = false;
+  # Touchpad: libinput's udev rules and device quirks (off unless enabled).
+  services.libinput.enable = true;
 
   services.udev.extraRules = ''
     # Integrated camera (Chicony 04f2:b74f): raw USB access for all users
@@ -47,7 +40,6 @@
   '';
 
   services = {
-    system76-scheduler.enable = false;
     upower.enable = true;
 
     tlp = {
