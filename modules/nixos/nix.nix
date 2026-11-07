@@ -17,7 +17,6 @@
       http-connections = 50;
       log-lines = 50;
       warn-dirty = false;
-      auto-optimise-store = true;
       trusted-users = ["root" "muhammad"];
       allowed-users = ["root" "muhammad"];
 
@@ -34,6 +33,10 @@
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       ];
     };
+
+    # Hard-link duplicate store files on a schedule rather than during every build
+    # (auto-optimise-store).
+    optimise.automatic = true;
 
     gc = {
       automatic = true;
