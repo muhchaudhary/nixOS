@@ -97,6 +97,13 @@ in
         cli = ./modules/home/cli;
         infra = ./modules/home/cli/infra.nix;
 
+        ai = ./modules/home/ai;
+        claude = ./modules/home/ai/claude.nix;
+        opencode = ./modules/home/ai/opencode.nix;
+        pi = ./modules/home/ai/pi.nix;
+        qwen-code = ./modules/home/ai/qwen-code.nix;
+        t3code = ./modules/home/ai/t3code.nix;
+
         apps = ./modules/home/apps;
         browsers = ./modules/home/apps/browsers.nix;
         communication = ./modules/home/apps/communication.nix;
@@ -104,7 +111,6 @@ in
         dev = ./modules/home/apps/dev.nix;
         general = ./modules/home/apps/general.nix;
         kitty = ./modules/home/apps/kitty.nix;
-        local-llm = ./modules/home/apps/local-llm.nix;
         media = ./modules/home/apps/media.nix;
         streaming = ./modules/home/apps/streaming.nix;
         vscode = ./modules/home/apps/vscode.nix;

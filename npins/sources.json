@@ -13,19 +13,6 @@
       "url": "https://github.com/edolstra/nix-warez/archive/32a73188c4026cea3f8ed97078ace45bf9f7f578.tar.gz",
       "hash": "sha256-R0SImlpvVtp4gBCjWtrjyWlir2vMEs03XdVBJtsryUU="
     },
-    "claude-code": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "sadjow",
-        "repo": "claude-code-nix"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "8cd20882e5ad8e15d7c10a6752a1a691460cff52",
-      "url": "https://github.com/sadjow/claude-code-nix/archive/8cd20882e5ad8e15d7c10a6752a1a691460cff52.tar.gz",
-      "hash": "sha256-Ig43Vl9+aB0gnktIm/1EM6+9w9S8TcvBjyt2HrgR8FY="
-    },
     "home-manager": {
       "type": "Git",
       "repository": {
@@ -64,6 +51,19 @@
       "revision": "d2427d4d15b36df40468f5a58bbd67cdba19835d",
       "url": "https://github.com/hyprwm/hyprland-plugins/archive/d2427d4d15b36df40468f5a58bbd67cdba19835d.tar.gz",
       "hash": "sha256-y+V5RFJcjnV1+ZzImkfiSJ97iDIflanjP2OR9lemvTs="
+    },
+    "llm-agents": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "llm-agents.nix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "2add2fd83bf01a23357d401ba24155e35d9d93d2",
+      "url": "https://github.com/numtide/llm-agents.nix/archive/2add2fd83bf01a23357d401ba24155e35d9d93d2.tar.gz",
+      "hash": "sha256-eheXUFjbw6txzeNpeBA1Cuurqoj+gtGYaeWumq+edOY="
     },
     "nilla": {
       "type": "Git",

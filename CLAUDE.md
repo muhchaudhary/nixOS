@@ -111,7 +111,7 @@ standalone HM configs.)
 
 1. **`base`** (`modules/home/base.nix`, every host, automatic) — user, stateVersion, core `cli`
    (direnv/fastfetch/fzf/fish/git; `infra` is deliberately not in the `cli` barrel).
-2. **profile** (`modules/home/profiles/*.nix`) — `workstation` = `apps` + `infra` + `gtk` +
+2. **profile** (`modules/home/profiles/*.nix`) — `workstation` = `apps` + `ai` + `infra` + `gtk` +
    `hyprland`, shared by desktop and laptop. Add a new profile file for a new role rather than
    adding conditionals.
 3. **host** (`hosts/<host>/home.nix`) — picks a profile and adds host-only modules/overrides.
@@ -127,7 +127,7 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 (boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit}`,
 `gtk`, `gaming` (steam/heroic), `secrets` (sops-nix), `virtualisation` (docker), `wg-hotspot`.
 
-**Home Manager (`modules/home/`):** `base`, `profiles/workstation`, `apps` (Firefox/Zen/Obsidian/
+**Home Manager (`modules/home/`):** `base`, `profiles/workstation`, `ai` (claude/opencode/pi/qwen-code/t3code, each also exported individually), `apps` (Firefox/Zen/Obsidian/
 Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid-Dark + Bibata),
 `hyprland`.
 
@@ -135,4 +135,4 @@ Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid
 
 `nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins` / `hyprland-qtutils`;
 `home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `spicetify-nix`; `zen-browser`;
-`spotifast` (native Spotify client); `claude-code` (sadjow/claude-code-nix, its `package.nix` is called with our pkgs, not loaded as a flake); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).
+`spotifast` (native Spotify client); `llm-agents` (numtide/llm-agents.nix: every AI agent in `modules/home/ai`, used as a flake via `.result.packages` so builds come from `cache.numtide.com`); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).

@@ -3,6 +3,7 @@
 {...}: {
   imports = [
     ../apps
+    ../ai
     ../cli/infra.nix
     ../gtk.nix
     ../hyprland
