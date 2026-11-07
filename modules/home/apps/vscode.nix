@@ -8,6 +8,13 @@
   # (the desktop). `osConfig` is the NixOS config of the host this home runs on.
   cuda = lib.elem "nvidia" (osConfig.services.xserver.videoDrivers or []);
 in {
+  # Read by VS Code's launcher. NIXOS_OZONE_WL already selects Wayland; Chromium only
+  # honours the last --enable-features, so all features go in one flag.
+  home.file.".config/code-flags.conf".text = ''
+    --disable-gpu-sandbox
+    --enable-features=WebRTCPipeWireCapturer,WaylandWindowDecorations
+  '';
+
   home.packages = with pkgs; [
     alejandra
     ruff
