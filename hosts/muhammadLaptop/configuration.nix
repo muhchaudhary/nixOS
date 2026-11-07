@@ -68,10 +68,8 @@
     };
   };
 
-  powerManagement = {
-    enable = true;
-    powertop.enable = true;
-  };
+  # No powertop auto-tune: it rewrites the same USB/Wi-Fi/runtime-PM knobs TLP manages.
+  powerManagement.enable = true;
 
   security.rtkit.enable = true;
 
