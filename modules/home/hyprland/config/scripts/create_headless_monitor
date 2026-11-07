@@ -7,6 +7,12 @@
 # `hyprctl keyword` doesn't work under the Lua config parser ("keyword
 # can't work with non-legacy parsers"), so monitor state must be changed
 # via `hyprctl eval` calling the hl.monitor() Lua binding instead.
+#
+# Only on hosts running Sunshine: elsewhere nothing declares the output in
+# monitors.lua, so every config reload (e.g. a `nilla os switch`) would turn it
+# back on.
+
+systemctl --user cat sunshine.service >/dev/null 2>&1 || exit 0
 
 hyprctl output create headless
 sleep 0.3
