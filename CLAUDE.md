@@ -143,6 +143,6 @@ Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid
 
 ### Notable inputs (pins)
 
-`nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins` / `hyprland-qtutils`;
+`nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins`;
 `home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `zen-browser`;
 `spotifast` (native Spotify client); `llm-agents` (numtide/llm-agents.nix: every AI agent in `modules/home/ai`, used as a flake via `.result.packages` so builds come from `cache.numtide.com`); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).
