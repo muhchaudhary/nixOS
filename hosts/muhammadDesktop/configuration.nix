@@ -26,14 +26,9 @@
     quickemu
     nordvpn
     tailscale
-    ssh
     odesc
     binaryCache
   ];
-
-  # SSH over the tailnet only: the port isn't opened on the LAN, and tailscale0
-  # is a trusted interface (see the tailscale module).
-  services.openssh.openFirewall = false;
 
   # Extra boot entry for serving LLMs (~/Documents/LLMs) while away: no
   # graphical session (frees its VRAM, and no hypridle to suspend the machine)

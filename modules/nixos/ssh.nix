@@ -1,6 +1,7 @@
-# OpenSSH, key-only, with this machine's authorized key. A host that only wants
-# SSH over the tailnet sets `services.openssh.openFirewall = false` (tailscale0 is
-# trusted by the tailscale module).
+# OpenSSH, key-only, with this machine's authorized key. Tailnet logins go through
+# Tailscale SSH (see the tailscale module), which takes port 22 on the tailnet
+# address; this is for the LAN, e.g. a fallback on a headless host if Tailscale
+# is down.
 {...}: {
   services.openssh = {
     enable = true;
