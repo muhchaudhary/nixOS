@@ -1,4 +1,5 @@
-# Pi coding agent (~/.pi stays unmanaged).
+# Pi coding agent, set up in ~/.pi/agent/models.json (+ defaultProvider/defaultModel in
+# settings.json) for the llama-swap server on muhammadDesktop. ~/.pi stays unmanaged.
 {
   pkgs,
   inputs,
