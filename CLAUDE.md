@@ -136,7 +136,7 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 ### Key module groups
 
 **NixOS (`modules/nixos/`):** `base` (nix + user + home-manager, every host), `system`
-(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic/lichii — Lichii is the upstream AppImage, pinned as the `lichii` npin), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
+(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic/lichii/hookshot — Lichii is the upstream AppImage, pinned as the `lichii` npin; Hookshot is not packaged, `hookshot.nix` only enables AppImage binfmt + nix-ld so its self-updating builder and the game it builds run), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
 `ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules),
 `binaryCache` (Harmonia on the desktop) / `desktopCache` (laptop + server download from it).
 

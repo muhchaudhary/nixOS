@@ -79,6 +79,7 @@ in
         steam = ./modules/nixos/gaming/steam.nix;
         heroic = ./modules/nixos/gaming/heroic.nix;
         lichii = ./modules/nixos/gaming/lichii.nix;
+        hookshot = ./modules/nixos/gaming/hookshot.nix;
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;
