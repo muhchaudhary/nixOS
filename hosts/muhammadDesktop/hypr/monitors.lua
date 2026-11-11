@@ -14,4 +14,9 @@ hl.device({
 
 hl.config({
   misc = { vrr = 1 },
+  -- Don't flip HDMI-A-1 into HDR when a fullscreen client (VS Code/Chromium via the
+  -- color-management protocol) tags its surface as HDR/wide-gamut: the switch is a full
+  -- modeset, which blanks the screen for a second. (This also stops games auto-switching;
+  -- set `cm = "hdr"` on the monitor instead if HDR is wanted.)
+  render = { cm_auto_hdr = 0 },
 })
