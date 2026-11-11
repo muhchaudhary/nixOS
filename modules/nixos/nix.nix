@@ -11,6 +11,10 @@
   nix = {
     package = pkgs.nix;
 
+    # No flake registry/channels here, so point <nixpkgs> at the pinned nixpkgs.
+    # Needed by `nix-shell -p` and nix-direnv (which resolves <nixpkgs> on load).
+    nixPath = ["nixpkgs=${pkgs.path}"];
+
     settings = {
       experimental-features = ["nix-command" "flakes"];
 
