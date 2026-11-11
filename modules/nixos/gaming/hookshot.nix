@@ -44,4 +44,13 @@ in {
     enable = true;
     libraries = runtimeLibs;
   };
+
+  # The builder's bundled OpenSSL looks for CAs at /etc/ssl/cert.pem (absent on NixOS), so the
+  # launcher's update check fails with CERTIFICATE_VERIFY_FAILED. Point it at NixOS's bundle;
+  # the variable passes through appimage-run's FHS env, where /etc/ssl/certs is the host's.
+  environment.sessionVariables.SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+
+  # The game asks "Update now / Not now / Skip this version" (and the launcher reports errors)
+  # through zenity; without it the question is silently skipped.
+  environment.systemPackages = [pkgs.zenity];
 }
