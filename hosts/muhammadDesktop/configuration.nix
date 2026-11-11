@@ -66,9 +66,36 @@
         ExecStart = "${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pl 300";
       };
     };
+
+    # The LLM stack (llama-swap + Open WebUI + Open Terminal) only runs in this
+    # boot. Its compose services use `restart: "no"`, so the normal desktop
+    # boot leaves them stopped; start them there by hand with
+    #   docker compose -f ~/Documents/LLMs/docker-compose.swap.yml up -d
+    systemd.services.llm-stack = let
+      compose = "${config.virtualisation.docker.package}/bin/docker compose -f docker-compose.swap.yml";
+    in {
+      description = "LLM stack (llama-swap, Open WebUI, Open Terminal)";
+      wantedBy = ["multi-user.target"];
+      requires = ["docker.service"];
+      after = ["docker.service" "network-online.target"];
+      wants = ["network-online.target"];
+      unitConfig.RequiresMountsFor = "/home/muhammad/Documents/LLMs";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        WorkingDirectory = "/home/muhammad/Documents/LLMs";
+        ExecStart = "${compose} up -d";
+        ExecStop = "${compose} stop";
+        TimeoutStartSec = "15min"; # covers pulling images after an update
+      };
+    };
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Motherboard fan/voltage/temperature sensors (ASRock B550 Phantom Gaming 4's
+  # Nuvoton NCT6798D), so `sensors` shows fan RPMs alongside k10temp.
+  boot.kernelModules = ["nct6775"];
 
   # Prefer dropping page cache over swapping out apps; loading multi-GB LLM
   # weights otherwise pushes idle browser/desktop memory into swap.
