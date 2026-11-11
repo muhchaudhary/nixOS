@@ -31,5 +31,13 @@
   environment.systemPackages = with pkgs; [
     cudaPackages.cudatoolkit
   ];
+
+  # The driver's shader cache (~/.cache/nvidia/GLCache) is capped at 1 GB and
+  # evicts entries past that, so emulators (Lichii's Switch 2 pipelines) end up
+  # rebuilding shaders they already compiled. Allow 10 GB and keep it.
+  environment.variables = {
+    __GL_SHADER_DISK_CACHE_SIZE = "10737418240";
+    __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
+  };
   hardware.nvidia-container-toolkit.enable = true;
 }
