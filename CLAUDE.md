@@ -136,7 +136,7 @@ in the shared module; hardware-dependent → read `osConfig` (as `vscode.nix` do
 ### Key module groups
 
 **NixOS (`modules/nixos/`):** `base` (nix + user + home-manager, every host), `system`
-(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic/lichii/hookshot — Lichii is the upstream AppImage, pinned as the `lichii` npin; Hookshot is not packaged, `hookshot.nix` only enables AppImage binfmt + nix-ld so its self-updating builder and the game it builds run), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
+(boot/locale + sound/network/bluetooth/printer barrel), `hardware/*`, `desktop/{hyprland,fonts,polkit,plymouth}`, `gaming` (steam/heroic/hookshot — Hookshot is not packaged, `hookshot.nix` only enables AppImage binfmt + nix-ld so its self-updating builder and the game it builds run), `secrets` (sops-nix), `virtualisation` (docker), `quickemu` (desktop VMs), `nordvpn`, `tailscale`,
 `ssh` (key-only OpenSSH + authorized key), `odesc` (ODESC/STM32 DFU udev rules),
 `binaryCache` (Harmonia on the desktop) / `desktopCache` (laptop + server download from it).
 
@@ -148,4 +148,4 @@ Blender/…, each also exported individually), `cli` (+ `infra`), `gtk` (Colloid
 
 `nilla` / `nilla-utils` — framework; `hyprland` / `hyprland-plugins`;
 `home-manager`; `nixos-hardware`; `nix-gaming`; `sops-nix`; `zen-browser`;
-`spotifast` (native Spotify client); `llm-agents` (numtide/llm-agents.nix: every AI agent in `modules/home/ai`, used as a flake via `.result.packages` so builds come from `cache.numtide.com`); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez); `lichii` (a mutable-URL pin of the latest Lichii release AppImage, read straight from `sources.json` by `gaming/lichii.nix` and excluded from the input generator).
+`spotifast` (native Spotify client); `llm-agents` (numtide/llm-agents.nix: every AI agent in `modules/home/ai`, used as a flake via `.result.packages` so builds come from `cache.numtide.com`); `blender-bin` (Blender overlay, pinned at the `blender` subdir of edolstra/nix-warez).

@@ -39,7 +39,7 @@
   ];
 
   # The driver's shader cache (~/.cache/nvidia/GLCache) is capped at 1 GB and
-  # evicts entries past that, so emulators (Lichii's Switch 2 pipelines) end up
+  # evicts entries past that, so emulators end up
   # rebuilding shaders they already compiled. Allow 10 GB and keep it.
   environment.variables = {
     __GL_SHADER_DISK_CACHE_SIZE = "10737418240";

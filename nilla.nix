@@ -13,8 +13,7 @@ in
       # Every npin becomes a Nilla input under its pinned name. Flakes expose their
       # outputs under `.result`; the nixpkgs channel exposes `.result.<system>`.
       # blender-bin is defined by hand below (the generator's `src` can't be overridden);
-      # lichii is a bare AppImage, read from sources.json by modules/nixos/gaming/lichii.nix.
-      generators.inputs.pins = builtins.removeAttrs pins ["blender-bin" "lichii"];
+      generators.inputs.pins = builtins.removeAttrs pins ["blender-bin"];
 
       inputs = {
         # The channel is pinned as "nixos-unstable"; expose it as the conventional
@@ -78,7 +77,6 @@ in
         gaming = ./modules/nixos/gaming;
         steam = ./modules/nixos/gaming/steam.nix;
         heroic = ./modules/nixos/gaming/heroic.nix;
-        lichii = ./modules/nixos/gaming/lichii.nix;
         hookshot = ./modules/nixos/gaming/hookshot.nix;
 
         secrets = ./modules/nixos/secrets.nix;
