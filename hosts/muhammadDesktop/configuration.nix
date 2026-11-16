@@ -67,14 +67,14 @@
       };
     };
 
-    # The LLM stack (llama-swap + Open WebUI + Open Terminal) only runs in this
-    # boot. Its compose services use `restart: "no"`, so the normal desktop
-    # boot leaves them stopped; start them there by hand with
+    # The LLM stack (llama-swap) only runs in this
+    # boot. Its compose service uses `restart: "no"`, so the normal desktop
+    # boot leaves it stopped; start it there by hand with
     #   docker compose -f ~/Documents/LLMs/docker-compose.swap.yml up -d
     systemd.services.llm-stack = let
       compose = "${config.virtualisation.docker.package}/bin/docker compose -f docker-compose.swap.yml";
     in {
-      description = "LLM stack (llama-swap, Open WebUI, Open Terminal)";
+      description = "LLM stack (llama-swap)";
       wantedBy = ["multi-user.target"];
       requires = ["docker.service"];
       after = ["docker.service" "network-online.target"];
