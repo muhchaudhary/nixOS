@@ -16,6 +16,12 @@
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
     "nvidia-drm.modeset=1"
     "nvidia-drm.fbdev=1"
+    # Take over the console at boot instead of on the first kernel message. With
+    # deferred takeover, a message printed during resume (e.g. an xHCI reinit)
+    # makes fbcon take over while nvidia_resume runs from the kernel PM notifier:
+    # fbcon holds console_lock and wants the nvkms lock, nvidia holds the nvkms
+    # lock and wants console_lock, and the system hangs on wake.
+    "fbcon=nodefer"
   ];
 
   hardware.nvidia = {
