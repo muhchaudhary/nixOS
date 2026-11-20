@@ -52,6 +52,19 @@
       "url": "https://github.com/hyprwm/hyprland-plugins/archive/f2747debf2f71814046dfc942242f587c0bc3c57.tar.gz",
       "hash": "sha256-41yzWvPjXXKPcsWdBzWnnKi+IYJK5ifGXUFgEmW9U4o="
     },
+    "jovian": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "Jovian-Experiments",
+        "repo": "Jovian-NixOS"
+      },
+      "branch": "development",
+      "submodules": false,
+      "revision": "fd5a7c8c359c2d0de0e2b5034311aab350b00d58",
+      "url": "https://github.com/Jovian-Experiments/Jovian-NixOS/archive/fd5a7c8c359c2d0de0e2b5034311aab350b00d58.tar.gz",
+      "hash": "sha256-oAvVErO+GOCTK0sJAihGST3IGztTJ+BERnN/IC0jshM="
+    },
     "llm-agents": {
       "type": "Git",
       "repository": {

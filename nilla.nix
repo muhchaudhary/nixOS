@@ -78,6 +78,8 @@ in
         steam = ./modules/nixos/gaming/steam.nix;
         heroic = ./modules/nixos/gaming/heroic.nix;
         hookshot = ./modules/nixos/gaming/hookshot.nix;
+        gamingMode = ./modules/nixos/gaming/gaming-mode.nix;
+        deckyLoader = ./modules/nixos/gaming/decky-loader.nix;
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;

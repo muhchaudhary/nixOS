@@ -16,6 +16,7 @@
 
     system
     gaming
+    deckyLoader
     hyprland
     fonts
     polkit
@@ -198,6 +199,26 @@
               {
                 do = "$(HOME)/.config/hypr/scripts/sunshine_headless_connect";
                 undo = "$(HOME)/.config/hypr/scripts/sunshine_headless_disconnect";
+              }
+            ];
+          }
+          {
+            # SteamOS-style Gaming Mode (modules/nixos/gaming/gaming-mode.nix) on
+            # the headless output at the client's resolution. Leaving it from
+            # Steam ("Switch to Desktop") ends the stream; quitting in Moonlight
+            # shuts it down. Undos run in reverse: Desktop Steam back first,
+            # then the physical monitors.
+            name = "Gaming Mode";
+            image-path = "steam.png";
+            cmd = "gaming-mode";
+            prep-cmd = [
+              {
+                do = "$(HOME)/.config/hypr/scripts/sunshine_headless_connect";
+                undo = "$(HOME)/.config/hypr/scripts/sunshine_headless_disconnect";
+              }
+              {
+                do = "";
+                undo = "gaming-mode --exit";
               }
             ];
           }
