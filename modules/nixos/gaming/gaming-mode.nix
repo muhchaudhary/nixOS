@@ -10,8 +10,17 @@
 # restarted if they were running.
 #
 # While it runs: Fabric (bar/OSD) is quit, since its layers draw over the game
-# (Steam has its own volume OSD and Quick Access Menu), and an idle inhibitor is
-# held, since hypridle can't see controller input and would lock the screen.
+# (Steam has its own volume OSD and Quick Access Menu), the Blueman applet is
+# stopped (its "device connected" window pops up over the game when a
+# controller connects and never closes), and an idle inhibitor is held, since
+# hypridle can't see controller input and would lock the screen.
+#
+# HDR: gamescope runs with --hdr-enabled (Steam's Display settings then offer
+# "Enable HDR"), and Hyprland's render:cm_auto_hdr is set to 1 for the session,
+# so the monitor switches to HDR only while gamescope's fullscreen surface is
+# HDR. It's 0 on the desktop, see hosts/muhammadDesktop/hypr/monitors.lua.
+# Games reach gamescope's HDR through its WSI layer (gamescope-wsi, below);
+# Proton/DXVK only offers HDR with PROTON_ENABLE_HDR/DXVK_HDR set.
 #
 # Sunshine's "Gaming Mode" app runs it on the headless output at the client's
 # resolution (SUNSHINE_CLIENT_* env); see hosts/muhammadDesktop/configuration.nix.
@@ -33,11 +42,17 @@
       had_steam="$state/had-desktop-steam"
       prev_ws="$state/previous-workspace"
       had_fabric="$state/had-fabric"
+      had_blueman="$state/had-blueman"
+      prev_auto_hdr="$state/previous-cm-auto-hdr"
+      # The applet runs as the XDG-autostart unit (services.blueman); it also
+      # spawns blueman-tray, which outlives it.
+      blueman_unit=app-blueman@autostart.service
       hypr_scripts="$HOME/.config/hypr/scripts"
 
       running() { [ -f "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; }
       steam_running() { pgrep -u "$(id -u)" -x steam >/dev/null; }
       dispatch() { hyprctl eval "hl.dispatch($1)" >/dev/null; }
+      set_auto_hdr() { hyprctl eval "hl.config({ render = { cm_auto_hdr = $1 } })" >/dev/null || true; }
       # Anchored: a bare `run_fabric.py` would also match any shell or editor
       # whose command line merely mentions it.
       fabric_pattern='(^|/)python[0-9.]* run_fabric\.py( |$)'
@@ -73,6 +88,14 @@
             rm -f "$had_fabric"
             # Through Hyprland, so it gets the same environment as at login.
             fabric_running || dispatch "hl.dsp.exec_cmd(\"$hypr_scripts/launch_fabric\")"
+          fi
+          if [ -f "$prev_auto_hdr" ]; then
+            set_auto_hdr "$(cat "$prev_auto_hdr")"
+            rm -f "$prev_auto_hdr"
+          fi
+          if [ -f "$had_blueman" ]; then
+            rm -f "$had_blueman"
+            systemctl --user start "$blueman_unit" || true
           fi
           if [ -f "$had_steam" ]; then
             rm -f "$had_steam"
@@ -136,6 +159,19 @@
         pkill -u "$(id -u)" -f "$fabric_pattern" || true
       fi
 
+      # Back to the desktop's value on exit (see restore_desktop).
+      if [ ! -f "$prev_auto_hdr" ]; then
+        hyprctl getoption render:cm_auto_hdr -j | jq -r .int >"$prev_auto_hdr" || rm -f "$prev_auto_hdr"
+      fi
+      set_auto_hdr 1
+
+      rm -f "$had_blueman"
+      if systemctl --user --quiet is-active "$blueman_unit"; then
+        touch "$had_blueman"
+        systemctl --user stop "$blueman_unit" || true
+      fi
+      pkill -u "$(id -u)" -f '(^|/)\.?blueman-(applet|tray)' || true
+
       # One Steam instance per user: the desktop one has to go first.
       rm -f "$had_steam"
       if steam_running; then
@@ -147,9 +183,9 @@
       # setsid: Sunshine kills the app's process group when the stream is quit;
       # gamescope/Steam must survive that so `--exit` (its undo) can shut
       # Steam down cleanly instead.
-      STEAM_MULTIPLE_XWAYLANDS=1 setsid gamescope \
+      STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
         -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
-        -f -e --xwayland-count 2 --mangoapp \
+        -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
         -- steam -gamepadui -steamos3 &
       gamescope_pid=$!
       echo "$gamescope_pid" >"$pidfile"
@@ -205,5 +241,7 @@ in {
   # the Quick Access Menu's Performance Overlay Level slider, as on SteamOS.
   environment.systemPackages = [gaming-mode steamos-session-select desktopItem pkgs.mangohud];
   # Steam runs inside its FHS env, so it needs the shim on its own PATH too.
-  programs.steam.extraPackages = [steamos-session-select];
+  # gamescope-wsi: the Vulkan layer (enabled by gamescope for its clients) that
+  # lets games hand gamescope HDR swapchains.
+  programs.steam.extraPackages = [steamos-session-select pkgs.gamescope-wsi];
 }
