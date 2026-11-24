@@ -73,6 +73,7 @@ in
         hyprland = ./modules/nixos/desktop/hyprland.nix;
         sddm = ./modules/nixos/desktop/sddm.nix;
         autologin = ./modules/nixos/desktop/autologin.nix;
+        controllerUnlock = ./modules/nixos/desktop/controller-unlock.nix;
         fonts = ./modules/nixos/desktop/fonts.nix;
         polkit = ./modules/nixos/desktop/polkit.nix;
         plymouth = ./modules/nixos/desktop/plymouth.nix;

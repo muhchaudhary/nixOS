@@ -19,6 +19,7 @@
     deckyLoader
     hyprland
     autologin
+    controllerUnlock
     fonts
     polkit
     plymouth
