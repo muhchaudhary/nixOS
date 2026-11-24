@@ -57,6 +57,13 @@ in {
       }
     });
   '';
+  # SDL2 on SDL3 (sdl2-compat) at a fixed path, for native games that bundle
+  # an old SDL2: their SDL2 hands every call over to it with the launch option
+  # `SDL_DYNAMIC_API=/etc/sdl2-compat/libSDL2-2.0.so.0 %command%`. Newer
+  # controller support, e.g. gyro from the GameSir C2 (SInput) with Steam
+  # Input off (Longshot).
+  environment.etc."sdl2-compat/libSDL2-2.0.so.0".source = "${pkgs.sdl2-compat}/lib/libSDL2-2.0.so.0";
+
   programs.gamescope.enable = true;
   users.users.muhammad.extraGroups = ["gamemode"];
   programs.steam = {
