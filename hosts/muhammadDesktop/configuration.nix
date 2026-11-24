@@ -237,6 +237,19 @@
       quantum = 32;
       rate = 48000;
     };
+    # The 3090's HDMI audio (the TV) after a suspend/resume: at quantum 32 the
+    # GPU reads past what PipeWire has written, so sounds come out garbled and
+    # repeated 2-3 times (driver resets and reopening the sink don't help).
+    # 256 samples (~5 ms) of ALSA headroom on that output only fixes it; the
+    # onboard audio keeps the low latency.
+    pipewire.wireplumber.extraConfig."51-nvidia-hdmi-headroom" = {
+      "monitor.alsa.rules" = [
+        {
+          matches = [{"node.name" = "~alsa_output.pci-0000_06_00.1.*";}];
+          actions.update-props."api.alsa.headroom" = 256;
+        }
+      ];
+    };
     xserver.wacom.enable = true;
   };
 
