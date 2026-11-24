@@ -32,6 +32,12 @@
     pname = "egpu-steam-ui";
     version = builtins.substring 0 7 (builtins.readFile "${src}/VERSION");
     src = "${src}/packaging/steam-ui-fix";
+    # Its GPU path freed the Vulkan memory under a GL texture while Steam's GL
+    # copy out of it could still be queued (window resized, e.g. its menu
+    # overlay after a game exits): Steam's GPU process then spun in the Nvidia
+    # driver and the Big Picture UI hung. glFinish before freeing, never free
+    # under another context, wait for its own blit.
+    patches = [./egpu-steam-ui-gl-sync.patch];
     buildInputs = with pkgs; [libxcb libx11 libxdamage libxfixes libglvnd vulkan-headers];
     buildPhase = ''
       runHook preBuild
