@@ -38,7 +38,7 @@
   gaming-mode = pkgs.writeShellApplication {
     name = "gaming-mode";
     # gamescope/steam/hyprctl come from the system (programs.* wrappers).
-    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud];
+    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode];
     text = ''
       state="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode"
       mkdir -p "$state"
@@ -234,6 +234,11 @@
         # lock or blank the screen. Sleep from Steam's power menu still works.
         systemd-inhibit --what=idle --who=gaming-mode --why="Gaming Mode" \
           tail --pid="$gamescope_pid" -f /dev/null &
+
+        # GameMode (CPU governor/EPP to performance, etc.) for the same
+        # lifetime: a stand-in process registered through gamemoderun, rather
+        # than LD_PRELOADing it into Steam and everything Steam starts.
+        gamemoderun tail --pid="$gamescope_pid" -f /dev/null &
       }
 
       # Watchdog, every second while gamescope runs:
