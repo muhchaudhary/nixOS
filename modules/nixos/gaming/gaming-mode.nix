@@ -345,4 +345,16 @@ in {
   # gamescope-wsi: the Vulkan layer (enabled by gamescope for its clients) that
   # lets games hand gamescope HDR swapchains.
   programs.steam.extraPackages = [steamos-session-select pkgs.gamescope-wsi];
+
+  # Nested gamescope hides (unmaps) its window whenever nothing inside is
+  # focused, e.g. for a moment when a game exits, so the Hyprland window closed
+  # and reopened each time (default size and open animation, then fullscreen).
+  # Patched to keep the window up, holding the last frame until something is
+  # focused again (cf. ValveSoftware/gamescope#1456). Caveat: a hung Steam UI
+  # then shows as a frozen frame rather than a lost window, which the watchdog
+  # can't see. If a nixpkgs bump makes it fail to apply, refresh it against
+  # the new source.
+  programs.gamescope.package = pkgs.gamescope.overrideAttrs (old: {
+    patches = (old.patches or []) ++ [./gamescope-nested-never-unmap.patch];
+  });
 }
