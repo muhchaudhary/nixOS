@@ -18,6 +18,7 @@
     gaming
     deckyLoader
     hyprland
+    autologin
     fonts
     polkit
     plymouth
@@ -39,7 +40,7 @@
   specialisation.headless.configuration = {
     system.nixos.tags = ["headless"];
 
-    services.displayManager.sddm.enable = lib.mkForce false;
+    services.greetd.enable = lib.mkForce false;
     services.sunshine.enable = lib.mkForce false;
 
     # Nothing should put the machine to sleep while it's serving.
@@ -101,9 +102,6 @@
   # Prefer dropping page cache over swapping out apps; loading multi-GB LLM
   # weights otherwise pushes idle browser/desktop memory into swap.
   boot.kernel.sysctl."vm.swappiness" = 10;
-
-  # Make Hyprland the default SDDM session (was internal.desktop.hyprland.makeDefaultSession).
-  services.displayManager.defaultSession = "hyprland-uwsm";
 
   # NVIDIA container runtime for Docker (was internal.virtualisation.nvidia = true).
   # The container toolkit itself is enabled by the nvidia module.

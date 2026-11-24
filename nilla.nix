@@ -70,6 +70,8 @@ in
         v4l2loopback = ./modules/nixos/hardware/v4l2loopback.nix;
 
         hyprland = ./modules/nixos/desktop/hyprland.nix;
+        sddm = ./modules/nixos/desktop/sddm.nix;
+        autologin = ./modules/nixos/desktop/autologin.nix;
         fonts = ./modules/nixos/desktop/fonts.nix;
         polkit = ./modules/nixos/desktop/polkit.nix;
         plymouth = ./modules/nixos/desktop/plymouth.nix;

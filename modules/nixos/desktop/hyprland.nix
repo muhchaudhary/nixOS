@@ -6,27 +6,8 @@
   programs.hyprlock.enable = true;
   # NetworkManager tray applet (the `network` module itself is shared with the headless server).
   programs.nm-applet.enable = true;
-  environment.systemPackages = with pkgs; [
-    sddm-astronaut
-  ];
-  services.displayManager.sddm = {
-    package = pkgs.kdePackages.sddm;
-    extraPackages = with pkgs; [
-      sddm-astronaut
-    ];
-    enable = true;
-    wayland.enable = true;
-    theme = "sddm-astronaut-theme";
-    enableHidpi = true;
-    settings = {
-      General = {
-        DisplayServer = "wayland";
-      };
-    };
-  };
-
-  # To make Hyprland the default session, a host sets:
-  #   services.displayManager.defaultSession = "hyprland-uwsm";
+  # Login: hosts import `sddm` (login screen) or `autologin` (straight into a
+  # locked Hyprland session).
 
   # programs.kdeconnect = {
   #   enable = true;

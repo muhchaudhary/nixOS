@@ -11,6 +11,7 @@
     system
     gaming
     hyprland
+    sddm
     fonts
     polkit
     plymouth
