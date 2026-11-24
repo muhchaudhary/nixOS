@@ -25,8 +25,19 @@
 # occasionally never comes back; a watchdog relaunches Gaming Mode when it's
 # been gone for 10 s (twice within a minute: back to the desktop instead).
 #
+# Host-specific environment: /etc/gaming-mode/env is sourced at start, if a
+# host provides one (the desktop: steam-ui-fix.nix).
+#
 # Output: the focused monitor, unless the host pins one by writing its name to
-# /etc/gaming-mode/output (the desktop pins its TV, see its configuration.nix).
+# /etc/gaming-mode/output (the desktop pins its TV, see its configuration.nix,
+# and binds the "gaming" workspace to it in hypr/monitors.lua).
+#
+# Placement: while Gaming Mode runs, a Hyprland window rule ("gaming-mode",
+# registered at each launch, disabled on exit) opens gamescope's window on the
+# "gaming" workspace, fullscreen; also after an HDR toggle remaps it. The rule
+# matches class "gamescope" (fixed, no per-instance app id), hence only while
+# Gaming Mode runs: Heroic's gamescope games on the desktop stay untouched. A
+# Hyprland config reload drops it until the next launch.
 #
 # Sunshine's "Gaming Mode" app runs it on the headless output at the client's
 # resolution (SUNSHINE_CLIENT_* env); see hosts/muhammadDesktop/configuration.nix.
@@ -64,6 +75,10 @@
       steam_running() { pgrep -u "$(id -u)" -x steam >/dev/null; }
       dispatch() { hyprctl eval "hl.dispatch($1)" >/dev/null; }
       set_auto_hdr() { hyprctl eval "hl.config({ render = { cm_auto_hdr = $1 } })" >/dev/null || true; }
+      # The placement rule (see the header); `false` disables it again.
+      set_window_rule() {
+        hyprctl eval "hl.window_rule({ name = \"gaming-mode\", enabled = $1, match = { class = \"^gamescope\$\" }, workspace = \"name:gaming\", fullscreen = true })" >/dev/null || true
+      }
       # Anchored: a bare `run_fabric.py` would also match any shell or editor
       # whose command line merely mentions it.
       fabric_pattern='(^|/)python[0-9.]* run_fabric\.py( |$)'
@@ -91,6 +106,7 @@
       restore_desktop() {
         (
           flock -w 10 9 || true
+          set_window_rule false
           if [ -f "$prev_ws" ]; then
             dispatch "hl.dsp.focus({workspace=\"$(cat "$prev_ws")\"})"
             rm -f "$prev_ws"
@@ -118,13 +134,12 @@
         ) 9>"$state/lock"
       }
 
-      # gamescope's (pid $1) Hyprland window as "<address> <workspace> <fullscreen>",
-      # empty while it has none; fails only if Hyprland can't be asked.
-      gamescope_window() {
+      # Whether gamescope (pid $1) has a Hyprland window: 0 yes, 1 no, 2 if
+      # Hyprland can't be asked.
+      has_window() {
         local clients
-        clients=$(hyprctl clients -j) || return 1
-        jq -r --argjson pid "$1" \
-          'first(.[] | select(.pid == $pid)) | "\(.address) \(.workspace.name) \(.fullscreen)"' <<<"$clients"
+        clients=$(hyprctl clients -j) || return 2
+        jq -e --argjson pid "$1" 'any(.[]; .pid == $pid)' <<<"$clients" >/dev/null || return 1
       }
 
       stop_gamescope() {
@@ -160,6 +175,13 @@
 
       rm -f "$leaving"
 
+      # Host additions to Gaming Mode's environment (the desktop: Nvidia's
+      # Steam overlay fix, see steam-ui-fix.nix).
+      if [ -r /etc/gaming-mode/env ]; then
+        # shellcheck disable=SC1091
+        . /etc/gaming-mode/env
+      fi
+
       # Output: a host can pin Gaming Mode to one monitor via
       # /etc/gaming-mode/output (the desktop: its TV), used if it's enabled;
       # else the focused monitor. Under Sunshine it's always the focused
@@ -180,8 +202,7 @@
       # An empty workspace right away, so the screen (and a stream) shows the
       # wallpaper rather than the desktop's windows while Steam starts; its
       # window only appears once it has drawn (seconds, or ~40 s on a first
-      # run/update). Also before a relaunch: gamescope's new window opens on
-      # the focused workspace.
+      # run/update). Also before a relaunch, for the same reason.
       focus_gaming_workspace() {
         if [ -n "$output" ]; then dispatch "hl.dsp.focus({monitor=\"$output\"})"; fi
         dispatch 'hl.dsp.focus({workspace="name:gaming"})'
@@ -219,6 +240,7 @@
       fi
 
       launch_gamescope() {
+        set_window_rule true
         # setsid: Sunshine kills the app's process group when the stream is
         # quit; gamescope/Steam must survive that so `--exit` (its undo) can
         # shut Steam down cleanly instead.
@@ -241,35 +263,23 @@
         gamemoderun tail --pid="$gamescope_pid" -f /dev/null &
       }
 
-      # Watchdog, every second while gamescope runs:
-      # - Keeps its window on the gaming workspace, fullscreen. A window opens
-      #   on the focused monitor, which may not be the gaming one by the time
-      #   Steam has drawn (or a game exits, see below), and `-f` is only a
-      #   request.
-      # - Returns 1 when the window is lost: with --hdr-enabled, gamescope
-      #   unmaps its window when a game exits (HDR output off) and maps it
-      #   again ~0.2 s later (HDR back on). Sometimes HDR never comes back on,
-      #   and gamescope and Steam keep running with no window at all. Counting
-      #   starts once the window has first appeared (Steam's first start can
-      #   take ~40 s), and not while leaving on purpose (Steam's window goes
-      #   before gamescope exits).
+      # Watchdog, every second while gamescope runs (placement is the window
+      # rule's job): returns 1 when the window is lost. With --hdr-enabled,
+      # gamescope unmaps its window when a game exits (HDR output off) and maps
+      # it again ~0.2 s later (HDR back on). Sometimes HDR never comes back on,
+      # and gamescope and Steam keep running with no window at all. Counting
+      # starts once the window has first appeared (Steam's first start can
+      # take ~40 s), and not while leaving on purpose (Steam's window goes
+      # before gamescope exits).
       watch_gamescope() {
-        local seen="" missing=0 win addr ws fs
+        local seen="" missing=0 rc
         while running; do
-          if [ ! -f "$leaving" ] && win=$(gamescope_window "$gamescope_pid" 2>/dev/null); then
-            if [ -n "$win" ]; then
+          if [ ! -f "$leaving" ]; then
+            rc=0
+            has_window "$gamescope_pid" 2>/dev/null || rc=$?
+            if [ "$rc" = 0 ]; then
               seen=1 missing=0
-              read -r addr ws fs <<<"$win"
-              if [ "$ws" != gaming ]; then
-                # Focus first: an empty, unshown workspace is gone, and moving
-                # to it would recreate it on the focused monitor.
-                focus_gaming_workspace
-                dispatch "hl.dsp.window.move({workspace=\"name:gaming\", window=\"address:$addr\"})"
-              fi
-              if [ "$ws" != gaming ] || [ "$fs" = 0 ]; then
-                dispatch "hl.dsp.window.fullscreen({action='set', window='address:$addr'})"
-              fi
-            elif [ -n "$seen" ]; then
+            elif [ "$rc" = 1 ] && [ -n "$seen" ]; then
               missing=$((missing + 1))
               [ "$missing" -lt 10 ] || return 1
             fi

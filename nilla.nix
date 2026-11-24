@@ -84,6 +84,7 @@ in
         hookshot = ./modules/nixos/gaming/hookshot.nix;
         gamingMode = ./modules/nixos/gaming/gaming-mode.nix;
         deckyLoader = ./modules/nixos/gaming/decky-loader.nix;
+        steamUiFix = ./modules/nixos/gaming/steam-ui-fix.nix;
 
         secrets = ./modules/nixos/secrets.nix;
         virtualisation = ./modules/nixos/virtualisation.nix;

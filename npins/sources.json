@@ -13,6 +13,20 @@
       "url": "https://github.com/edolstra/nix-warez/archive/32a73188c4026cea3f8ed97078ace45bf9f7f578.tar.gz",
       "hash": "sha256-R0SImlpvVtp4gBCjWtrjyWlir2vMEs03XdVBJtsryUU="
     },
+    "egpu-buddy": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "denver8989",
+        "repo": "EGPU-Buddy"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "ba7b0130bc2559759d7d61e41561dbe067ad2e1c",
+      "url": "https://github.com/denver8989/EGPU-Buddy/archive/ba7b0130bc2559759d7d61e41561dbe067ad2e1c.tar.gz",
+      "hash": "sha256-gLmyGSYeuOO79ob4mt9M/DAQxHU6+yibwHjIWmh8SI4=",
+      "frozen": true
+    },
     "home-manager": {
       "type": "Git",
       "repository": {

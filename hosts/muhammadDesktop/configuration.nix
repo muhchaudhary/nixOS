@@ -17,6 +17,7 @@
     system
     gaming
     deckyLoader
+    steamUiFix
     hyprland
     autologin
     controllerUnlock
@@ -141,6 +142,7 @@
 
   # Gaming Mode (modules/nixos/gaming/gaming-mode.nix) always opens on the TV,
   # whichever monitor is focused (not under Sunshine: that's the headless output).
+  # hosts/muhammadDesktop/hypr/monitors.lua binds its workspace to the TV as well.
   environment.etc."gaming-mode/output".text = "HDMI-A-1";
 
   # ZSA keyboards (Oryx/Keymapp/Wally flashing + live training): nixpkgs' rules,
