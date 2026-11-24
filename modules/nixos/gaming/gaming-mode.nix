@@ -20,7 +20,13 @@
 # so the monitor switches to HDR only while gamescope's fullscreen surface is
 # HDR. It's 0 on the desktop, see hosts/muhammadDesktop/hypr/monitors.lua.
 # Games reach gamescope's HDR through its WSI layer (gamescope-wsi, below);
-# Proton/DXVK only offers HDR with PROTON_ENABLE_HDR/DXVK_HDR set.
+# Proton/DXVK only offers HDR with PROTON_ENABLE_HDR/DXVK_HDR set. gamescope's
+# window briefly disappears on every game exit (HDR off and on again) and
+# occasionally never comes back; a watchdog relaunches Gaming Mode when it's
+# been gone for 10 s (twice within a minute: back to the desktop instead).
+#
+# Output: the focused monitor, unless the host pins one by writing its name to
+# /etc/gaming-mode/output (the desktop pins its TV, see its configuration.nix).
 #
 # Sunshine's "Gaming Mode" app runs it on the headless output at the client's
 # resolution (SUNSHINE_CLIENT_* env); see hosts/muhammadDesktop/configuration.nix.
@@ -44,12 +50,17 @@
       had_fabric="$state/had-fabric"
       had_blueman="$state/had-blueman"
       prev_auto_hdr="$state/previous-cm-auto-hdr"
+      # Leaving on purpose (`--exit`, Steam's "Switch to Desktop"): the
+      # watchdog mustn't take Steam's window going away for a lost one.
+      leaving="$state/leaving"
+      # Relaunching after a lost window: still running, between gamescopes.
+      restarting="$state/restarting"
       # The applet runs as the XDG-autostart unit (services.blueman); it also
       # spawns blueman-tray, which outlives it.
       blueman_unit=app-blueman@autostart.service
       hypr_scripts="$HOME/.config/hypr/scripts"
 
-      running() { [ -f "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; }
+      running() { [ -f "$pidfile" ] && { kill -0 "$(cat "$pidfile")" 2>/dev/null || [ -f "$restarting" ]; }; }
       steam_running() { pgrep -u "$(id -u)" -x steam >/dev/null; }
       dispatch() { hyprctl eval "hl.dispatch($1)" >/dev/null; }
       set_auto_hdr() { hyprctl eval "hl.config({ render = { cm_auto_hdr = $1 } })" >/dev/null || true; }
@@ -107,14 +118,26 @@
         ) 9>"$state/lock"
       }
 
-      exit_gaming_mode() {
-        running || return 0
-        local pid
-        pid=$(cat "$pidfile")
+      # gamescope's (pid $1) Hyprland window as "<address> <workspace> <fullscreen>",
+      # empty while it has none; fails only if Hyprland can't be asked.
+      gamescope_window() {
+        local clients
+        clients=$(hyprctl clients -j) || return 1
+        jq -r --argjson pid "$1" \
+          'first(.[] | select(.pid == $pid)) | "\(.address) \(.workspace.name) \(.fullscreen)"' <<<"$clients"
+      }
+
+      stop_gamescope() {
         shutdown_steam
         # gamescope exits once Steam (its child) has.
-        for _ in $(seq 60); do kill -0 "$pid" 2>/dev/null || break; sleep 0.5; done
-        kill "$pid" 2>/dev/null || true
+        for _ in $(seq 60); do kill -0 "$1" 2>/dev/null || break; sleep 0.5; done
+        kill "$1" 2>/dev/null || true
+      }
+
+      exit_gaming_mode() {
+        running || return 0
+        touch "$leaving"
+        stop_gamescope "$(cat "$pidfile")"
         rm -f "$pidfile"
         wait_steam_gone 10
         restore_desktop
@@ -135,21 +158,36 @@
       # gamescope/Steam output, for debugging (Sunshine discards it).
       exec >"$state/log" 2>&1
 
-      # Size: the Moonlight client's request when started by Sunshine, else the
-      # focused monitor's current mode.
+      rm -f "$leaving"
+
+      # Output: a host can pin Gaming Mode to one monitor via
+      # /etc/gaming-mode/output (the desktop: its TV), used if it's enabled;
+      # else the focused monitor. Under Sunshine it's always the focused
+      # (headless) output, at the Moonlight client's requested mode.
+      output=""
       if [ -n "''${SUNSHINE_CLIENT_WIDTH:-}" ]; then
         w=$SUNSHINE_CLIENT_WIDTH h=$SUNSHINE_CLIENT_HEIGHT r=$SUNSHINE_CLIENT_FPS
       else
-        read -r w h r < <(hyprctl monitors -j | jq -r 'first(.[] | select(.focused)) | "\(.width) \(.height) \(.refreshRate | round)"')
+        if [ -r /etc/gaming-mode/output ]; then
+          output=$(cat /etc/gaming-mode/output)
+          hyprctl monitors -j | jq -e --arg o "$output" 'any(.[]; .name == $o)' >/dev/null || output=""
+        fi
+        read -r w h r < <(hyprctl monitors -j | jq -r --arg o "$output" \
+          'first(.[] | select(if $o == "" then .focused else .name == $o end)) | "\(.width) \(.height) \(.refreshRate | round)"')
       fi
-      echo "gaming mode: ''${w}x''${h}@''${r}"
+      echo "gaming mode: ''${output:-focused output} ''${w}x''${h}@''${r}"
 
       # An empty workspace right away, so the screen (and a stream) shows the
       # wallpaper rather than the desktop's windows while Steam starts; its
       # window only appears once it has drawn (seconds, or ~40 s on a first
-      # run/update).
+      # run/update). Also before a relaunch: gamescope's new window opens on
+      # the focused workspace.
+      focus_gaming_workspace() {
+        if [ -n "$output" ]; then dispatch "hl.dsp.focus({monitor=\"$output\"})"; fi
+        dispatch 'hl.dsp.focus({workspace="name:gaming"})'
+      }
       hyprctl activeworkspace -j | jq -r .name >"$prev_ws"
-      dispatch 'hl.dsp.focus({workspace="name:gaming"})'
+      focus_gaming_workspace
 
       rm -f "$had_fabric"
       if fabric_running; then
@@ -180,42 +218,88 @@
         wait_steam_gone 30
       fi
 
-      # setsid: Sunshine kills the app's process group when the stream is quit;
-      # gamescope/Steam must survive that so `--exit` (its undo) can shut
-      # Steam down cleanly instead.
-      STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
-        -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
-        -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
-        -- steam -gamepadui -steamos3 &
-      gamescope_pid=$!
-      echo "$gamescope_pid" >"$pidfile"
+      launch_gamescope() {
+        # setsid: Sunshine kills the app's process group when the stream is
+        # quit; gamescope/Steam must survive that so `--exit` (its undo) can
+        # shut Steam down cleanly instead.
+        STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
+          -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
+          -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
+          -- steam -gamepadui -steamos3 &
+        gamescope_pid=$!
+        echo "$gamescope_pid" >"$pidfile"
 
-      # hypridle only sees keyboard/mouse; hold an idle inhibitor (which it
-      # honours) until gamescope exits, so a controller-only session doesn't
-      # lock or blank the screen. Sleep from Steam's power menu still works.
-      systemd-inhibit --what=idle --who=gaming-mode --why="Gaming Mode" \
-        tail --pid="$gamescope_pid" -f /dev/null &
+        # hypridle only sees keyboard/mouse; hold an idle inhibitor (which it
+        # honours) until gamescope exits, so a controller-only session doesn't
+        # lock or blank the screen. Sleep from Steam's power menu still works.
+        systemd-inhibit --what=idle --who=gaming-mode --why="Gaming Mode" \
+          tail --pid="$gamescope_pid" -f /dev/null &
+      }
 
-      # Make sure the window ends up fullscreen once it appears (`-f` is only a
-      # request, and it can map before that lands).
-      (
-        for _ in $(seq 240); do
-          running || break
-          addr=$(hyprctl clients -j | jq -r --argjson pid "$gamescope_pid" \
-            'first(.[] | select(.pid == $pid)) | .address' 2>/dev/null) || true
-          if [ -n "$addr" ] && [ "$addr" != null ]; then
-            sleep 1
-            dispatch "hl.dsp.window.fullscreen({action='set', window='address:$addr'})"
-            break
+      # Watchdog, every second while gamescope runs:
+      # - Keeps its window on the gaming workspace, fullscreen. A window opens
+      #   on the focused monitor, which may not be the gaming one by the time
+      #   Steam has drawn (or a game exits, see below), and `-f` is only a
+      #   request.
+      # - Returns 1 when the window is lost: with --hdr-enabled, gamescope
+      #   unmaps its window when a game exits (HDR output off) and maps it
+      #   again ~0.2 s later (HDR back on). Sometimes HDR never comes back on,
+      #   and gamescope and Steam keep running with no window at all. Counting
+      #   starts once the window has first appeared (Steam's first start can
+      #   take ~40 s), and not while leaving on purpose (Steam's window goes
+      #   before gamescope exits).
+      watch_gamescope() {
+        local seen="" missing=0 win addr ws fs
+        while running; do
+          if [ ! -f "$leaving" ] && win=$(gamescope_window "$gamescope_pid" 2>/dev/null); then
+            if [ -n "$win" ]; then
+              seen=1 missing=0
+              read -r addr ws fs <<<"$win"
+              if [ "$ws" != gaming ]; then
+                # Focus first: an empty, unshown workspace is gone, and moving
+                # to it would recreate it on the focused monitor.
+                focus_gaming_workspace
+                dispatch "hl.dsp.window.move({workspace=\"name:gaming\", window=\"address:$addr\"})"
+              fi
+              if [ "$ws" != gaming ] || [ "$fs" = 0 ]; then
+                dispatch "hl.dsp.window.fullscreen({action='set', window='address:$addr'})"
+              fi
+            elif [ -n "$seen" ]; then
+              missing=$((missing + 1))
+              [ "$missing" -lt 10 ] || return 1
+            fi
           fi
-          sleep 0.5
+          sleep 1
         done
-      ) &
+        return 0
+      }
 
       # Stay in the foreground for gaming mode's lifetime (Sunshine ends the
-      # stream when this exits, like leaving Gaming Mode on the Deck).
-      while running; do sleep 1; done
-      rm -f "$pidfile"
+      # stream when this exits, like leaving Gaming Mode on the Deck). A lost
+      # window relaunches Gaming Mode (Steam restarts inside a new gamescope);
+      # if it's lost again within a minute, back to the desktop instead.
+      last_restart=0
+      launch_gamescope
+      until watch_gamescope; do
+        now=$(date +%s)
+        if [ $((now - last_restart)) -lt 60 ]; then
+          echo "gaming mode: gamescope's window lost again within a minute, leaving Gaming Mode"
+          touch "$leaving"
+          stop_gamescope "$gamescope_pid"
+          break
+        fi
+        last_restart=$now
+        echo "gaming mode: gamescope's window has been gone for 10 s, relaunching"
+        touch "$restarting"
+        stop_gamescope "$gamescope_pid"
+        wait_steam_gone 10
+        rm -f "$restarting"
+        # `--exit` while restarting: it removed the pidfile.
+        [ -f "$pidfile" ] || break
+        focus_gaming_workspace
+        launch_gamescope
+      done
+      rm -f "$pidfile" "$leaving"
       wait_steam_gone 10
       restore_desktop
     '';
@@ -223,8 +307,10 @@
 
   # With -steamos3, Steam's power menu "Switch to Desktop" runs this; on SteamOS it
   # switches sessions, here leaving Steam is enough: gaming-mode notices gamescope
-  # exit and restores the desktop.
+  # exit and restores the desktop. The marker keeps its watchdog from taking the
+  # closing window for a lost one (and relaunching).
   steamos-session-select = pkgs.writeShellScriptBin "steamos-session-select" ''
+    touch "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode/leaving" 2>/dev/null || true
     exec steam -shutdown
   '';
 

@@ -138,6 +138,10 @@
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
+  # Gaming Mode (modules/nixos/gaming/gaming-mode.nix) always opens on the TV,
+  # whichever monitor is focused (not under Sunshine: that's the headless output).
+  environment.etc."gaming-mode/output".text = "HDMI-A-1";
+
   # ZSA keyboards (Oryx/Keymapp/Wally flashing + live training): nixpkgs' rules,
   # which grant the logged-in user access via uaccess.
   hardware.keyboard.zsa.enable = true;
