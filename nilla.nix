@@ -27,6 +27,7 @@ in
             };
             overlays = [
               config.inputs.blender-bin.result.overlays.default
+              (import ./overlays/hyprlock.nix) # text caret on the lock screen
               # NOTE: overlays/openldap.nix (doCheck = false) is intentionally NOT
               # applied — it changes openldap's hash and forces the entire KDE/kio
               # stack (SDDM, portal-kde, gwenview deps) to rebuild from source

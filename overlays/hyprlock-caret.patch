@@ -1,0 +1,133 @@
+diff -ru a/src/config/ConfigManager.cpp b/src/config/ConfigManager.cpp
+--- a/src/config/ConfigManager.cpp
++++ b/src/config/ConfigManager.cpp
+@@ -328,6 +328,7 @@
+     m_config.addSpecialConfigValue("input-field", "placeholder_text", Hyprlang::STRING{"<i>Input Password</i>"});
+     m_config.addSpecialConfigValue("input-field", "hide_input", Hyprlang::INT{0});
+     m_config.addSpecialConfigValue("input-field", "hide_input_base_color", Hyprlang::INT{0xEE00FF99});
++    m_config.addSpecialConfigValue("input-field", "caret", Hyprlang::INT{0});
+     m_config.addSpecialConfigValue("input-field", "rounding", Hyprlang::INT{-1});
+     m_config.addSpecialConfigValue("input-field", "check_color", GRADIENTCONFIG("0xFF22CC88"));
+     m_config.addSpecialConfigValue("input-field", "fail_color", GRADIENTCONFIG("0xFFCC2222"));
+@@ -510,6 +511,7 @@
+                 {"placeholder_text", m_config.getSpecialConfigValue("input-field", "placeholder_text", k.c_str())},
+                 {"hide_input", m_config.getSpecialConfigValue("input-field", "hide_input", k.c_str())},
+                 {"hide_input_base_color", m_config.getSpecialConfigValue("input-field", "hide_input_base_color", k.c_str())},
++                {"caret", m_config.getSpecialConfigValue("input-field", "caret", k.c_str())},
+                 {"rounding", m_config.getSpecialConfigValue("input-field", "rounding", k.c_str())},
+                 {"check_color", m_config.getSpecialConfigValue("input-field", "check_color", k.c_str())},
+                 {"fail_color", m_config.getSpecialConfigValue("input-field", "fail_color", k.c_str())},
+diff -ru a/src/renderer/widgets/PasswordInputField.cpp b/src/renderer/widgets/PasswordInputField.cpp
+--- a/src/renderer/widgets/PasswordInputField.cpp
++++ b/src/renderer/widgets/PasswordInputField.cpp
+@@ -47,6 +47,7 @@
+         fadeOnEmpty              = std::any_cast<Hyprlang::INT>(props.at("fade_on_empty"));
+         fadeTimeoutMs            = std::any_cast<Hyprlang::INT>(props.at("fade_timeout"));
+         hiddenInputState.enabled = std::any_cast<Hyprlang::INT>(props.at("hide_input"));
++        hiddenInputState.caret   = std::any_cast<Hyprlang::INT>(props.at("caret"));
+         rounding                 = std::any_cast<Hyprlang::INT>(props.at("rounding"));
+         configPlaceholderText    = std::any_cast<Hyprlang::STRING>(props.at("placeholder_text"));
+         configFailText           = std::any_cast<Hyprlang::STRING>(props.at("fail_text"));
+@@ -107,6 +108,11 @@
+         fade.fadeOutTimer.reset();
+     }
+ 
++    if (hiddenInputState.caretTimer) {
++        hiddenInputState.caretTimer->cancel();
++        hiddenInputState.caretTimer.reset();
++    }
++
+     if (g_pHyprlock->isTerminating())
+         return;
+ 
+@@ -123,6 +129,25 @@
+         PP->onFadeOutTimer();
+ }
+ 
++static void caretBlinkCallback(AWP<CPasswordInputField> ref) {
++    if (const auto PP = ref.lock(); PP)
++        PP->onCaretTimer();
++}
++
++// The caret blinks like a terminal cursor, staying solid right after a keystroke.
++void CPasswordInputField::onCaretTimer() {
++    hiddenInputState.caretVisible = !hiddenInputState.caretVisible;
++    hiddenInputState.caretTimer   = g_pHyprlock->addTimer(std::chrono::milliseconds(530), [REF = m_self](auto, auto) { caretBlinkCallback(REF); }, nullptr);
++    g_pHyprlock->renderOutput(outputStringPort);
++}
++
++void CPasswordInputField::restartCaretBlink() {
++    if (hiddenInputState.caretTimer)
++        hiddenInputState.caretTimer->cancel();
++    hiddenInputState.caretVisible = true;
++    hiddenInputState.caretTimer   = g_pHyprlock->addTimer(std::chrono::milliseconds(530), [REF = m_self](auto, auto) { caretBlinkCallback(REF); }, nullptr);
++}
++
+ void CPasswordInputField::onFadeOutTimer() {
+     fade.allowFadeOut = true;
+     fade.fadeOutTimer.reset();
+@@ -298,6 +323,22 @@
+ 
+             fontCol.a = DOTALPHA;
+         }
++
++        // Blinking caret after the last dot: hide_input_base_color while empty,
++        // a new random hue of it on every keystroke (as hide_input does),
++        // fail_color after a failed attempt.
++        if (hiddenInputState.caret && !hiddenInputState.caretTimer)
++            restartCaretBlink();
++
++        if (hiddenInputState.caret && hiddenInputState.caretVisible && !checkWaiting) {
++            const double CARETH = std::round(inputFieldBox.h * 0.6);
++            const double CARETW = std::max(2.0, std::round(CARETH * 0.08));
++            const double CARETX = CURRDOTS < 0.5 ? (dots.center ? (inputFieldBox.w - CARETW) / 2.0 : DOTPAD) : xstart + CURRWIDTH + passSpacing;
++            CHyprColor   caretCol = displayFail ? colorConfig.fail->m_vColors.front() : (passwordLength == 0 ? colorConfig.hiddenBase : hiddenInputState.lastColor);
++            caretCol.a *= fade.a->value() * data.opacity;
++            CBox caretBox{inputFieldBox.pos() + Vector2D{CARETX, (inputFieldBox.h - CARETH) / 2.0}, Vector2D{CARETW, CARETH}};
++            g_pRenderer->renderRect(caretBox, caretCol, 0);
++        }
+     }
+ 
+     bool placeholderPasswordCondition = (passwordLength == 0 && placeholder.resourceID > 0);
+@@ -400,12 +441,15 @@
+ }
+ 
+ void CPasswordInputField::updateHiddenInputState() {
+-    if (!hiddenInputState.enabled || (size_t)hiddenInputState.lastPasswordLength == passwordLength)
++    if ((!hiddenInputState.enabled && !hiddenInputState.caret) || (size_t)hiddenInputState.lastPasswordLength == passwordLength)
+         return;
+ 
+     // randomize new thang
+     hiddenInputState.lastPasswordLength = passwordLength;
+ 
++    if (hiddenInputState.caret)
++        restartCaretBlink();
++
+     const auto BASEOK = colorConfig.hiddenBase.asOkLab();
+ 
+     // convert to polar coordinates
+diff -ru a/src/renderer/widgets/PasswordInputField.hpp b/src/renderer/widgets/PasswordInputField.hpp
+--- a/src/renderer/widgets/PasswordInputField.hpp
++++ b/src/renderer/widgets/PasswordInputField.hpp
+@@ -31,6 +31,7 @@
+ 
+     void         reset();
+     void         onFadeOutTimer();
++    void         onCaretTimer();
+ 
+   private:
+     AWP<CPasswordInputField> m_self;
+@@ -92,8 +93,13 @@
+         int        lastQuadrant       = 0;
+         int        lastPasswordLength = 0;
+         bool       enabled            = false;
++        bool       caret              = false;
++        bool        caretVisible       = true;
++        ASP<CTimer> caretTimer;
+     } hiddenInputState;
+ 
++    void restartCaretBlink();
++
+     struct {
+         CGradientValueData* outer = nullptr;
+         CHyprColor          inner;
