@@ -83,6 +83,7 @@ in
         heroic = ./modules/nixos/gaming/heroic.nix;
         hookshot = ./modules/nixos/gaming/hookshot.nix;
         gamingMode = ./modules/nixos/gaming/gaming-mode.nix;
+        gamingBrowser = ./modules/nixos/gaming/gaming-browser.nix;
         deckyLoader = ./modules/nixos/gaming/decky-loader.nix;
         steamUiFix = ./modules/nixos/gaming/steam-ui-fix.nix;
 

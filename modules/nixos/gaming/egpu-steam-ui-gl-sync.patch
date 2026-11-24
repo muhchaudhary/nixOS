@@ -1,0 +1,35 @@
+--- a/egpu-steam-ui.c
++++ b/egpu-steam-ui.c
+@@ -207,7 +207,12 @@
+ }
+ static void gpu_drop_src(int k) { if (ws[k].src) { p_vkDestroyImage(vd, ws[k].src, NULL); p_vkFreeMemory(vd, ws[k].srcmem, NULL); } ws[k].src = 0; ws[k].srcmem = 0; ws[k].sino = 0; }
+ static void gpu_drop_dst(int k, void (*deltex)(GLsizei, const GLuint *), void (*delmem)(GLsizei, const GLuint *)) {
++  static void (*finish)(void); if (!finish) finish = rgpa("glFinish");
+   if (ws[k].gtex) { deltex(1, &ws[k].gtex); delmem(1, &ws[k].gmem); }
++  /* GL runs behind: Steam's copy out of the old texture (queued last frame) may not
++     have executed yet. Freeing the Vulkan memory under it before then is a GPU
++     use-after-free (on Nvidia: Steam's GPU process spins in the driver, the UI hangs). */
++  if (ws[k].dst && finish) finish();
+   if (ws[k].dst) { p_vkDestroyImage(vd, ws[k].dst, NULL); p_vkFreeMemory(vd, ws[k].dstmem, NULL); }
+   ws[k].gtex = ws[k].gmem = 0; ws[k].dst = 0; ws[k].dstmem = 0; ws[k].gw = ws[k].gh = 0;
+ }
+@@ -248,7 +253,8 @@
+   }
+   /* 2. our copy target, shared with GL */
+   if (!ws[k].dst || ws[k].gw != w || ws[k].gh != h || ws[k].gctx != ctx) {
+-    if (ws[k].gctx == ctx) gpu_drop_dst(k, deltex, delmem); else { ws[k].gtex = ws[k].gmem = 0; if (ws[k].dst) { p_vkDestroyImage(vd, ws[k].dst, NULL); p_vkFreeMemory(vd, ws[k].dstmem, NULL); ws[k].dst = 0; } }
++    /* Another context's texture still sits on the old memory (we can't delete or finish it from here): leak it rather than free it under that context (rare: Steam recreating its context). */
++    if (ws[k].gctx == ctx) gpu_drop_dst(k, deltex, delmem); else { ws[k].gtex = ws[k].gmem = 0; ws[k].dst = 0; ws[k].dstmem = 0; }
+     VkExternalMemoryImageCreateInfo ext = { VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO, NULL, VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT };
+     VkImageCreateInfo ic = { VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, &ext, 0, VK_IMAGE_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, { w, h, 1 }, 1, 1, VK_SAMPLE_COUNT_1_BIT,
+                              VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_SHARING_MODE_EXCLUSIVE, 0, NULL, VK_IMAGE_LAYOUT_UNDEFINED };
+@@ -290,7 +296,8 @@
+     VkSubmitInfo si = { VK_STRUCTURE_TYPE_SUBMIT_INFO, NULL, 0, NULL, NULL, 1, &vcb, 0, NULL };
+     p_vkResetFences(vd, 1, &vfence);
+     if (p_vkQueueSubmit(vq, 1, &si, vfence) != VK_SUCCESS) goto out;
+-    p_vkWaitForFences(vd, 1, &vfence, VK_TRUE, 100000000ull);
++    /* Until done: the command buffer is reset and the images may be freed next call. */
++    if (p_vkWaitForFences(vd, 1, &vfence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) goto out;
+   }
+   ok = 1;
+ out:

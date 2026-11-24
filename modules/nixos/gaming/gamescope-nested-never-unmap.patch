@@ -1,0 +1,15 @@
+--- a/src/Backends/WaylandBackend.cpp
++++ b/src/Backends/WaylandBackend.cpp
+@@ -1274,6 +1274,12 @@
+     }
+     void CWaylandConnector::SetVisible( bool bVisible )
+     {
++        // Never hide the nested window (gaming-mode.nix): hiding unmaps it on the
++        // host compositor, so every focus gap (a game exiting) closed and reopened
++        // the Hyprland window (default size, open animation, then fullscreen).
++        // With nothing focused, Present() draws the black backing plane instead.
++        bVisible = true;
++
+         if ( m_bVisible == bVisible )
+             return;
+ 

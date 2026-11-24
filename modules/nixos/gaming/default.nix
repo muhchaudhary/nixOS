@@ -6,5 +6,6 @@
     ./heroic.nix
     ./hookshot.nix
     ./gaming-mode.nix
+    ./gaming-browser.nix
   ];
 }
