@@ -150,7 +150,10 @@ export SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS=0
 #   Steam Runtime apps via SRT, from the rest via gamescope-mimeapps.list
 #   (gamescope sets XDG_CURRENT_DESKTOP=gamescope; in ~/.config, where it
 #   outranks the user's mimeapps.list) and steam-http-loader.
+#   NIXOS_XDG_OPEN_USE_PORTAL would send xdg-open through the desktop portal,
+#   which runs in the Hyprland session and opens its default browser instead.
 export SRT_URLOPEN_PREFER_STEAM=1
+unset NIXOS_XDG_OPEN_USE_PORTAL
 ln -sfn "$GAMING_MODE_MIMEAPPS" "${XDG_CONFIG_HOME:-$HOME/.config}/gamescope-mimeapps.list"
 # - Steam's on-screen keyboard as the input method of Qt/GTK apps.
 export QT_IM_MODULE=steam GTK_IM_MODULE=Steam
