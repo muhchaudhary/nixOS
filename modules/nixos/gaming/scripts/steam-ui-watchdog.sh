@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # steam-ui-watchdog GAMESCOPE_PID: recovers a hung Big Picture UI for as long
 # as Gaming Mode's gamescope runs (started by gaming-mode, see gaming-mode.nix).
 #
