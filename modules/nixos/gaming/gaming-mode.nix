@@ -244,7 +244,15 @@
         # setsid: Sunshine kills the app's process group when the stream is
         # quit; gamescope/Steam must survive that so `--exit` (its undo) can
         # shut Steam down cleanly instead.
-        STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
+        # gamescope_cursor_composite=2 (any gamescope_<convar> env var sets that
+        # convar): gamescope draws the cursor itself. Nested, it otherwise only
+        # hands it to Hyprland, which shows it only while Hyprland's own pointer
+        # is over the window; Steam Input's mouse (a non-Steam app like
+        # gaming-browser) moves gamescope's pointer, not Hyprland's, so no cursor.
+        # GAMING_MODE_OUTPUT: the output size, for apps that size themselves
+        # (gaming-browser); measured at their start, the game Xwayland can still
+        # be at its initial 1920x1080.
+        GAMING_MODE_OUTPUT="''${w}x''${h}" gamescope_cursor_composite=2 STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
           -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
           -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
           -- steam -gamepadui -steamos3 &
