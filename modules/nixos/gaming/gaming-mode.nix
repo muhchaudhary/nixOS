@@ -55,10 +55,17 @@
     text = builtins.readFile ./scripts/steam-ui-watchdog.sh;
   };
 
+  # hyprctl comes from the system.
+  gaming-mode-vrr = pkgs.writeShellApplication {
+    name = "gaming-mode-vrr";
+    runtimeInputs = with pkgs; [coreutils procps gnused xprop];
+    text = builtins.readFile ./scripts/gaming-mode-vrr.sh;
+  };
+
   gaming-mode = pkgs.writeShellApplication {
     name = "gaming-mode";
     # gamescope/steam/hyprctl come from the system (programs.* wrappers).
-    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode steam-ui-watchdog];
+    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode steam-ui-watchdog gaming-mode-vrr];
     text = builtins.readFile ./scripts/gaming-mode.sh;
   };
 
@@ -97,7 +104,18 @@ in {
   # watchdog can't see; steam-ui-watchdog covers the known hang (an unresponsive
   # or bloated steamwebhelper), not a hang of the Steam client itself. If a
   # nixpkgs bump makes it fail to apply, refresh it against the new source.
+  #
+  # gamescope-nested-vrr-capable.patch: nested, gamescope only reports the
+  # display VRR-capable from presentation feedback with a variable (zero)
+  # refresh, which Hyprland never sends (it reports the nominal rate), so Steam
+  # never offered its VRR toggle. GAMESCOPE_NESTED_VRR_CAPABLE=1 (set by
+  # gaming-mode only) reports it capable; gaming-mode-vrr.sh applies the toggle.
   programs.gamescope.package = pkgs.gamescope.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [./gamescope-nested-never-unmap.patch];
+    patches =
+      (old.patches or [])
+      ++ [
+        ./gamescope-nested-never-unmap.patch
+        ./gamescope-nested-vrr-capable.patch
+      ];
   });
 }

@@ -9,6 +9,7 @@ prev_ws="$state/previous-workspace"
 had_fabric="$state/had-fabric"
 had_blueman="$state/had-blueman"
 prev_auto_hdr="$state/previous-cm-auto-hdr"
+prev_vrr="$state/previous-vrr"
 # Leaving on purpose (`--exit`, Steam's "Switch to Desktop"): the
 # watchdog mustn't take Steam's window going away for a lost one.
 leaving="$state/leaving"
@@ -23,6 +24,7 @@ running() { [ -f "$pidfile" ] && { kill -0 "$(cat "$pidfile")" 2>/dev/null || [ 
 steam_running() { pgrep -u "$(id -u)" -x steam >/dev/null; }
 dispatch() { hyprctl eval "hl.dispatch($1)" >/dev/null; }
 set_auto_hdr() { hyprctl eval "hl.config({ render = { cm_auto_hdr = $1 } })" >/dev/null || true; }
+set_vrr() { hyprctl eval "hl.config({ misc = { vrr = $1 } })" >/dev/null || true; }
 # The placement rule (see the header); `false` disables it again.
 set_window_rule() {
   hyprctl eval "hl.window_rule({ name = \"gaming-mode\", enabled = $1, match = { class = \"^gamescope\$\" }, workspace = \"name:gaming\", fullscreen = true })" >/dev/null || true
@@ -67,6 +69,10 @@ restore_desktop() {
     if [ -f "$prev_auto_hdr" ]; then
       set_auto_hdr "$(cat "$prev_auto_hdr")"
       rm -f "$prev_auto_hdr"
+    fi
+    if [ -f "$prev_vrr" ]; then
+      set_vrr "$(cat "$prev_vrr")"
+      rm -f "$prev_vrr"
     fi
     if [ -f "$had_blueman" ]; then
       rm -f "$had_blueman"
@@ -171,6 +177,11 @@ if [ ! -f "$prev_auto_hdr" ]; then
   hyprctl getoption render:cm_auto_hdr -j | jq -r .int >"$prev_auto_hdr" || rm -f "$prev_auto_hdr"
 fi
 set_auto_hdr 1
+# VRR: Steam's own toggle decides while Gaming Mode runs (gaming-mode-vrr);
+# the desktop's setting comes back on exit.
+if [ ! -f "$prev_vrr" ]; then
+  hyprctl getoption misc:vrr -j | jq -r .int >"$prev_vrr" || rm -f "$prev_vrr"
+fi
 
 rm -f "$had_blueman"
 if systemctl --user --quiet is-active "$blueman_unit"; then
@@ -207,7 +218,9 @@ launch_gamescope() {
   # GAMING_MODE_OUTPUT: the output size, for apps that size themselves
   # (gaming-browser); measured at their start, the game Xwayland can still
   # be at its initial 1920x1080.
-  GAMING_MODE_OUTPUT="${w}x${h}" gamescope_cursor_composite=2 STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
+  # GAMESCOPE_NESTED_VRR_CAPABLE=1 (gamescope-nested-vrr-capable.patch): Steam
+  # offers its VRR toggle, which gaming-mode-vrr applies to Hyprland.
+  GAMESCOPE_NESTED_VRR_CAPABLE=1 GAMING_MODE_OUTPUT="${w}x${h}" gamescope_cursor_composite=2 STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
     -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
     -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
     -- steam -gamepadui -steamos3 &
@@ -228,6 +241,10 @@ launch_gamescope() {
   # Kills a hung or bloated Big Picture so Steam reloads its UI (a Steam
   # CEF bug after a quick game quit; see steam-ui-watchdog.sh).
   steam-ui-watchdog "$gamescope_pid" &
+
+  # Steam's "Enable VRR" toggle switches Hyprland's VRR (see
+  # gaming-mode-vrr.sh).
+  gaming-mode-vrr "$gamescope_pid" &
 }
 
 # Watchdog, every second while gamescope runs (placement is the window
