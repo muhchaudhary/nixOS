@@ -66,6 +66,7 @@
     name = "gaming-mode";
     # gamescope/steam/hyprctl come from the system (programs.* wrappers).
     runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode steam-ui-watchdog gaming-mode-vrr];
+    runtimeEnv.GAMING_MODE_MIMEAPPS = gamescopeMimeapps;
     text = builtins.readFile ./scripts/gaming-mode.sh;
   };
 
@@ -76,6 +77,46 @@
   steamos-session-select = pkgs.writeShellScriptBin "steamos-session-select" ''
     touch "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode/leaving" 2>/dev/null || true
     exec steam -shutdown
+  '';
+
+  # With -steamos3, Steam polls this for SteamOS's update branch (every few
+  # seconds, "command not found" into its log); answers as SteamOS's stub does
+  # (from CachyOS's gamescope-session): one branch, named after the OS.
+  steamos-select-branch = pkgs.writeShellScriptBin "steamos-select-branch" ''
+    case "''${1:-}" in
+      -c | -l) . /etc/os-release && echo "$NAME" ;;
+      stable) ;;
+      *) echo "Usage: steamos-select-branch <stable|-c|-l>" >&2; exit 1 ;;
+    esac
+  '';
+
+  # Inside Gaming Mode, links and documents opened by apps go to Steam's
+  # overlay browser, as on SteamOS (steam_http_loader). gamescope sets
+  # XDG_CURRENT_DESKTOP=gamescope, so gamescope-mimeapps.list applies only
+  # there; gaming-mode links it as ~/.config/gamescope-mimeapps.list, since a
+  # system-wide one loses to the user's own mimeapps.list (spec lookup order).
+  steam-http-loader = pkgs.writeShellScriptBin "steam-http-loader" ''
+    case "$1" in
+      mailto:*) exec steam "steam://mailto/''${1#mailto:}" ;;
+      *://*) exec steam "steam://openurl_external/$1" ;;
+      *) exec steam "steam://openurl_external/file://$(realpath -- "$1")" ;;
+    esac
+  '';
+  steamHttpLoaderItem = pkgs.makeDesktopItem {
+    name = "steam_http_loader";
+    desktopName = "Steam Link Handler";
+    exec = "steam-http-loader %u";
+    noDisplay = true;
+    mimeTypes = ["x-scheme-handler/http" "x-scheme-handler/https" "x-scheme-handler/mailto" "text/html" "application/pdf"];
+  };
+  gamescopeMimeapps = pkgs.writeText "gamescope-mimeapps.list" ''
+    [Default Applications]
+    x-scheme-handler/http=steam_http_loader.desktop
+    x-scheme-handler/https=steam_http_loader.desktop
+    x-scheme-handler/mailto=steam_http_loader.desktop
+    application/pdf=steam_http_loader.desktop
+    application/x-extension-html=steam_http_loader.desktop
+    text/html=steam_http_loader.desktop
   '';
 
   desktopItem = pkgs.makeDesktopItem {
@@ -89,11 +130,11 @@
 in {
   # mangohud provides mangoapp, which `--mangoapp` starts: the overlay behind
   # the Quick Access Menu's Performance Overlay Level slider, as on SteamOS.
-  environment.systemPackages = [gaming-mode steamos-session-select desktopItem pkgs.mangohud];
-  # Steam runs inside its FHS env, so it needs the shim on its own PATH too.
+  environment.systemPackages = [gaming-mode steamos-session-select desktopItem pkgs.mangohud steam-http-loader steamHttpLoaderItem];
+  # Steam runs inside its FHS env, so it needs the shims on its own PATH too.
   # gamescope-wsi: the Vulkan layer (enabled by gamescope for its clients) that
   # lets games hand gamescope HDR swapchains.
-  programs.steam.extraPackages = [steamos-session-select pkgs.gamescope-wsi];
+  programs.steam.extraPackages = [steamos-session-select steamos-select-branch pkgs.gamescope-wsi];
 
   # Nested gamescope hides (unmaps) its window whenever nothing inside is
   # focused, e.g. for a moment when a game exits, so the Hyprland window closed

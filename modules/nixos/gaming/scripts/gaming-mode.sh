@@ -136,6 +136,30 @@ if [ -r /etc/gaming-mode/env ]; then
   . /etc/gaming-mode/env
 fi
 
+# Steam feature switches, from SteamOS's own session script (as forked by
+# CachyOS, github.com/CachyOS/gamescope-session); only those that apply to a
+# nested gamescope on this hardware. Everything below inherits them via
+# gamescope.
+# - Upscaling filters (FSR/NIS/pixel) in the Quick Access Menu.
+export STEAM_GAMESCOPE_NIS_SUPPORTED=1 STEAM_GAMESCOPE_FANCY_SCALING_SUPPORT=1
+# - HDR and VRR controls (both work here: HDR natively, VRR via gaming-mode-vrr).
+export STEAM_GAMESCOPE_HDR_SUPPORTED=1 STEAM_GAMESCOPE_VRR_SUPPORTED=1
+# - SDL games keep running when the overlay or Quick Access Menu takes focus.
+export SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS=0
+# - Links open in Steam's overlay browser, not the desktop's browser: from
+#   Steam Runtime apps via SRT, from the rest via gamescope-mimeapps.list
+#   (gamescope sets XDG_CURRENT_DESKTOP=gamescope; in ~/.config, where it
+#   outranks the user's mimeapps.list) and steam-http-loader.
+export SRT_URLOPEN_PREFER_STEAM=1
+ln -sfn "$GAMING_MODE_MIMEAPPS" "${XDG_CONFIG_HOME:-$HOME/.config}/gamescope-mimeapps.list"
+# - Steam's on-screen keyboard as the input method of Qt/GTK apps.
+export QT_IM_MODULE=steam GTK_IM_MODULE=Steam
+# - Performance overlay presets as on SteamOS (incl. the horizontal bar).
+#   Steam writes mangoapp's config to this file; hidden until it does.
+export STEAM_USE_MANGOAPP=1 STEAM_MANGOAPP_PRESETS_SUPPORTED=1 STEAM_MANGOAPP_HORIZONTAL_SUPPORTED=1
+export MANGOHUD_CONFIGFILE="$state/mangohud.config"
+echo no_display >"$MANGOHUD_CONFIGFILE"
+
 # Output: a host can pin Gaming Mode to one monitor via
 # /etc/gaming-mode/output (the desktop: its TV), used if it's enabled;
 # else the focused monitor. Under Sunshine it's always the focused
@@ -218,11 +242,13 @@ launch_gamescope() {
   # GAMING_MODE_OUTPUT: the output size, for apps that size themselves
   # (gaming-browser); measured at their start, the game Xwayland can still
   # be at its initial 1920x1080.
+  # --hide-cursor-delay: the cursor (drawn by gamescope) hides after 3 s idle,
+  # as on SteamOS.
   # GAMESCOPE_NESTED_VRR_CAPABLE=1 (gamescope-nested-vrr-capable.patch): Steam
   # offers its VRR toggle, which gaming-mode-vrr applies to Hyprland.
   GAMESCOPE_NESTED_VRR_CAPABLE=1 GAMING_MODE_OUTPUT="${w}x${h}" gamescope_cursor_composite=2 STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1 setsid gamescope \
     -W "$w" -H "$h" -w "$w" -h "$h" -r "$r" \
-    -f -e --xwayland-count 2 --mangoapp --hdr-enabled \
+    -f -e --xwayland-count 2 --mangoapp --hdr-enabled --hide-cursor-delay 3000 \
     -- steam -gamepadui -steamos3 &
   gamescope_pid=$!
   echo "$gamescope_pid" >"$pidfile"
