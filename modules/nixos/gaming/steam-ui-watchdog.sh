@@ -10,8 +10,13 @@
 #
 # Detection, every 5 s: SharedJSContext (in that renderer) not answering
 # Runtime.evaluate on Steam's CEF debug port 3 times in a row (~15-30 s); the
-# port is enabled by Decky, without it only the memory ceiling applies. Or the
-# renderer past 3 GB (it normally stays under ~700 MB): killed at once.
+# port needs ~/.local/share/Steam/.cef-enable-remote-debugging (gaming-mode
+# creates it), without it only the memory ceilings apply. Or the renderer past
+# 3 GB (it normally stays under ~700 MB): killed at once.
+#
+# The browser process (`steamwebhelper -nocrashdialog`, the renderers' parent)
+# can leak too (seen at 20 GB alongside a hung renderer; normally ~600 MB):
+# past 3 GB it's SIGKILLed as well, and Steam starts a new one.
 
 gamescope_pid=$1
 state="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode"
@@ -38,6 +43,15 @@ steam_ui_renderer() {
           if (pid) print pid, best }'
 }
 
+# The browser process: the steamwebhelper that isn't a typed child (its
+# children carry --type=..., incl. /proc/self/exe utility processes). Prints
+# "pid rss_kb" of the largest.
+steam_ui_browser() {
+  ps -u "$(id -u)" -o pid=,rss=,args= | awk '
+    /steamwebhelper/ && !/--type=/ && $2 > best { best = $2; pid = $1 }
+    END { if (pid) print pid, best }'
+}
+
 recover() {
   local pid rss
   read -r pid rss < <(steam_ui_renderer) || return 0
@@ -52,6 +66,16 @@ while kill -0 "$gamescope_pid" 2>/dev/null; do
   sleep 5
   # Steam shutting down on purpose, or Gaming Mode relaunching.
   if [ -f "$state/leaving" ] || [ -f "$state/restarting" ]; then
+    fails=0
+    continue
+  fi
+
+  bpid="" brss=0
+  read -r bpid brss < <(steam_ui_browser) || true
+  if [ "${brss:-0}" -gt "$max_rss_kb" ]; then
+    echo "steam-ui-watchdog: Steam's UI browser process at $((brss / 1024)) MB, killing $bpid"
+    kill -9 "$bpid" 2>/dev/null || true
+    sleep 30
     fails=0
     continue
   fi

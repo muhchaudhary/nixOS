@@ -23,8 +23,9 @@
 # Proton/DXVK only offers HDR with PROTON_ENABLE_HDR/DXVK_HDR set. gamescope's
 # window briefly disappears on every game exit (HDR off and on again) and
 # occasionally never comes back; a watchdog relaunches Gaming Mode when it's
-# been gone for 10 s (twice within a minute: back to the desktop instead).
-# The watchdog also kills a hung Big Picture renderer (a Steam CEF bug after a
+# been gone for 10 s, or when gamescope/Steam exit without leaving on purpose
+# (a crash); twice within a minute: back to the desktop instead.
+# steam-ui-watchdog kills a hung or bloated Big Picture (a Steam CEF bug after a
 # quick game quit), so Steam reloads its UI instead of the screen freezing.
 #
 # Host-specific environment: /etc/gaming-mode/env is sourced at start, if a
@@ -248,6 +249,13 @@
       fi
 
       launch_gamescope() {
+        # steam-ui-watchdog probes Steam's CEF debug port, which Steam only
+        # opens with this marker file present at its start (Decky needs it
+        # too); ensured here so the watchdog never silently falls back to its
+        # memory check alone.
+        if [ -d "$HOME/.local/share/Steam" ]; then
+          touch "$HOME/.local/share/Steam/.cef-enable-remote-debugging"
+        fi
         set_window_rule true
         # setsid: Sunshine kills the app's process group when the stream is
         # quit; gamescope/Steam must survive that so `--exit` (its undo) can
@@ -278,7 +286,7 @@
         # than LD_PRELOADing it into Steam and everything Steam starts.
         gamemoderun tail --pid="$gamescope_pid" -f /dev/null &
 
-        # Kills a hung Big Picture renderer so Steam reloads its UI (a Steam
+        # Kills a hung or bloated Big Picture so Steam reloads its UI (a Steam
         # CEF bug after a quick game quit; see steam-ui-watchdog.sh).
         steam-ui-watchdog "$gamescope_pid" &
       }
@@ -311,20 +319,28 @@
 
       # Stay in the foreground for gaming mode's lifetime (Sunshine ends the
       # stream when this exits, like leaving Gaming Mode on the Deck). A lost
-      # window relaunches Gaming Mode (Steam restarts inside a new gamescope);
-      # if it's lost again within a minute, back to the desktop instead.
+      # window, or gamescope exiting without leaving on purpose (Steam or
+      # gamescope crashed; `--exit` and "Switch to Desktop" set $leaving),
+      # relaunches Gaming Mode (Steam restarts inside a new gamescope); if that
+      # happens again within a minute, back to the desktop instead.
       last_restart=0
       launch_gamescope
-      until watch_gamescope; do
+      while :; do
+        if watch_gamescope; then
+          if [ -f "$leaving" ] || [ ! -f "$pidfile" ]; then break; fi
+          reason="gamescope exited unexpectedly"
+        else
+          reason="gamescope's window has been gone for 10 s"
+        fi
         now=$(date +%s)
         if [ $((now - last_restart)) -lt 60 ]; then
-          echo "gaming mode: gamescope's window lost again within a minute, leaving Gaming Mode"
+          echo "gaming mode: $reason, again within a minute: leaving Gaming Mode"
           touch "$leaving"
           stop_gamescope "$gamescope_pid"
           break
         fi
         last_restart=$now
-        echo "gaming mode: gamescope's window has been gone for 10 s, relaunching"
+        echo "gaming mode: $reason, relaunching"
         touch "$restarting"
         stop_gamescope "$gamescope_pid"
         wait_steam_gone 10
@@ -371,9 +387,10 @@ in {
   # and reopened each time (default size and open animation, then fullscreen).
   # Patched to keep the window up, holding the last frame until something is
   # focused again (cf. ValveSoftware/gamescope#1456). Caveat: a hung Steam UI
-  # then shows as a frozen frame rather than a lost window, which the watchdog
-  # can't see. If a nixpkgs bump makes it fail to apply, refresh it against
-  # the new source.
+  # then shows as a frozen frame rather than a lost window, which the window
+  # watchdog can't see; steam-ui-watchdog covers the known hang (an unresponsive
+  # or bloated steamwebhelper), not a hang of the Steam client itself. If a
+  # nixpkgs bump makes it fail to apply, refresh it against the new source.
   programs.gamescope.package = pkgs.gamescope.overrideAttrs (old: {
     patches = (old.patches or []) ++ [./gamescope-nested-never-unmap.patch];
   });
