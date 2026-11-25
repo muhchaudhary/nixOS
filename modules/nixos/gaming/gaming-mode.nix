@@ -24,6 +24,8 @@
 # window briefly disappears on every game exit (HDR off and on again) and
 # occasionally never comes back; a watchdog relaunches Gaming Mode when it's
 # been gone for 10 s (twice within a minute: back to the desktop instead).
+# The watchdog also kills a hung Big Picture renderer (a Steam CEF bug after a
+# quick game quit), so Steam reloads its UI instead of the screen freezing.
 #
 # Host-specific environment: /etc/gaming-mode/env is sourced at start, if a
 # host provides one (the desktop: steam-ui-fix.nix).
@@ -46,10 +48,16 @@
   pkgs,
   ...
 }: let
+  steam-ui-watchdog = pkgs.writeShellApplication {
+    name = "steam-ui-watchdog";
+    runtimeInputs = with pkgs; [coreutils procps curl jq websocat gawk gnugrep];
+    text = builtins.readFile ./steam-ui-watchdog.sh;
+  };
+
   gaming-mode = pkgs.writeShellApplication {
     name = "gaming-mode";
     # gamescope/steam/hyprctl come from the system (programs.* wrappers).
-    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode];
+    runtimeInputs = with pkgs; [coreutils procps util-linux jq dbus config.systemd.package mangohud gamemode steam-ui-watchdog];
     text = ''
       state="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode"
       mkdir -p "$state"
@@ -269,6 +277,10 @@
         # lifetime: a stand-in process registered through gamemoderun, rather
         # than LD_PRELOADing it into Steam and everything Steam starts.
         gamemoderun tail --pid="$gamescope_pid" -f /dev/null &
+
+        # Kills a hung Big Picture renderer so Steam reloads its UI (a Steam
+        # CEF bug after a quick game quit; see steam-ui-watchdog.sh).
+        steam-ui-watchdog "$gamescope_pid" &
       }
 
       # Watchdog, every second while gamescope runs (placement is the window
