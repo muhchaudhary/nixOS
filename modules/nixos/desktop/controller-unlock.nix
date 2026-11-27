@@ -61,7 +61,21 @@
       NAME = "controller-unlock keypad"
 
 
+      # hyprlock and set-lock-pin run in the Hyprland session, on greetd's VT1.
+      # With another VT in front (Gaming Mode's session on tty2, a console),
+      # the controller belongs to it: a hyprlock left behind in the background
+      # (hypridle locks it on suspend) mustn't take it away.
+      def foreground_vt():
+          try:
+              with open("/sys/class/tty/tty0/active") as f:
+                  return f.read().strip()
+          except OSError:
+              return "tty1"
+
+
       def wanted():
+          if foreground_vt() != "tty1":
+              return False
           for pid in os.listdir("/proc"):
               if pid.isdigit():
                   try:

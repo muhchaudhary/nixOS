@@ -16,6 +16,7 @@
 
     system
     gaming
+    gamingSession
     deckyLoader
     steamUiFix
     hyprland

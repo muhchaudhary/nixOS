@@ -26,7 +26,8 @@
 # been gone for 10 s, or when gamescope/Steam exit without leaving on purpose
 # (a crash); twice within a minute: back to the desktop instead.
 # steam-ui-watchdog kills a hung or bloated Big Picture (a Steam CEF bug after a
-# quick game quit), so Steam reloads its UI instead of the screen freezing.
+# quick game quit), so Steam reloads its UI instead of the screen freezing, and
+# restarts it if it fell back to slow software rendering (CEF GPU process crash).
 #
 # Host-specific environment: /etc/gaming-mode/env is sourced at start, if a
 # host provides one (the desktop: steam-ui-fix.nix).
@@ -131,6 +132,8 @@ in {
   # mangohud provides mangoapp, which `--mangoapp` starts: the overlay behind
   # the Quick Access Menu's Performance Overlay Level slider, as on SteamOS.
   environment.systemPackages = [gaming-mode steamos-session-select desktopItem pkgs.mangohud steam-http-loader steamHttpLoaderItem];
+  # For gaming-session.nix, which links it the same way.
+  environment.etc."gaming-mode/gamescope-mimeapps.list".source = gamescopeMimeapps;
   # Steam runs inside its FHS env, so it needs the shims on its own PATH too.
   # gamescope-wsi: the Vulkan layer (enabled by gamescope for its clients) that
   # lets games hand gamescope HDR swapchains.
@@ -151,12 +154,16 @@ in {
   # refresh, which Hyprland never sends (it reports the nominal rate), so Steam
   # never offered its VRR toggle. GAMESCOPE_NESTED_VRR_CAPABLE=1 (set by
   # gaming-mode only) reports it capable; gaming-mode-vrr.sh applies the toggle.
+  #
+  # gamescope-nvidia-gbm-scanout.patch: only for gaming-session.nix (gamescope on
+  # the DRM backend), opt-in via gamescope_drm_gbm_scanout=1; see the patch header.
   programs.gamescope.package = pkgs.gamescope.overrideAttrs (old: {
     patches =
       (old.patches or [])
       ++ [
         ./gamescope-nested-never-unmap.patch
         ./gamescope-nested-vrr-capable.patch
+        ./gamescope-nvidia-gbm-scanout.patch
       ];
   });
 }
