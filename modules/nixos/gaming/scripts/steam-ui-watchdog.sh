@@ -18,6 +18,14 @@
 # The browser process (`steamwebhelper -nocrashdialog`, the renderers' parent)
 # can leak too (seen at 20 GB alongside a hung renderer; normally ~600 MB):
 # past 3 GB it's SIGKILLed as well, and Steam starts a new one.
+#
+# Software fallback: if CEF's GPU process crashes (seen right after the hang
+# recovery above), Chromium redraws the UI on the CPU (gpu_compositing
+# "disabled_software") for the rest of that browser process's life: at 4K,
+# very sluggish. Only a new browser process gets the GPU back, so once its
+# GPU compositing has been seen enabled and then turns software, the browser
+# is SIGKILLed and Steam starts a new one (within a second). A UI that was in
+# software from the start (Steam's GPU web rendering setting off) is left be.
 
 gamescope_pid=$1
 state="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gaming-mode"
@@ -53,6 +61,17 @@ steam_ui_browser() {
     END { if (pid) print pid, best }'
 }
 
+# CEF's GPU compositing status ("enabled", "disabled_software", ...), from the
+# browser's debug endpoint; empty if it can't tell.
+gpu_compositing() {
+  local ws
+  ws=$(curl -s --max-time 2 http://127.0.0.1:8080/json/version 2>/dev/null |
+    jq -r '.webSocketDebuggerUrl // empty' 2>/dev/null) || ws=""
+  [ -n "$ws" ] || return 0
+  timeout 5 websocat -n1 -B 4194304 "$ws" <<<'{"id":1,"method":"SystemInfo.getInfo"}' 2>/dev/null |
+    jq -r '.result.gpu.featureStatus.gpu_compositing // empty' 2>/dev/null || true
+}
+
 recover() {
   local pid rss
   read -r pid rss < <(steam_ui_renderer) || return 0
@@ -63,6 +82,7 @@ recover() {
 }
 
 fails=0
+gpu_seen_pid="" # the browser process last seen with GPU compositing
 while kill -0 "$gamescope_pid" 2>/dev/null; do
   sleep 5
   # Steam shutting down on purpose, or Gaming Mode relaunching.
@@ -80,6 +100,20 @@ while kill -0 "$gamescope_pid" 2>/dev/null; do
     fails=0
     continue
   fi
+
+  case "$(gpu_compositing)" in
+    enabled) gpu_seen_pid=$bpid ;;
+    disabled_software)
+      if [ -n "$bpid" ] && [ "$bpid" = "$gpu_seen_pid" ]; then
+        echo "steam-ui-watchdog: Steam's UI lost GPU compositing (CEF's GPU process crashed), restarting its browser process $bpid"
+        kill -9 "$bpid" 2>/dev/null || true
+        gpu_seen_pid=""
+        sleep 30
+        fails=0
+        continue
+      fi
+      ;;
+  esac
 
   rss=0
   read -r _ rss < <(steam_ui_renderer) || true
