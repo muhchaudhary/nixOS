@@ -41,6 +41,14 @@ if steam_running; then
   wait_steam_gone 30
 fi
 
+# Lock the desktop: it stays logged in on tty1 behind the session, and with
+# the session's idle inhibitor hypridle won't lock it. Through logind, so
+# hypridle runs its lock_cmd (hyprlock), as for any other lock.
+desktop_session=$(loginctl show-user "$(id -u)" -p Display --value 2>/dev/null || true)
+if [ -n "$desktop_session" ]; then
+  loginctl lock-session "$desktop_session" || echo "gaming-session: couldn't lock the desktop"
+fi
+
 echo "gaming-session: starting ($(cat "$state/session-output" 2>/dev/null || echo "no output info"))"
 # --wait: returns once the session has ended (Steam's "Switch to Desktop").
 systemctl start --wait "$unit" || echo "gaming-session: $unit failed, see journalctl -b -u $unit"

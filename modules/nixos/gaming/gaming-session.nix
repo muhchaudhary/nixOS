@@ -10,7 +10,8 @@
 # every app keeps running). Back on the desktop, everything is as it was.
 #
 # Start: the "Gaming Mode" launcher entry, i.e. `gaming-session`, which shuts
-# the desktop Steam down, notes the TV's mode, starts gaming-session.service
+# the desktop Steam down, notes the TV's mode, locks the desktop (hyprlock;
+# the controller PIN unlocks it on return), starts gaming-session.service
 # (switching to tty2) and waits for it to end, then brings the desktop Steam
 # back. Leave: Steam's power menu "Switch to Desktop" (steamos-session-select),
 # or `systemctl stop gaming-session`; either way, back to tty1.
@@ -25,6 +26,10 @@
 # steam-ui-watchdog kills a hung or bloated Big Picture (a Steam CEF bug after a
 # quick game quit), so Steam reloads its UI instead of the screen freezing, and
 # restarts it if it fell back to slow software rendering (CEF GPU process crash).
+#
+# Idle: the session holds a logind idle inhibitor, since the desktop's hypridle
+# sees no input while tty2 is in front and would lock, blank and suspend the
+# machine mid-game. Idle sleep in Gaming Mode is Steam's own (Settings > Power).
 #
 # Logs: journalctl -b -u gaming-session (the script's lines are tagged "bash");
 # the launcher's in $XDG_RUNTIME_DIR/gaming-mode/session-launcher.log.
@@ -49,7 +54,7 @@
   # login shell's PATH.
   gaming-session-run = pkgs.writeShellApplication {
     name = "gaming-session-run";
-    runtimeInputs = with pkgs; [coreutils procps mangohud gamemode steam-ui-watchdog];
+    runtimeInputs = with pkgs; [coreutils procps config.systemd.package mangohud gamemode steam-ui-watchdog];
     runtimeEnv.GAMING_MODE_MIMEAPPS = gamescopeMimeapps;
     text = builtins.readFile ./scripts/gaming-session-run.sh;
   };

@@ -76,6 +76,13 @@ if [ -r "$overrides" ]; then
 fi
 echo "gaming-session: ${mode_args[*]:-preferred output and mode} ${gamescope_args[*]}"
 
+# hypridle (in the desktop session on tty1) only sees Hyprland's input, none
+# while this VT is in front: it would lock, blank and then suspend the machine
+# mid-game. It honours logind idle inhibitors; this one lasts as long as this
+# script (the session). Sleep from Steam's power menu still works.
+systemd-inhibit --what=idle --who=gaming-session --why="Gaming Mode" \
+  tail --pid=$$ -f /dev/null &
+
 gamescope_pid=""
 # Stopping the unit (KillMode=mixed: SIGTERM to this process only): let Steam
 # shut down cleanly, gamescope follows it.
