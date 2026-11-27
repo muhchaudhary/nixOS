@@ -1,6 +1,6 @@
 {
-  "version": "1.147.0-insider",
-  "rev": "95906867e0763b595ee0c8814ba93fea96798d3e",
-  "url": "https://vscode.download.prss.microsoft.com/dbazure/download/insider/95906867e0763b595ee0c8814ba93fea96798d3e/code-insider-x64-1794807279.tar.gz",
-  "sha256": "7b9aed08f6c2ce29f62a45fc94c3e1a1e5efac39a5c0c426e137a24e8749262c"
+  "version": "1.148.0-insider",
+  "rev": "ade7f1b62fe6890ef4fee08ea5a8ebb0e7c002f8",
+  "url": "https://vscode.download.prss.microsoft.com/dbazure/download/insider/ade7f1b62fe6890ef4fee08ea5a8ebb0e7c002f8/code-insider-x64-1795426337.tar.gz",
+  "sha256": "9bb7ca0f77877062883e62c60479392137ed7e53aa2f508a6b8765a980c6de71"
 }
