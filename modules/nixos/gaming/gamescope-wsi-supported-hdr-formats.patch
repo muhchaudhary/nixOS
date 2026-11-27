@@ -1,0 +1,83 @@
+gamescope WSI layer: only advertise the extra HDR surface formats the driver
+can back on the Gamescope surface.
+
+The layer appends A2B10G10R10/A2R10G10B10 (HDR10) and R16G16B16A16 (scRGB)
+to every Gamescope surface's format list, but CreateSwapchainKHR then
+refuses any format the driver itself doesn't list for that surface. On
+NVIDIA, a native game (Longshot) picked the advertised
+A2R10G10B10 + HDR10_ST2084 and got VK_ERROR_INITIALIZATION_FAILED
+("Refusing to make swapchain (unsupported VkFormat)"), so it never started.
+With this, games only see the HDR formats that work (A2B10G10R10 there).
+
+--- a/layer/VkLayer_FROG_gamescope_wsi.cpp	2026-11-26 21:16:13.409964894 -0500
++++ b/layer/VkLayer_FROG_gamescope_wsi.cpp	2026-11-26 21:16:31.719671884 -0500
+@@ -20,6 +20,7 @@
+ #include <utility>
+ #include <tuple>
+ #include <vector>
++#include <array>
+ #include <algorithm>
+ #include <functional>
+ #include <unordered_map>
+@@ -1126,6 +1127,33 @@
+       return array;
+     }();
+ 
++    // The extra HDR formats the driver can back on the Gamescope (bypass)
++    // surface: CreateSwapchainKHR refuses any format the driver doesn't list
++    // for it, so advertising one it lacks (seen: A2R10G10B10 on NVIDIA) makes
++    // games pick a format that then fails swapchain creation.
++    template <typename T, size_t N, typename GetFormat>
++    static std::vector<T> SupportedExtraHDRFormats(
++      const vkroots::VkPhysicalDeviceDispatch & pDispatch,
++            VkPhysicalDevice             physicalDevice,
++            VkSurfaceKHR                 surface,
++      const std::array<T, N>&            extras,
++            GetFormat                    getFormat) {
++      std::vector<VkSurfaceFormatKHR> nativeFormats;
++      vkroots::enumerate(
++        std::bind_front(&vkroots::VkPhysicalDeviceDispatch::GetPhysicalDeviceSurfaceFormatsKHR, &pDispatch),
++        nativeFormats,
++        physicalDevice,
++        surface);
++
++      std::vector<T> supported;
++      for (const T& extra : extras) {
++        const VkFormat format = getFormat(extra);
++        if (std::ranges::any_of(nativeFormats, std::bind_front(std::equal_to{}, format), &VkSurfaceFormatKHR::format))
++          supported.push_back(extra);
++      }
++      return supported;
++    }
++
+     static VkResult GetPhysicalDeviceSurfaceFormatsKHR(
+       const vkroots::VkPhysicalDeviceDispatch & pDispatch,
+             VkPhysicalDevice             physicalDevice,
+@@ -1145,9 +1173,12 @@
+           !(canBypass || gamescopeSurface->canBypassXWayland(true)))
+         return pDispatch.GetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, selectedSurface, pSurfaceFormatCount, pSurfaceFormats);
+ 
++      const auto extraFormats = SupportedExtraHDRFormats(pDispatch, physicalDevice, surface,
++        s_ExtraHDRSurfaceFormats, [](const VkSurfaceFormatKHR &f) { return f.format; });
++
+       return vkroots::append(
+         std::bind_front(&vkroots::VkPhysicalDeviceDispatch::GetPhysicalDeviceSurfaceFormatsKHR, &pDispatch),
+-        s_ExtraHDRSurfaceFormats,
++        extraFormats,
+         pSurfaceFormatCount,
+         pSurfaceFormats,
+         physicalDevice,
+@@ -1174,9 +1205,12 @@
+           !(canBypass || gamescopeSurface->canBypassXWayland(true)))
+         return pDispatch.GetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo, pSurfaceFormatCount, pSurfaceFormats);
+ 
++      const auto extraFormats = SupportedExtraHDRFormats(pDispatch, physicalDevice, pSurfaceInfo->surface,
++        s_ExtraHDRSurfaceFormat2s, [](const VkSurfaceFormat2KHR &f) { return f.surfaceFormat.format; });
++
+       return vkroots::append(
+         std::bind_front(&vkroots::VkPhysicalDeviceDispatch::GetPhysicalDeviceSurfaceFormats2KHR, &pDispatch),
+-        s_ExtraHDRSurfaceFormat2s,
++        extraFormats,
+         pSurfaceFormatCount,
+         pSurfaceFormats,
+         physicalDevice,

@@ -125,8 +125,16 @@ in {
   environment.systemPackages = [gaming-session desktopItem pkgs.mangohud steamos-session-select steam-http-loader steamHttpLoaderItem];
   # Steam runs inside its FHS env, so it needs the shims on its own PATH too.
   # gamescope-wsi: the Vulkan layer (enabled by gamescope for its clients) that
-  # lets games hand gamescope HDR swapchains.
-  programs.steam.extraPackages = [steamos-session-select steamos-select-branch pkgs.gamescope-wsi];
+  # lets games hand gamescope HDR swapchains. Patched to only offer the HDR
+  # formats the driver can back: on NVIDIA it offered A2R10G10B10 + HDR10, then
+  # refused to make the swapchain, so Longshot (HDR on) never started.
+  programs.steam.extraPackages = [
+    steamos-session-select
+    steamos-select-branch
+    (pkgs.gamescope-wsi.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [./gamescope-wsi-supported-hdr-formats.patch];
+    }))
+  ];
 
   # gamescope-nvidia-gbm-scanout.patch: scanout buffers from GBM (enabled by
   # gaming-session-run, gamescope_drm_gbm_scanout=1), as Vulkan-allocated ones
