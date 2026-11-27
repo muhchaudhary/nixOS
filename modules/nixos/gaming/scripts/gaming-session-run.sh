@@ -23,18 +23,33 @@ if [ -r /etc/gaming-mode/env ]; then
   . /etc/gaming-mode/env
 fi
 
-# SteamOS's session environment, as in the nested Gaming Mode (gaming-mode.sh
-# explains each); VRR and HDR are gamescope's own here, no bridging needed.
+# Steam feature switches, from SteamOS's own session script (as forked by
+# CachyOS, github.com/CachyOS/gamescope-session); only those that apply on
+# this hardware. Everything below inherits them via gamescope.
+# - Upscaling filters (FSR/NIS/pixel) in the Quick Access Menu.
 export STEAM_GAMESCOPE_NIS_SUPPORTED=1 STEAM_GAMESCOPE_FANCY_SCALING_SUPPORT=1
+# - HDR and VRR controls.
 export STEAM_GAMESCOPE_HDR_SUPPORTED=1 STEAM_GAMESCOPE_VRR_SUPPORTED=1
+# - SDL games keep running when the overlay or Quick Access Menu takes focus.
 export SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS=0
+# - Links open in Steam's overlay browser, not the desktop's browser: from
+#   Steam Runtime apps via SRT, from the rest via gamescope-mimeapps.list
+#   (gamescope sets XDG_CURRENT_DESKTOP=gamescope; in ~/.config, where it
+#   outranks the user's mimeapps.list) and steam-http-loader.
+#   NIXOS_XDG_OPEN_USE_PORTAL would send xdg-open through the desktop portal,
+#   which runs in the Hyprland session and opens its default browser instead.
 export SRT_URLOPEN_PREFER_STEAM=1
 unset NIXOS_XDG_OPEN_USE_PORTAL
-ln -sfn /etc/gaming-mode/gamescope-mimeapps.list "${XDG_CONFIG_HOME:-$HOME/.config}/gamescope-mimeapps.list"
+ln -sfn "$GAMING_MODE_MIMEAPPS" "${XDG_CONFIG_HOME:-$HOME/.config}/gamescope-mimeapps.list"
+# - Steam's on-screen keyboard as the input method of Qt/GTK apps.
 export QT_IM_MODULE=steam GTK_IM_MODULE=Steam
+# - Performance overlay presets as on SteamOS (incl. the horizontal bar).
+#   Steam writes mangoapp's config to this file; hidden until it does.
 export STEAM_USE_MANGOAPP=1 STEAM_MANGOAPP_PRESETS_SUPPORTED=1 STEAM_MANGOAPP_HORIZONTAL_SUPPORTED=1
 export MANGOHUD_CONFIGFILE="$state/mangohud.config"
 echo no_display >"$MANGOHUD_CONFIGFILE"
+# - One Xwayland for Steam, another for games (--xwayland-count 2); HDR in
+#   Proton/DXVK games (they only offer it with these set).
 export STEAM_MULTIPLE_XWAYLANDS=1 PROTON_ENABLE_HDR=1 DXVK_HDR=1
 # Scanout buffers from GBM instead of Vulkan: on NVIDIA, Vulkan-allocated ones
 # show up corrupted at 4K (gamescope#2309; gamescope-nvidia-gbm-scanout.patch).
@@ -48,6 +63,7 @@ if read -r name w h r <"$state/session-output" 2>/dev/null; then
   # For apps that size themselves (gaming-browser).
   export GAMING_MODE_OUTPUT="${w}x${h}"
 fi
+# --hide-cursor-delay: the cursor hides after 3 s idle, as on SteamOS.
 gamescope_args=(-e --xwayland-count 2 --mangoapp --hdr-enabled --hide-cursor-delay 3000)
 
 # Trial knob (no rebuild between tests): may replace gamescope_args, or unset

@@ -1,4 +1,4 @@
-# A web browser for Gaming Mode (gaming-mode.nix): `gaming-browser [args/URLs…]`,
+# A web browser for Gaming Mode (gaming-session.nix): `gaming-browser [args/URLs…]`,
 # Chromium, added to Steam once as a non-Steam game ("Add a Non-Steam Game" →
 # "Gaming Browser"; it syncs into Gaming Mode), with Steam Input's "Web
 # Browser" controller template. Extra arguments go to Chromium, e.g. a shortcut
@@ -10,17 +10,16 @@
 #   screen for ~1 min until Chromium fell back to software). SteamOS's Flatpak
 #   Chrome never gets the overlay injected; here it loads and works instead.
 #   The renderer sandboxes (the ones that face web content) stay on.
-# - X11 only: Gaming Mode's Steam (and so this) inherits Hyprland's
-#   WAYLAND_DISPLAY/NIXOS_OZONE_WL, which would open the window on the desktop
-#   instead of inside gamescope.
+# - X11 only: opens in gamescope's Xwayland like a game, whatever
+#   NIXOS_OZONE_WL says (Wayland would need gamescope's own socket).
 # - Own profile (~/.local/share/gaming-browser/chromium): with the desktop's
 #   profile, an already running desktop browser would get the request and open
 #   the window on the desktop; it also keeps the TV session apart.
 # - Window sized to gamescope's screen (no window manager there to maximize
-#   it; size from gaming-mode's GAMING_MODE_OUTPUT), and scaled for the couch:
+#   it; size from gaming-session-run's GAMING_MODE_OUTPUT), and scaled for the couch:
 #   1.25× at 1080p, 2.5× at 4K (the window size is in scaled pixels, so it's
 #   divided by the scale). Bigger cursor (XCURSOR_SIZE, times that scale):
-#   nested gamescope doesn't scale cursors itself.
+#   gamescope doesn't scale cursors itself.
 {pkgs, ...}: let
   gaming-browser = pkgs.writeShellApplication {
     name = "gaming-browser";

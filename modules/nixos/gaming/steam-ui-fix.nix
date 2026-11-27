@@ -16,7 +16,7 @@
 # ~/.local/state/nv-egpu-buddy/steam-ui-fix.log. It needs Steam's "GPU accelerated
 # rendering in web views" (Settings > Display / Interface) left on.
 #
-# Only Gaming Mode loads it: gaming-mode sources /etc/gaming-mode/env, whose
+# Only Gaming Mode loads it: gaming-session-run sources /etc/gaming-mode/env, whose
 # STEAM_EXTRA_LD_PRELOAD the Steam wrapper's profile puts in front of its own
 # LD_PRELOAD (the wrapper sets LD_PRELOAD for extest, overwriting the caller's).
 # `$PLATFORM` (expanded by ld.so, and by pressure-vessel in Steam's runtime

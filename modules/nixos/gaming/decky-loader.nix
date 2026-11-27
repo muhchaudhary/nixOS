@@ -1,5 +1,5 @@
 # Decky Loader: the plugin loader behind the "Decky" tab in Steam's Quick Access
-# Menu, for gaming mode (modules/nixos/gaming/gaming-mode.nix). Not part of the
+# Menu, for Gaming Mode (modules/nixos/gaming/gaming-session.nix). Not part of the
 # `gaming` barrel: hosts that want it import `deckyLoader` (the desktop only).
 #
 # Not in nixpkgs; Jovian-NixOS (the `jovian` pin) packages it. Only its

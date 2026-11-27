@@ -23,15 +23,7 @@ wait_steam_gone() {
   sleep 1
 }
 
-# The nested Gaming Mode and this one share Steam: only one at a time. Its
-# exit would bring the desktop Steam back (racing the session's Steam, which
-# then hands off to it and quits): take that over instead.
 had_steam=""
-if [ -f "$state/had-desktop-steam" ]; then
-  rm -f "$state/had-desktop-steam"
-  had_steam=1
-fi
-gaming-mode --exit || true
 
 # The mode gamescope should set: the desktop's for the pinned output (the TV,
 # /etc/gaming-mode/output), else the focused monitor's. Asked now, while

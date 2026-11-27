@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 # steam-ui-watchdog GAMESCOPE_PID: recovers a hung Big Picture UI for as long
-# as Gaming Mode's gamescope runs (started by gaming-mode, see gaming-mode.nix).
+# as Gaming Mode's gamescope runs (started by gaming-session-run, see
+# gaming-session.nix).
 #
 # The hang: quitting a game right after it starts rendering sometimes leaves
 # the steamwebhelper renderer that hosts Steam's UI pages spinning in native
@@ -11,7 +12,7 @@
 #
 # Detection, every 5 s: SharedJSContext (in that renderer) not answering
 # Runtime.evaluate on Steam's CEF debug port 3 times in a row (~15-30 s); the
-# port needs ~/.local/share/Steam/.cef-enable-remote-debugging (gaming-mode
+# port needs ~/.local/share/Steam/.cef-enable-remote-debugging (gaming-session-run
 # creates it), without it only the memory ceilings apply. Or the renderer past
 # 3 GB (it normally stays under ~700 MB): killed at once.
 #
@@ -85,8 +86,8 @@ fails=0
 gpu_seen_pid="" # the browser process last seen with GPU compositing
 while kill -0 "$gamescope_pid" 2>/dev/null; do
   sleep 5
-  # Steam shutting down on purpose, or Gaming Mode relaunching.
-  if [ -f "$state/leaving" ] || [ -f "$state/restarting" ]; then
+  # Steam shutting down on purpose.
+  if [ -f "$state/leaving" ]; then
     fails=0
     continue
   fi

@@ -4,8 +4,8 @@ NVIDIA driver: ValveSoftware/gamescope#2309, unmerged upstream.
 
 Commits 5cf8472..4e879fb of github.com/farnoy/gamescope, branch
 nvidia-gbm-wayland (b34824d), squashed onto 3.17.0; DRM part only (the
-WaylandBackend commits on that branch aren't needed: the nested Gaming Mode
-doesn't set the convar and scans out through Hyprland). README hunk dropped.
+WaylandBackend commits on that branch aren't needed: only gaming-session.nix
+sets the convar, on the DRM backend). README hunk dropped.
 
 diff --git a/src/Backends/DRMBackend.cpp b/src/Backends/DRMBackend.cpp
 index c9034b7..4db6629 100644
